@@ -1,6 +1,5 @@
 package me.ampayne2.DropParty;
 
-import java.sql.DriverManager;
 import java.util.ArrayList;
 
 import org.bukkit.ChatColor;
@@ -18,8 +17,6 @@ public class DropParty extends JavaPlugin {
 		PluginManager manager = this.getServer().getPluginManager();
 		manager.registerEvents(new DropPartyListener(), this);
 		DropPartyListener.plugin = this;
-		getConfig().options().copyDefaults(true);
-		saveConfig();
 	}
 
 	public void onDisable() {
@@ -81,10 +78,6 @@ public class DropParty extends JavaPlugin {
 	}
 	
 	public void saveLocation(String saveType, int chestx, int chesty, int chestz){
-		
-		String url = getConfig().getString("");
-		String user = getConfig().getString("");
-		String password = getConfig().getString("");
 		switch (saveType){
 		case "chest":
 			//save to chest table

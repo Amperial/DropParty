@@ -1,5 +1,0 @@
-# Default Configuration File for DropParty Plugin.
-MySQL:
-  url: "mysql://localhost:3306/yourdatabasename"
-  username: "yourdatabaseuser"
-  password: "yourdatabasepass"
