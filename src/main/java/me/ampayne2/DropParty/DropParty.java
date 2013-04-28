@@ -1,5 +1,6 @@
 package me.ampayne2.DropParty;
 
+import java.sql.DriverManager;
 import java.util.ArrayList;
 
 import org.bukkit.ChatColor;
@@ -17,6 +18,8 @@ public class DropParty extends JavaPlugin {
 		PluginManager manager = this.getServer().getPluginManager();
 		manager.registerEvents(new DropPartyListener(), this);
 		DropPartyListener.plugin = this;
+		getConfig().options().copyDefaults(true);
+		saveConfig();
 	}
 
 	public void onDisable() {
@@ -29,50 +32,38 @@ public class DropParty extends JavaPlugin {
 
 		if (!cmd.getName().equalsIgnoreCase("dropparty"))
 			return false;
-
 		if (!(sender instanceof Player)) {
-			sender.sendMessage(ChatColor.RED + "This command can only be run by a player.");
+			sender.sendMessage(ChatColor.RED
+					+ "This command can only be run by a player.");
 			return false;
 		}
-
 		if (!sender.hasPermission("dropparty.admin"))
 			return false;
-
 		if (args.length == 0) {
 			sender.sendMessage(ChatColor.RED + "Not enough arguments.");
 			return false;
 		}
-
 		if (args.length > 1) {
 			sender.sendMessage(ChatColor.RED + "Too many arguments.");
 			return false;
 		}
 
-		if (!args[0].equalsIgnoreCase("setchest")
-				&& !args[0].equalsIgnoreCase("setitem")
-				&& !args[0].equalsIgnoreCase("start")
-				&& !args[0].equalsIgnoreCase("stop")) {
+		String playerName = ((Player) sender).getDisplayName();
+		switch (args[0]) {
+		case "setchest":
+			toggleSelecting(playerName, sender);
+			return true;
+		case "setitem":
+			return true;
+		case "start":
+			return true;
+		case "stop":
+			return true;
+		default:
 			sender.sendMessage(ChatColor.RED
 					+ "Invalid argument. Valid arguments are: setchest, setitem, start, and stop.");
 			return false;
 		}
-
-		String playerName = ((Player) sender).getDisplayName();
-
-		if (args[0].equals("setchest")) {
-			toggleSelecting(playerName, sender);
-			return true;
-		}
-		if (args[0].equals("setitem")) {
-			return true;
-		}
-		if (args[0].equals("start")) {
-			return true;
-		}
-		if (args[0].equals("stop")) {
-			return true;
-		}
-		return false;
 	}
 
 	public void toggleSelecting(String playerName, CommandSender sender) {
@@ -87,5 +78,19 @@ public class DropParty extends JavaPlugin {
 
 	public boolean isSelecting(String playerName) {
 		return playersSelecting.contains(playerName);
+	}
+	
+	public void saveLocation(String saveType, int chestx, int chesty, int chestz){
+		
+		String url = getConfig().getString("");
+		String user = getConfig().getString("");
+		String password = getConfig().getString("");
+		switch (saveType){
+		case "chest":
+			//save to chest table
+		case "item":
+			//save to item table
+		default:
+		}
 	}
 }

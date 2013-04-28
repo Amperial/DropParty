@@ -29,6 +29,10 @@ public class DropPartyListener implements Listener {
 		}
 
 		Player player = event.getPlayer();
+		int chestx = clickedBlock.getX();
+		int chesty = clickedBlock.getY();
+		int chestz = clickedBlock.getZ();
+		String saveType = "chest";
 		// Code that saves the chest to mysql goes here
 		event.setCancelled(true);
 	}
