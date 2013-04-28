@@ -10,7 +10,7 @@ public class CommandSetChest {
 	private final ArrayList<String> playersSelecting = new ArrayList<String>();
 
 	public void setChest(String playerName, CommandSender sender) {
-
+		toggleSelecting(playerName, sender);
 	}
 
 	public void toggleSelecting(String playerName, CommandSender sender) {

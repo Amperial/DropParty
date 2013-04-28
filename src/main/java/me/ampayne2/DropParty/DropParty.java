@@ -21,9 +21,10 @@ public class DropParty extends JavaPlugin {
 		instance = this;
 		PluginManager manager = this.getServer().getPluginManager();
 		manager.registerEvents(new DropPartyListener(), this);
-		manager.registerEvents(new CommandController(), this);
 		getConfig().options().copyDefaults(true);
 		saveConfig();
+		CommandController command = new CommandController();
+		getCommand("dropparty").setExecutor(command);
 		try {
 			dbManager = new DatabaseManager(this);
 		} catch (TableRegistrationException e) {
