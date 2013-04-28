@@ -16,6 +16,7 @@ public class DropParty extends JavaPlugin {
 	public void onEnable() {
 		PluginManager manager = this.getServer().getPluginManager();
 		manager.registerEvents(new DropPartyListener(), this);
+		DropPartyListener.plugin = this;
 	}
 
 	public void onDisable() {
@@ -30,7 +31,7 @@ public class DropParty extends JavaPlugin {
 			return false;
 
 		if (!(sender instanceof Player)) {
-			sender.sendMessage("This command can only be run by a player.");
+			sender.sendMessage(ChatColor.RED + "This command can only be run by a player.");
 			return false;
 		}
 
@@ -77,10 +78,10 @@ public class DropParty extends JavaPlugin {
 	public void toggleSelecting(String playerName, CommandSender sender) {
 		if (isSelecting(playerName)) {
 			playersSelecting.remove(playerName);
-			sender.sendMessage("Selection mode disabled.");
+			sender.sendMessage(ChatColor.AQUA + "Selection mode deactivated.");
 		} else {
 			playersSelecting.add(playerName);
-			sender.sendMessage("Selection mode activated.");
+			sender.sendMessage(ChatColor.AQUA + "Selection mode activated.");
 		}
 	}
 
