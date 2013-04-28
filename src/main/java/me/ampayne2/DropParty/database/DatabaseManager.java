@@ -11,7 +11,7 @@ import me.ampayne2.DropParty.database.tables.DropPartyChestsTable;
 
 public class DatabaseManager {
 
-	private Database db;
+	private static Database db;
 
 	public DatabaseManager(DropParty plugin) throws TableRegistrationException, ConnectionException {
 		MySQLConfiguration config = new MySQLConfiguration();
@@ -26,7 +26,7 @@ public class DatabaseManager {
 		db.connect();
 	}
 
-	public Database getDatabase() {
+	public static Database getDatabase() {
 		return db;
 	}
 }

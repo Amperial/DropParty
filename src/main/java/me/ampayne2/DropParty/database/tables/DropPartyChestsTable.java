@@ -19,4 +19,8 @@ public class DropPartyChestsTable {
 
 	@Field
 	public double z;
+
+	public String toString() {
+		return x + ":" + y + ":" + z;
+	}
 }

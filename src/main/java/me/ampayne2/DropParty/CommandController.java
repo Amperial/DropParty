@@ -12,6 +12,7 @@ public class CommandController extends JavaPlugin {
 	CommandSetItem setItem = new CommandSetItem();
 	CommandStart start = new CommandStart();
 	CommandStop stop = new CommandStop();
+	CommandListChests listchests = new CommandListChests();
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
@@ -36,7 +37,7 @@ public class CommandController extends JavaPlugin {
 			sender.sendMessage(ChatColor.RED + "Too many arguments.");
 			return false;
 		}
-		if (!args[0].equalsIgnoreCase("setChest") && !args[0].equalsIgnoreCase("setItem") && !args[0].equalsIgnoreCase("start") && !args[0].equalsIgnoreCase("stop")) {
+		if (!args[0].equalsIgnoreCase("setChest") && !args[0].equalsIgnoreCase("setItem") && !args[0].equalsIgnoreCase("start") && !args[0].equalsIgnoreCase("stop") && !args[0].equalsIgnoreCase("listChests")) {
 			sender.sendMessage(ChatColor.RED
 					+ "Invalid argument. Valid arguments are: setchest, setitem, start, and stop.");
 			return false;
@@ -50,6 +51,8 @@ public class CommandController extends JavaPlugin {
 			start.start();
 		if (args[0].equalsIgnoreCase("stop"))
 			stop.stop();
+		if (args[0].equalsIgnoreCase("listchests"))
+			listchests.listchests();
 
 		return true;
 	}
