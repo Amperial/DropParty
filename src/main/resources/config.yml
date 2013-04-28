@@ -1,0 +1,8 @@
+# Default Configuration File for DropParty Plugin.
+mysql:
+  host: "localhost"
+  username: "yourdatabaseuser"
+  password: "yourdatabasepass"
+  database: "database"
+  port: 3306
+  prefix: "dp_"
