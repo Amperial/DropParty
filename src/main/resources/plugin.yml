@@ -1,3 +1,15 @@
 name: DropParty
 version: 0.1
+description: Create Simple Drop Parties.
+author: ampayne2
 main: me.ampayne2.DropParty.DropParty
+database: true
+commands:
+  dropparty:
+    aliases: dp
+    permission: dropparty.admin
+    permission-message: You do note have permission for Drop Party.
+    usage: "Usage: /[dropparty/dp] [setchest/setitem/start/stop]."
+permissions:
+  dropparty.admin:
+    description: Gives access to all Drop Party commands
