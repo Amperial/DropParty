@@ -1,5 +1,8 @@
 package me.ampayne2.DropParty;
 
+import me.ampayne2.DropParty.command.commands.CommandRemoveChest;
+import me.ampayne2.DropParty.command.commands.CommandSetChest;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
