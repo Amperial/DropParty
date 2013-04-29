@@ -12,13 +12,13 @@ public class DropPartyChestsTable {
 	public int id;
 
 	@Field
-	public double x;
+	public int x;
 
 	@Field
-	public double y;
+	public int y;
 
 	@Field
-	public double z;
+	public int z;
 
 	public String toString() {
 		return x + ":" + y + ":" + z;

@@ -52,7 +52,7 @@ public class CommandController extends JavaPlugin {
 		if (args[0].equalsIgnoreCase("stop"))
 			stop.stop();
 		if (args[0].equalsIgnoreCase("listchests"))
-			listchests.listchests();
+			listchests.listchests(sender);
 
 		return true;
 	}
