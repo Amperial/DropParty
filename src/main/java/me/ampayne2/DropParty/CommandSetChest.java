@@ -11,34 +11,37 @@ import org.bukkit.entity.Player;
 
 public class CommandSetChest {
 
-	private final static ArrayList<String> playersSelecting = new ArrayList<String>();
+	private final static ArrayList<String> playersSetting = new ArrayList<String>();
 
 	public void setChest(String playerName, CommandSender sender) {
-		toggleSelecting(playerName, sender);
+		if (CommandRemoveChest.isRemoving(playerName)){
+			CommandRemoveChest.toggleRemoving(playerName, sender);
+		}
+		toggleSetting(playerName, sender);
 	}
 
-	public static void toggleSelecting(String playerName, CommandSender sender) {
-		if (isSelecting(playerName)) {
-			playersSelecting.remove(playerName);
-			sender.sendMessage(ChatColor.AQUA + "Selection mode deactivated.");
+	public static void toggleSetting(String playerName, CommandSender sender) {
+		if (isSetting(playerName)) {
+			playersSetting.remove(playerName);
+			sender.sendMessage(ChatColor.AQUA + "SetChest mode deactivated.");
 		} else {
-			playersSelecting.add(playerName);
-			sender.sendMessage(ChatColor.AQUA + "Selection mode activated.");
+			playersSetting.add(playerName);
+			sender.sendMessage(ChatColor.AQUA + "SetChest mode activated.");
 		}
 	}
 
-	public static boolean isSelecting(String playerName) {
-		return playersSelecting.contains(playerName);
+	public static boolean isSetting(String playerName) {
+		return playersSetting.contains(playerName);
 	}
 
 	public static void saveChest(Player player, String playerName, int x, int y, int z) {
-		playersSelecting.remove(playerName);
+		playersSetting.remove(playerName);
 		DropPartyChestsTable table = new DropPartyChestsTable();
 		table.x = x;
 		table.y = y;
 		table.z = z;
 		DatabaseManager.getDatabase().save(table);
-		player.sendMessage("chest saved");
+		player.sendMessage(ChatColor.AQUA + "Chest Set Successfully.");
 		
 	}
 

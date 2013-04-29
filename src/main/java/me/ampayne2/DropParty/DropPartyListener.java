@@ -11,26 +11,40 @@ public class DropPartyListener implements Listener {
 
 	@EventHandler
 	public void onChestHit(PlayerInteractEvent event) {
-		if (event.getAction() != org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK){
+		if (event.getAction() != org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK) {
 			return;
 		}
 		String playerName = event.getPlayer().getDisplayName();
 		Player player = event.getPlayer();
-		if (!CommandSetChest.isSelecting(playerName)){
+		if (!CommandSetChest.isSetting(playerName)
+				&& !CommandRemoveChest.isRemoving(playerName)) {
+			return;
+		}
+		if (CommandSetChest.isSetting(playerName)
+				&& CommandRemoveChest.isRemoving(playerName)) {
 			return;
 		}
 
 		Block clickedBlock = event.getClickedBlock();
 
 		try {
-			if (clickedBlock.getType() != Material.CHEST){
+			if (clickedBlock.getType() != Material.CHEST) {
 				return;
 			}
 		} catch (NullPointerException ex) {
 			return;
 		}
-		CommandSetChest.saveChest(player, playerName, clickedBlock.getX(), clickedBlock.getY(),
-				clickedBlock.getZ());
+
+		if (CommandSetChest.isSetting(playerName)) {
+			CommandSetChest.saveChest(player, playerName, clickedBlock.getX(),
+					clickedBlock.getY(), clickedBlock.getZ());
+		}
+
+		if (CommandRemoveChest.isRemoving(playerName)) {
+			CommandRemoveChest.deleteChest(player, playerName,
+					clickedBlock.getX(), clickedBlock.getY(),
+					clickedBlock.getZ());
+		}
 		event.setCancelled(true);
 	}
 
