@@ -3,6 +3,7 @@ package me.ampayne2.DropParty;
 import com.alta189.simplesave.exceptions.ConnectionException;
 import com.alta189.simplesave.exceptions.TableRegistrationException;
 
+import me.ampayne2.DropParty.command.CommandController;
 import me.ampayne2.DropParty.database.DatabaseManager;
 
 import org.bukkit.plugin.PluginManager;
@@ -23,8 +24,10 @@ public class DropParty extends JavaPlugin {
 		manager.registerEvents(new DropPartyListener(), this);
 		getConfig().options().copyDefaults(true);
 		saveConfig();
-		CommandController command = new CommandController();
-		getCommand("dropparty").setExecutor(command);
+
+		//We load the command
+		getCommand("dropparty").setExecutor(new CommandController());
+
 		try {
 			dbManager = new DatabaseManager(this);
 		} catch (TableRegistrationException e) {

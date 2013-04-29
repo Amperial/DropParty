@@ -1,7 +1,8 @@
-package me.ampayne2.DropParty;
+package me.ampayne2.DropParty.command.commands;
 
 import java.util.ArrayList;
 
+import me.ampayne2.DropParty.command.interfaces.DropPartyCommand;
 import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.database.tables.DropPartyChestsTable;
 
@@ -9,17 +10,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CommandRemoveChest {
+public class CommandRemoveChest implements DropPartyCommand {
 	
 	private final static ArrayList<String> playersRemoving = new ArrayList<String>();
-
-	public void removeChest(String playerName, CommandSender sender) {
-		if (CommandSetChest.isSetting(playerName)){
-			CommandSetChest.toggleSetting(playerName, sender);
-		}
-		toggleRemoving(playerName, sender);
-		
-	}
 
 	public static void toggleRemoving(String playerName, CommandSender sender) {
 		if (isRemoving(playerName)) {
@@ -42,4 +35,12 @@ public class CommandRemoveChest {
 		
 	}
 
+	@Override
+	public void execute(CommandSender sender, String[] args) {
+		String playerName = sender.getName();
+		if (CommandSetChest.isSetting(playerName)){
+			CommandSetChest.toggleSetting(playerName, sender);
+		}
+		toggleRemoving(playerName, sender);
+	}
 }
