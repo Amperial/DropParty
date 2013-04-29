@@ -37,12 +37,7 @@ public class CommandRemoveChest {
 
 	public static void deleteChest(Player player, String playerName, int x, int y, int z) {
 		playersRemoving.remove(playerName);
-		DropPartyChestsTable table = new DropPartyChestsTable();
-		table.x = x;
-		table.y = y;
-		table.z = z;
-		DatabaseManager.getDatabase().select(DropPartyChestsTable.class).where().equal("x",x).and().equal("y",y).and().equal("z",z).execute().findOne();
-		DatabaseManager.getDatabase().remove(table);
+		DatabaseManager.getDatabase().remove(DatabaseManager.getDatabase().select(DropPartyChestsTable.class).where().equal("x",x).and().equal("y",y).and().equal("z",z).execute().findOne());
 		player.sendMessage(ChatColor.AQUA + "Chest Removed Successfully.");
 		
 	}
