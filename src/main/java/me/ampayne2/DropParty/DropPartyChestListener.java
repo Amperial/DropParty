@@ -8,9 +8,10 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class DropPartyListener implements Listener {
+public class DropPartyChestListener implements Listener {
 
 	@EventHandler
 	public void onChestHit(PlayerInteractEvent event) {
@@ -49,6 +50,24 @@ public class DropPartyListener implements Listener {
 					clickedBlock.getZ());
 		}
 		event.setCancelled(true);
+	}
+
+	@EventHandler
+	public void onChestBreak(BlockBreakEvent event) {
+		Block clickedBlock = event.getBlock();
+		Player player = event.getPlayer();
+		String playerName = event.getPlayer().getDisplayName();
+
+		try {
+			if (clickedBlock.getType() != Material.CHEST) {
+				return;
+			}
+		} catch (NullPointerException ex) {
+			return;
+		}
+
+		CommandRemoveChest.deleteChest(player, playerName, clickedBlock.getX(),
+				clickedBlock.getY(), clickedBlock.getZ());
 	}
 
 }

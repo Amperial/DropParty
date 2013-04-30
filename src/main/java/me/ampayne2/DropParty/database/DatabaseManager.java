@@ -8,6 +8,7 @@ import com.alta189.simplesave.mysql.MySQLConfiguration;
 
 import me.ampayne2.DropParty.DropParty;
 import me.ampayne2.DropParty.database.tables.DropPartyChestsTable;
+import me.ampayne2.DropParty.database.tables.DropPartyItempointsTable;
 
 public class DatabaseManager {
 
@@ -23,6 +24,7 @@ public class DatabaseManager {
 		config.setPrefix(plugin.getConfig().getString("mysql.prefix"));
 		db = DatabaseFactory.createNewDatabase(config);
 		db.registerTable(DropPartyChestsTable.class);
+		db.registerTable(DropPartyItempointsTable.class);
 		db.connect();
 	}
 

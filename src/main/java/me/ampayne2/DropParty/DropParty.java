@@ -21,7 +21,8 @@ public class DropParty extends JavaPlugin {
 	public void onEnable() {
 		instance = this;
 		PluginManager manager = this.getServer().getPluginManager();
-		manager.registerEvents(new DropPartyListener(), this);
+		manager.registerEvents(new DropPartyChestListener(), this);
+		manager.registerEvents(new DropPartyGlowstoneListener(), this);
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 

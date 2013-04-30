@@ -14,12 +14,19 @@ public class CommandListChests implements DropPartyCommand {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
-		int chestid = 0;
-		List<DropPartyChestsTable> list = DatabaseManager.getDatabase().select(DropPartyChestsTable.class).execute().find();
+		List<DropPartyChestsTable> list = DatabaseManager.getDatabase()
+				.select(DropPartyChestsTable.class).execute().find();
 		ListIterator<DropPartyChestsTable> li = list.listIterator();
-		while(li.hasNext()){
+		if (list.size() == 0) {
+			sender.sendMessage(ChatColor.AQUA + "No Drop Party Chests Found.");
+			return;
+		}
+		int id = 0;
+		while (li.hasNext()) {
 			DropPartyChestsTable entry = li.next();
-			sender.sendMessage(ChatColor.AQUA + "Chest " + entry.id + " X:" + entry.x + " Y:" + entry.y + " Z:" + entry.z);
+			id++;
+			sender.sendMessage(ChatColor.AQUA + "Chest " + id + " X:" + entry.x
+					+ " Y:" + entry.y + " Z:" + entry.z);
 		}
 	}
 }

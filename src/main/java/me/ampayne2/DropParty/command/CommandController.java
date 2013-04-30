@@ -5,10 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.ampayne2.DropParty.command.commands.CommandListChests;
+import me.ampayne2.DropParty.command.commands.CommandListItempoints;
 import me.ampayne2.DropParty.command.commands.CommandRemoveChest;
-import me.ampayne2.DropParty.command.commands.CommandRemoveItem;
+import me.ampayne2.DropParty.command.commands.CommandRemoveItempoint;
 import me.ampayne2.DropParty.command.commands.CommandSetChest;
-import me.ampayne2.DropParty.command.commands.CommandSetItem;
+import me.ampayne2.DropParty.command.commands.CommandSetItempoint;
 import me.ampayne2.DropParty.command.commands.CommandStart;
 import me.ampayne2.DropParty.command.commands.CommandStop;
 import me.ampayne2.DropParty.command.interfaces.DropPartyCommand;
@@ -21,19 +22,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class CommandController extends JavaPlugin {
 
-	//This contains all the command this plugin manage.
-	//A Map is simply a Key => Value system
 	private final Map<String, DropPartyCommand> commandList = new HashMap<String, DropPartyCommand>();
 
 	public CommandController() {
 
-		//We add every command to the commandList map.
-		commandList.put("setchest", new CommandSetChest());
-		commandList.put("setitem", new CommandSetItem());
 		commandList.put("start", new CommandStart());
 		commandList.put("stop", new CommandStop());
-		commandList.put("listchests", new CommandListChests());
+		commandList.put("setchest", new CommandSetChest());
+		commandList.put("setitempoint", new CommandSetItempoint());
 		commandList.put("removechest", new CommandRemoveChest());
+		commandList.put("removeitempoint", new CommandRemoveItempoint());
+		commandList.put("listchests", new CommandListChests());
+		commandList.put("listitempoints", new CommandListItempoints());
 	}
 
 	@Override
@@ -49,25 +49,35 @@ public class CommandController extends JavaPlugin {
 		}
 
 		if (!sender.hasPermission("dropparty.admin")) {
-			sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+			sender.sendMessage(ChatColor.RED
+					+ "You do not have permission to use this command.");
 			return true;
 		}
 
 		if (args.length == 0) {
-			sender.sendMessage(ChatColor.RED + "Invalid argument. Valid arguments are: " + Arrays.toString(commandList.keySet().toArray()));
-			return true;
-		}
-
-		if (args.length > 1) {
-			sender.sendMessage(ChatColor.RED + "Too many arguments.");
+			sender.sendMessage(ChatColor.RED
+					+ "Invalid argument. Valid arguments are: "
+					+ Arrays.toString(commandList.keySet().toArray()));
 			return true;
 		}
 
 		if (commandList.containsKey(args[0])) {
-			commandList.get(args[0]).execute(sender, args);
+			String[] newArgs;
+			if (args.length == 0) {
+				newArgs = new String[0];
+				args = new String[1];
+				args[0] = "";
+			} else {
+				newArgs = new String[args.length - 1];
+				System.arraycopy(args, 1, newArgs, 0, args.length - 1);
+			}
+			commandList.get(args[0]).execute(sender, newArgs);
+
 			return true;
 		} else {
-			sender.sendMessage(ChatColor.RED + "Invalid argument. Valid arguments are: " + Arrays.toString(commandList.keySet().toArray()));
+			sender.sendMessage(ChatColor.RED
+					+ "Invalid argument. Valid arguments are: "
+					+ Arrays.toString(commandList.keySet().toArray()));
 			return true;
 		}
 	}

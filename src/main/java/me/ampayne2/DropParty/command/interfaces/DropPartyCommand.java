@@ -9,8 +9,11 @@ public interface DropPartyCommand {
 
 	/**
 	 * The command executor
-	 * @param sender The sender of the command
-	 * @param args The arguments sent with the command
+	 * 
+	 * @param sender
+	 *            The sender of the command
+	 * @param args
+	 *            The arguments sent with the command
 	 */
-	public void execute(CommandSender sender, String[] args);
+	public void execute(CommandSender sender, String[] newArgs);
 }
