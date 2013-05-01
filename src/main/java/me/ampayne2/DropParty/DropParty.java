@@ -35,7 +35,7 @@ public class DropParty extends JavaPlugin {
 	private DatabaseManager dbManager = null;
 	private static DropParty instance;
 
-	public DropParty getInstance() {
+	public static DropParty getInstance() {
 		return instance;
 	}
 

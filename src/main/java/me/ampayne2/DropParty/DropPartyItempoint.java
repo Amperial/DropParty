@@ -20,6 +20,7 @@ package me.ampayne2.DropParty;
 
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Random;
 
 import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.database.tables.DropPartyItempointsTable;
@@ -48,12 +49,16 @@ public class DropPartyItempoint {
 			DropPartyItempointsTable entry = li.next();
 			World tworld = Bukkit.getServer().getWorld(entry.world);
 			itemPoints[id] = new Location(tworld, entry.x, entry.y, entry.z);
+			id++;
 		}
 		return itemPoints;
 		
 	}
 	
 	public static void dropItemStack(ItemStack itemStack, Location[] itemPoints){
+		Random generator = new Random();
+		int itempoint = generator.nextInt(itemPoints.length);
+		World world = itemPoints[itempoint].getWorld();
+		world.dropItemNaturally(itemPoints[itempoint], itemStack);
 	}
-
 }

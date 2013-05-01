@@ -29,18 +29,17 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
 public class DropPartyChest {
 	
-	public static Block[] getChests(CommandSender sender){
+	public static Chest[] getChests(CommandSender sender){
 		List<DropPartyChestsTable> list = DatabaseManager.getDatabase()
 				.select(DropPartyChestsTable.class).execute().find();
 		ListIterator<DropPartyChestsTable> li = list.listIterator();
-		Location[] chestlocs = new Location[list.size()];
-		Block[] chests = new Block[list.size()];
+		Chest[] chests = new Chest[list.size()];
 		if (list.size() == 0) {
 			sender.sendMessage(ChatColor.AQUA + "No Drop Party Chests Found.");
 			DropParty.toggleRunning(sender.getName(), sender);
@@ -49,14 +48,14 @@ public class DropPartyChest {
 		while (li.hasNext()) {
 			DropPartyChestsTable entry = li.next();
 			World tworld = Bukkit.getServer().getWorld(entry.world);
-			chestlocs[id] = new Location(tworld, entry.x, entry.y, entry.z);
-			chests[id] = chestlocs[id].getBlock();
+			Location chestloc = new Location(tworld, entry.x, entry.y, entry.z);
+			chests[id] = (Chest) chestloc.getBlock().getState();
 		}
 		return chests;
 		
 	}
 	
-	public static ItemStack getNextItemStack(Block[] chests){
+	public static ItemStack getNextItemStack(Chest[] chests){
 		ItemStack itemStack = new ItemStack(Material.BAKED_POTATO, 1);
 		return itemStack;
 	}
