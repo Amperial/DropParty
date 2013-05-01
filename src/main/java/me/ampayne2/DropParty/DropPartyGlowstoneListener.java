@@ -20,7 +20,10 @@ package me.ampayne2.DropParty;
 
 import me.ampayne2.DropParty.command.commands.CommandRemoveItempoint;
 import me.ampayne2.DropParty.command.commands.CommandSetItempoint;
+import me.ampayne2.DropParty.database.DatabaseManager;
+import me.ampayne2.DropParty.database.tables.DropPartyItempointsTable;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -29,9 +32,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 public class DropPartyGlowstoneListener implements Listener {
-	
+
 	@EventHandler
-	public void onBlockPlace(BlockPlaceEvent event){
+	public void onBlockPlace(BlockPlaceEvent event) {
 		String playerName = event.getPlayer().getDisplayName();
 		Player player = event.getPlayer();
 		if (!CommandSetItempoint.isSetting(playerName)
@@ -54,14 +57,25 @@ public class DropPartyGlowstoneListener implements Listener {
 		}
 
 		if (CommandSetItempoint.isSetting(playerName)) {
-			CommandSetItempoint.saveItempoint(player, playerName, placedBlock.getX(),
-					placedBlock.getY(), placedBlock.getZ());
+			CommandSetItempoint.saveItempoint(player, playerName, placedBlock
+					.getWorld().getName(), placedBlock.getX(), placedBlock
+					.getY(), placedBlock.getZ());
 		}
 
 		if (CommandRemoveItempoint.isRemoving(playerName)) {
+			if (DatabaseManager.getDatabase()
+					.select(DropPartyItempointsTable.class).where()
+					.equal("world", placedBlock.getWorld().getName()).and()
+					.equal("x", placedBlock.getX()).and()
+					.equal("y", placedBlock.getY()).and()
+					.equal("z", placedBlock.getZ()).execute().findOne() == null) {
+				player.sendMessage(ChatColor.RED
+						+ "There is no Drop Party Itempoint here.");
+				event.setCancelled(true);
+				return;
+			}
 			CommandRemoveItempoint.deleteItempoint(player, playerName,
-					placedBlock.getX(), placedBlock.getY(),
-					placedBlock.getZ());
+					placedBlock.getX(), placedBlock.getY(), placedBlock.getZ());
 		}
 		event.setCancelled(true);
 	}

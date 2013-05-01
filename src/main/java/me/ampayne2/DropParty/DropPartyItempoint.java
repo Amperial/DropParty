@@ -16,37 +16,44 @@
  * You should have received a copy of the GNU General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.DropParty.command.commands;
+package me.ampayne2.DropParty;
 
 import java.util.List;
 import java.util.ListIterator;
 
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-
-import me.ampayne2.DropParty.command.interfaces.DropPartyCommand;
 import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.database.tables.DropPartyItempointsTable;
 
-public class CommandListItempoints implements DropPartyCommand {
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
 
-	@Override
-	public void execute(CommandSender sender, String[] args) {
+public class DropPartyItempoint {
+	
+	public static Location[] getItempoints(CommandSender sender){
+		
 		List<DropPartyItempointsTable> list = DatabaseManager.getDatabase()
 				.select(DropPartyItempointsTable.class).execute().find();
 		ListIterator<DropPartyItempointsTable> li = list.listIterator();
+		Location[] itemPoints = new Location[list.size()];
 		if (list.size() == 0) {
-			sender.sendMessage(ChatColor.AQUA
-					+ "No Drop Party Item Points Found.");
-			return;
+			sender.sendMessage(ChatColor.AQUA + "No Drop Party Item Points Found.");
+			DropParty.toggleRunning(sender.getName(), sender);
 		}
 		int id = 0;
 		while (li.hasNext()) {
 			DropPartyItempointsTable entry = li.next();
-			id++;
-			sender.sendMessage(ChatColor.AQUA + "ItemPoint " + id + " World: " + entry.world + " X:"
-					+ entry.x + " Y:" + entry.y + " Z:" + entry.z);
+			World tworld = Bukkit.getServer().getWorld(entry.world);
+			itemPoints[id] = new Location(tworld, entry.x, entry.y, entry.z);
 		}
+		return itemPoints;
+		
+	}
+	
+	public static void dropItemStack(ItemStack itemStack, Location[] itemPoints){
 	}
 
 }

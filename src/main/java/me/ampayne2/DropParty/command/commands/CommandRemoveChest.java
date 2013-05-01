@@ -46,15 +46,16 @@ public class CommandRemoveChest implements DropPartyCommand {
 		return playersRemoving.contains(playerName);
 	}
 
-	public static void deleteChest(Player player, String playerName, int x,
-			int y, int z) {
-		playersRemoving.remove(playerName);
+	public static void deleteChest(Player player, String playerName,
+			String world, int x, int y, int z) {
 		DatabaseManager.getDatabase().remove(
 				DatabaseManager.getDatabase()
 						.select(DropPartyChestsTable.class).where()
+						.equal("world", player.getWorld().getName()).and()
 						.equal("x", x).and().equal("y", y).and().equal("z", z)
 						.execute().findOne());
-		player.sendMessage(ChatColor.AQUA + "Drop Party Chest Removed Successfully.");
+		player.sendMessage(ChatColor.AQUA
+				+ "Drop Party Chest Removed Successfully.");
 
 	}
 
@@ -64,20 +65,30 @@ public class CommandRemoveChest implements DropPartyCommand {
 		if (args.length == 1) {
 			List<DropPartyChestsTable> list = DatabaseManager.getDatabase()
 					.select(DropPartyChestsTable.class).execute().find();
-			int chestid = Integer.parseInt(args[0]);
+			int chestid;
+			try {
+				chestid = Integer.parseInt(args[0]);
+			} catch (NumberFormatException e) {
+				sender.sendMessage(ChatColor.RED + "'" + args[0] + "'"
+						+ " is not an integer.");
+				return;
+			}
 			if (!(list.size() >= chestid)) {
 				sender.sendMessage(ChatColor.AQUA
-						+ "Drop Party Chest Does not exist.");
+						+ "There is no Chest with the ID " + chestid);
 				return;
 			}
 			DropPartyChestsTable entry = list.get(chestid - 1);
+			Player player = (Player) sender;
 			DatabaseManager.getDatabase().remove(
 					DatabaseManager.getDatabase()
 							.select(DropPartyChestsTable.class).where()
+							.equal("world", player.getWorld().getName()).and()
 							.equal("x", entry.x).and().equal("y", entry.y)
 							.and().equal("z", entry.z).execute().findOne());
 
-			sender.sendMessage(ChatColor.AQUA + "Drop Party Chest Removed Successfully.");
+			sender.sendMessage(ChatColor.AQUA
+					+ "Drop Party Chest Removed Successfully.");
 			return;
 
 		}

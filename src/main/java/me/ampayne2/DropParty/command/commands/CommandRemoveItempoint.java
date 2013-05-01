@@ -36,10 +36,12 @@ public class CommandRemoveItempoint implements DropPartyCommand {
 	public static void toggleRemoving(String playerName, CommandSender sender) {
 		if (isRemoving(playerName)) {
 			playersRemoving.remove(playerName);
-			sender.sendMessage(ChatColor.AQUA + "RemoveItemPoint mode deactivated.");
+			sender.sendMessage(ChatColor.AQUA
+					+ "RemoveItemPoint mode deactivated.");
 		} else {
 			playersRemoving.add(playerName);
-			sender.sendMessage(ChatColor.AQUA + "RemoveItemPoint mode activated.");
+			sender.sendMessage(ChatColor.AQUA
+					+ "RemoveItemPoint mode activated.");
 		}
 	}
 
@@ -49,13 +51,14 @@ public class CommandRemoveItempoint implements DropPartyCommand {
 
 	public static void deleteItempoint(Player player, String playerName, int x,
 			int y, int z) {
-		playersRemoving.remove(playerName);
 		DatabaseManager.getDatabase().remove(
 				DatabaseManager.getDatabase()
 						.select(DropPartyItempointsTable.class).where()
+						.equal("world", player.getWorld().getName()).and()
 						.equal("x", x).and().equal("y", y).and().equal("z", z)
 						.execute().findOne());
-		player.sendMessage(ChatColor.AQUA + "Drop Party Item Point Removed Successfully.");
+		player.sendMessage(ChatColor.AQUA
+				+ "Drop Party Item Point Removed Successfully.");
 
 	}
 
@@ -65,20 +68,30 @@ public class CommandRemoveItempoint implements DropPartyCommand {
 		if (args.length == 1) {
 			List<DropPartyItempointsTable> list = DatabaseManager.getDatabase()
 					.select(DropPartyItempointsTable.class).execute().find();
-			int itempointid = Integer.parseInt(args[0]);
+			int itempointid;
+			try {
+				itempointid = Integer.parseInt(args[0]);
+			} catch (NumberFormatException e) {
+				sender.sendMessage(ChatColor.RED + "'" + args[0] + "'"
+						+ " is not an integer.");
+				return;
+			}
 			if (!(list.size() >= itempointid)) {
 				sender.sendMessage(ChatColor.AQUA
-						+ "Drop Party Item Point does not exist.");
+						+ "There is no Item Point with the ID " + itempointid);
 				return;
 			}
 			DropPartyItempointsTable entry = list.get(itempointid - 1);
+			Player player = (Player) sender;
 			DatabaseManager.getDatabase().remove(
 					DatabaseManager.getDatabase()
 							.select(DropPartyItempointsTable.class).where()
+							.equal("world", player.getWorld().getName()).and()
 							.equal("x", entry.x).and().equal("y", entry.y)
 							.and().equal("z", entry.z).execute().findOne());
 
-			sender.sendMessage(ChatColor.AQUA + "Drop Party Item Point Removed Successfully.");
+			sender.sendMessage(ChatColor.AQUA
+					+ "Drop Party Item Point Removed Successfully.");
 			return;
 
 		}

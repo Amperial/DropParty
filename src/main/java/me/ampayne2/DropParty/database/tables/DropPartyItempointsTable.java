@@ -27,7 +27,10 @@ public class DropPartyItempointsTable {
 
 	@Id
 	public int id;
-
+	
+	@Field
+	public String world;
+	
 	@Field
 	public int x;
 

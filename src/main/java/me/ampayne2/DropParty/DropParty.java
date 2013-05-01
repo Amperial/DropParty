@@ -18,12 +18,15 @@
  */
 package me.ampayne2.DropParty;
 
+import java.io.IOException;
 import com.alta189.simplesave.exceptions.ConnectionException;
 import com.alta189.simplesave.exceptions.TableRegistrationException;
 
 import me.ampayne2.DropParty.command.CommandController;
 import me.ampayne2.DropParty.database.DatabaseManager;
 
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -62,6 +65,12 @@ public class DropParty extends JavaPlugin {
 			getServer().getPluginManager().disablePlugin(this);
 			return;
 		}
+		try {
+		    Metrics metrics = new Metrics(this);
+		    metrics.start();
+		} catch (IOException e) {
+		    // Failed to submit the stats :-(
+		}
 	}
 
 	public void onDisable() {
@@ -70,6 +79,26 @@ public class DropParty extends JavaPlugin {
 
 	public DatabaseManager getDatabaseManager() {
 		return dbManager;
+	}
+	
+	private static int isRunning = 0;
+	
+	public static void toggleRunning(String playerName, CommandSender sender) {
+		if (isRunning == 1) {
+			isRunning = 0;
+			sender.sendMessage(ChatColor.AQUA + "DropParty stopped.");
+		} else {
+			isRunning = 1;
+			sender.sendMessage(ChatColor.AQUA + "DropParty started.");
+		}
+	}
+	
+	public static boolean isRunning(){
+		if (isRunning == 1){
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

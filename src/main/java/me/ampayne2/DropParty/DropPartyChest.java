@@ -16,35 +16,49 @@
  * You should have received a copy of the GNU General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.DropParty.command.commands;
+package me.ampayne2.DropParty;
 
 import java.util.List;
 import java.util.ListIterator;
 
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-
-import me.ampayne2.DropParty.command.interfaces.DropPartyCommand;
 import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.database.tables.DropPartyChestsTable;
 
-public class CommandListChests implements DropPartyCommand {
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
 
-	@Override
-	public void execute(CommandSender sender, String[] args) {
+public class DropPartyChest {
+	
+	public static Block[] getChests(CommandSender sender){
 		List<DropPartyChestsTable> list = DatabaseManager.getDatabase()
 				.select(DropPartyChestsTable.class).execute().find();
 		ListIterator<DropPartyChestsTable> li = list.listIterator();
+		Location[] chestlocs = new Location[list.size()];
+		Block[] chests = new Block[list.size()];
 		if (list.size() == 0) {
 			sender.sendMessage(ChatColor.AQUA + "No Drop Party Chests Found.");
-			return;
+			DropParty.toggleRunning(sender.getName(), sender);
 		}
 		int id = 0;
 		while (li.hasNext()) {
 			DropPartyChestsTable entry = li.next();
-			id++;
-			sender.sendMessage(ChatColor.AQUA + "Chest " + id + " World: " + entry.world + " X: " + entry.x
-					+ " Y: " + entry.y + " Z: " + entry.z);
+			World tworld = Bukkit.getServer().getWorld(entry.world);
+			chestlocs[id] = new Location(tworld, entry.x, entry.y, entry.z);
+			chests[id] = chestlocs[id].getBlock();
 		}
+		return chests;
+		
 	}
+	
+	public static ItemStack getNextItemStack(Block[] chests){
+		ItemStack itemStack = new ItemStack(Material.BAKED_POTATO, 1);
+		return itemStack;
+	}
+
 }

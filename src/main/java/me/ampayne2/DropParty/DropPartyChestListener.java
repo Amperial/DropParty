@@ -20,7 +20,10 @@ package me.ampayne2.DropParty;
 
 import me.ampayne2.DropParty.command.commands.CommandRemoveChest;
 import me.ampayne2.DropParty.command.commands.CommandSetChest;
+import me.ampayne2.DropParty.database.DatabaseManager;
+import me.ampayne2.DropParty.database.tables.DropPartyChestsTable;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -56,16 +59,29 @@ public class DropPartyChestListener implements Listener {
 		} catch (NullPointerException ex) {
 			return;
 		}
+		clickedBlock.getWorld().getName();
 
 		if (CommandSetChest.isSetting(playerName)) {
-			CommandSetChest.saveChest(player, playerName, clickedBlock.getX(),
-					clickedBlock.getY(), clickedBlock.getZ());
+			CommandSetChest.saveChest(player, playerName, clickedBlock
+					.getWorld().getName(), clickedBlock.getX(), clickedBlock
+					.getY(), clickedBlock.getZ());
 		}
 
 		if (CommandRemoveChest.isRemoving(playerName)) {
-			CommandRemoveChest.deleteChest(player, playerName,
-					clickedBlock.getX(), clickedBlock.getY(),
-					clickedBlock.getZ());
+			if (DatabaseManager.getDatabase()
+					.select(DropPartyChestsTable.class).where()
+					.equal("world", clickedBlock.getWorld().getName()).and()
+					.equal("x", clickedBlock.getX()).and()
+					.equal("y", clickedBlock.getY()).and()
+					.equal("z", clickedBlock.getZ()).execute().findOne() == null) {
+				player.sendMessage(ChatColor.RED
+						+ "This chest is not a drop party chest.");
+				event.setCancelled(true);
+				return;
+			}
+			CommandRemoveChest.deleteChest(player, playerName, clickedBlock
+					.getWorld().getName(), clickedBlock.getX(), clickedBlock
+					.getY(), clickedBlock.getZ());
 		}
 		event.setCancelled(true);
 	}
@@ -84,7 +100,8 @@ public class DropPartyChestListener implements Listener {
 			return;
 		}
 
-		CommandRemoveChest.deleteChest(player, playerName, clickedBlock.getX(),
+		CommandRemoveChest.deleteChest(player, playerName, clickedBlock
+				.getWorld().getName(), clickedBlock.getX(),
 				clickedBlock.getY(), clickedBlock.getZ());
 	}
 

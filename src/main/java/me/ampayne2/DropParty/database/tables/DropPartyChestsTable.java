@@ -18,7 +18,6 @@
  */
 package me.ampayne2.DropParty.database.tables;
 
-
 import com.alta189.simplesave.Field;
 import com.alta189.simplesave.Id;
 import com.alta189.simplesave.Table;
@@ -28,6 +27,9 @@ public class DropPartyChestsTable {
 
 	@Id
 	public int id;
+
+	@Field
+	public String world;
 
 	@Field
 	public int x;

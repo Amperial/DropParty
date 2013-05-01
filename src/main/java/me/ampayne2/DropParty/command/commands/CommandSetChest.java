@@ -45,17 +45,18 @@ public class CommandSetChest implements DropPartyCommand {
 		return playersSetting.contains(playerName);
 	}
 
-	public static void saveChest(Player player, String playerName, int x,
-			int y, int z) {
+	public static void saveChest(Player player, String playerName,
+			String world, int x, int y, int z) {
 		if (DatabaseManager.getDatabase().select(DropPartyChestsTable.class)
-				.where().equal("x", x).and().equal("y", y).and().equal("z", z)
+				.where().equal("world", player.getWorld().getName()).and()
+				.equal("x", x).and().equal("y", y).and().equal("z", z)
 				.execute().findOne() != null) {
 			player.sendMessage(ChatColor.RED
 					+ "This chest is already a drop party chest.");
 			return;
 		}
-		playersSetting.remove(playerName);
 		DropPartyChestsTable table = new DropPartyChestsTable();
+		table.world = player.getWorld().getName();
 		table.x = x;
 		table.y = y;
 		table.z = z;
