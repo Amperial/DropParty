@@ -59,6 +59,8 @@ public class DropPartyItempoint {
 		Random generator = new Random();
 		int itempoint = generator.nextInt(itemPoints.length);
 		World world = itemPoints[itempoint].getWorld();
-		world.dropItemNaturally(itemPoints[itempoint], itemStack);
+		if(itemStack != null){
+			world.dropItemNaturally(itemPoints[itempoint], itemStack);
+		}
 	}
 }

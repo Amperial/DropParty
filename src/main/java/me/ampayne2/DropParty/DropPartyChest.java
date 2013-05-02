@@ -27,10 +27,10 @@ import me.ampayne2.DropParty.database.tables.DropPartyChestsTable;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Chest;
 import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class DropPartyChest {
@@ -50,14 +50,35 @@ public class DropPartyChest {
 			World tworld = Bukkit.getServer().getWorld(entry.world);
 			Location chestloc = new Location(tworld, entry.x, entry.y, entry.z);
 			chests[id] = (Chest) chestloc.getBlock().getState();
+			id++;
 		}
 		return chests;
 		
 	}
 	
-	public static ItemStack getNextItemStack(Chest[] chests){
-		ItemStack itemStack = new ItemStack(Material.BAKED_POTATO, 1);
-		return itemStack;
-	}
+	public static ItemStack getNextItemStack(CommandSender sender, Chest[] chests){
+		int chest = 0;
+		Inventory inv = chests[chest].getBlockInventory();
+		int slotindex = 0;
+		while(DropParty.isRunning()) {
+			if(slotindex == 27){
+				slotindex = 0;
+				if(chests.length == chest+1){
+					sender.sendMessage(ChatColor.AQUA + "Drop Party has run out of items.");
+					DropParty.toggleRunning(sender.getName(), sender);
+				}else{
+					chest++;
+					inv = chests[chest].getBlockInventory();
+				}
 
+			}
+			if(inv.getItem(slotindex) != null){
+				ItemStack itemStack = inv.getItem(slotindex);
+				inv.setItem(slotindex, null);
+				return itemStack;
+			}
+			slotindex++;
+		}
+		return null;
+	}
 }

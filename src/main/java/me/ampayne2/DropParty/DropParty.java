@@ -81,7 +81,7 @@ public class DropParty extends JavaPlugin {
 		return dbManager;
 	}
 	
-	private static int isRunning = 0;
+	static int isRunning = 0;
 	
 	public static void toggleRunning(String playerName, CommandSender sender) {
 		if (isRunning == 1) {

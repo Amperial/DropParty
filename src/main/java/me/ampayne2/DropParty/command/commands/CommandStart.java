@@ -35,10 +35,9 @@ public class CommandStart implements DropPartyCommand {
 		DropParty.toggleRunning(sender.getName(), sender);
 		Chest[] chests = DropPartyChest.getChests(sender);
 		Location[] itemPoints = DropPartyItempoint.getItempoints(sender);
-		while (DropParty.isRunning()){
-			ItemStack itemStack = DropPartyChest.getNextItemStack(chests);
+		while (DropParty.isRunning()) {
+			ItemStack itemStack = DropPartyChest.getNextItemStack(sender, chests);
 			DropPartyItempoint.dropItemStack(itemStack, itemPoints);
-			//there needs to be a wait here, somehow
 		}
 	}
 }
