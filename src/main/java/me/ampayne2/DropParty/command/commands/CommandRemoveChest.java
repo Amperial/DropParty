@@ -48,14 +48,19 @@ public class CommandRemoveChest implements DropPartyCommand {
 
 	public static void deleteChest(Player player, String playerName,
 			String world, int x, int y, int z) {
-		DatabaseManager.getDatabase().remove(
-				DatabaseManager.getDatabase()
-						.select(DropPartyChestsTable.class).where()
-						.equal("world", player.getWorld().getName()).and()
-						.equal("x", x).and().equal("y", y).and().equal("z", z)
-						.execute().findOne());
-		player.sendMessage(ChatColor.AQUA
-				+ "Drop Party Chest Removed Successfully.");
+		if (DatabaseManager.getDatabase().select(DropPartyChestsTable.class)
+				.where().equal("world", player.getWorld().getName()).and()
+				.equal("x", x).and().equal("y", y).and().equal("z", z)
+				.execute().findOne() != null) {
+			DatabaseManager.getDatabase().remove(
+					DatabaseManager.getDatabase()
+							.select(DropPartyChestsTable.class).where()
+							.equal("world", player.getWorld().getName()).and()
+							.equal("x", x).and().equal("y", y).and()
+							.equal("z", z).execute().findOne());
+			player.sendMessage(ChatColor.AQUA
+					+ "Drop Party Chest Removed Successfully.");
+		}
 
 	}
 
