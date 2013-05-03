@@ -47,7 +47,6 @@ public class DropParty extends JavaPlugin {
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 
-		//We load the command
 		getCommand("dropparty").setExecutor(new CommandController());
 
 		try {
@@ -81,7 +80,7 @@ public class DropParty extends JavaPlugin {
 		return dbManager;
 	}
 	
-	static int isRunning = 0;
+	private static int isRunning = 0;
 	
 	public static void toggleRunning(String playerName, CommandSender sender) {
 		if (isRunning == 1) {

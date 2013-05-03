@@ -28,8 +28,10 @@ public class CommandStart implements DropPartyCommand {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
-		DropPartyDrop.setSender(sender);
-		DropParty.toggleRunning(sender.getName(), sender);
-		DropPartyDrop.dropItems(sender);
+		if(DropParty.isRunning() == false){
+			DropPartyDrop.setSender(sender);
+			DropParty.toggleRunning(sender.getName(), sender);
+			DropPartyDrop.dropItems(sender);
+		}
 	}
 }
