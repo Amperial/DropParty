@@ -27,7 +27,9 @@ public class CommandStop implements DropPartyCommand{
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
-		DropParty.toggleRunning(sender.getName(), sender);
+		if(!DropParty.isRunning()){
+			DropParty.toggleRunning(sender.getName(), sender);
+		}
 	}
 
 }
