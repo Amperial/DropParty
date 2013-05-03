@@ -19,25 +19,17 @@
 package me.ampayne2.DropParty.command.commands;
 
 import me.ampayne2.DropParty.DropParty;
-import me.ampayne2.DropParty.DropPartyChest;
-import me.ampayne2.DropParty.DropPartyItempoint;
+import me.ampayne2.DropParty.DropPartyDrop;
 import me.ampayne2.DropParty.command.interfaces.DropPartyCommand;
 
-import org.bukkit.Location;
-import org.bukkit.block.Chest;
 import org.bukkit.command.CommandSender;
-import org.bukkit.inventory.ItemStack;
 
 public class CommandStart implements DropPartyCommand {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
+		DropPartyDrop.setSender(sender);
 		DropParty.toggleRunning(sender.getName(), sender);
-		Chest[] chests = DropPartyChest.getChests(sender);
-		Location[] itemPoints = DropPartyItempoint.getItempoints(sender);
-		while (DropParty.isRunning()) {
-			ItemStack itemStack = DropPartyChest.getNextItemStack(sender, chests);
-			DropPartyItempoint.dropItemStack(itemStack, itemPoints);
-		}
+		DropPartyDrop.dropItems(sender);
 	}
 }
