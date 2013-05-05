@@ -9,7 +9,7 @@
 	<description>Drop Party Plugin for Bukkit.</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<bukkitVersion>1.5.1-R0.1</bukkitVersion>
+		<bukkitVersion>1.5.2-R0.2-SNAPSHOT</bukkitVersion>
 	</properties>
 
 	<repositories>
