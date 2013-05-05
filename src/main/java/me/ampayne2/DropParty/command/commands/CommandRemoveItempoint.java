@@ -82,11 +82,10 @@ public class CommandRemoveItempoint implements DropPartyCommand {
 				return;
 			}
 			DropPartyItempointsTable entry = list.get(itempointid - 1);
-			Player player = (Player) sender;
 			DatabaseManager.getDatabase().remove(
 					DatabaseManager.getDatabase()
 							.select(DropPartyItempointsTable.class).where()
-							.equal("world", player.getWorld().getName()).and()
+							.equal("world", entry.world).and()
 							.equal("x", entry.x).and().equal("y", entry.y)
 							.and().equal("z", entry.z).execute().findOne());
 

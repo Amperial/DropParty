@@ -84,11 +84,10 @@ public class CommandRemoveChest implements DropPartyCommand {
 				return;
 			}
 			DropPartyChestsTable entry = list.get(chestid - 1);
-			Player player = (Player) sender;
 			DatabaseManager.getDatabase().remove(
 					DatabaseManager.getDatabase()
 							.select(DropPartyChestsTable.class).where()
-							.equal("world", player.getWorld().getName()).and()
+							.equal("world", entry.world).and()
 							.equal("x", entry.x).and().equal("y", entry.y)
 							.and().equal("z", entry.z).execute().findOne());
 
