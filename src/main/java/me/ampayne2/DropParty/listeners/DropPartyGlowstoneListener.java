@@ -16,31 +16,27 @@
  * You should have received a copy of the GNU General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.DropParty.database.tables;
+package me.ampayne2.DropParty.listeners;
 
-import com.alta189.simplesave.Field;
-import com.alta189.simplesave.Id;
-import com.alta189.simplesave.Table;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPlaceEvent;
 
-@Table("DropPartyChest")
-public class DropPartyChestsTable {
+public class DropPartyGlowstoneListener implements Listener {
 
-	@Id
-	public int id;
-	
-	@Field
-	public String dpid;
-
-	@Field
-	public String world;
-
-	@Field
-	public int x;
-
-	@Field
-	public int y;
-
-	@Field
-	public int z;
+	@EventHandler
+	public void onBlockPlace(BlockPlaceEvent event) {
+		Block placedBlock = event.getBlock();
+		try {
+			if (placedBlock.getType() != Material.GLOWSTONE) {
+				return;
+			}
+		} catch (NullPointerException ex) {
+			return;
+		}
+		event.setCancelled(true);
+	}
 
 }

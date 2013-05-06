@@ -29,6 +29,9 @@ public class DropPartyItempointsTable {
 	public int id;
 	
 	@Field
+	public String dpid;
+	
+	@Field
 	public String world;
 	
 	@Field
@@ -39,9 +42,5 @@ public class DropPartyItempointsTable {
 
 	@Field
 	public int z;
-
-	public String toString() {
-		return x + ":" + y + ":" + z;
-	}
 
 }

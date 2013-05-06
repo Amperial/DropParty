@@ -24,6 +24,8 @@ import com.alta189.simplesave.exceptions.TableRegistrationException;
 
 import me.ampayne2.DropParty.command.CommandController;
 import me.ampayne2.DropParty.database.DatabaseManager;
+import me.ampayne2.DropParty.listeners.DropPartyChestListener;
+import me.ampayne2.DropParty.listeners.DropPartyGlowstoneListener;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

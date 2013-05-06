@@ -18,14 +18,23 @@
  */
 package me.ampayne2.DropParty.command;
 
-import me.ampayne2.DropParty.command.commands.CommandListChests;
-import me.ampayne2.DropParty.command.commands.CommandListItempoints;
-import me.ampayne2.DropParty.command.commands.CommandRemoveChest;
-import me.ampayne2.DropParty.command.commands.CommandRemoveItempoint;
-import me.ampayne2.DropParty.command.commands.CommandSetChest;
-import me.ampayne2.DropParty.command.commands.CommandSetItempoint;
+import me.ampayne2.DropParty.command.commands.CommandCreate;
+import me.ampayne2.DropParty.command.commands.CommandDelete;
 import me.ampayne2.DropParty.command.commands.CommandStart;
-import me.ampayne2.DropParty.command.commands.CommandStop;
+import me.ampayne2.DropParty.command.commands.CommandTeleport;
+import me.ampayne2.DropParty.command.commands.list.CommandListChests;
+import me.ampayne2.DropParty.command.commands.list.CommandListItempoints;
+import me.ampayne2.DropParty.command.commands.list.CommandListParties;
+import me.ampayne2.DropParty.command.commands.list.CommandListSettings;
+import me.ampayne2.DropParty.command.commands.list.CommandListTeleport;
+import me.ampayne2.DropParty.command.commands.remove.CommandRemoveChest;
+import me.ampayne2.DropParty.command.commands.remove.CommandRemoveItempoint;
+import me.ampayne2.DropParty.command.commands.set.CommandSetChest;
+import me.ampayne2.DropParty.command.commands.set.CommandSetItempoint;
+import me.ampayne2.DropParty.command.commands.set.CommandSetItemDelay;
+import me.ampayne2.DropParty.command.commands.set.CommandSetMaxLength;
+import me.ampayne2.DropParty.command.commands.set.CommandSetMaxStack;
+import me.ampayne2.DropParty.command.commands.set.CommandSetTeleport;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -39,25 +48,43 @@ public class CommandController extends JavaPlugin {
 
 	public CommandController() {
 
-		SubCommand chest = new SubCommand();
-		chest.addCommand("set", new CommandSetChest());
-		chest.addCommand("remove", new CommandRemoveChest());
-		chest.addCommand("list", new CommandListChests());
-		mainCommand.addCommand("chest", chest);
-
-		SubCommand item = new SubCommand();
-		item.addCommand("set", new CommandSetItempoint());
-		item.addCommand("remove", new CommandRemoveItempoint());
-		item.addCommand("list", new CommandListItempoints());
-		mainCommand.addCommand("item", item);
-
-		SubCommand start = new SubCommand();
-		start.addCommand("", new CommandStart());
+		CommandStart start = new CommandStart();
 		mainCommand.addCommand("start", start);
 
-		SubCommand stop = new SubCommand();
-		stop.addCommand("", new CommandStop());
+		CommandStart stop = new CommandStart();
 		mainCommand.addCommand("stop", stop);
+		
+		CommandTeleport teleport = new CommandTeleport();
+		mainCommand.addCommand("teleport", teleport);
+		
+		CommandCreate create = new CommandCreate();
+		mainCommand.addCommand("create", create);
+		
+		SubCommand set = new SubCommand();
+		set.addCommand("chest", new CommandSetChest());
+		set.addCommand("item", new CommandSetItempoint());
+		set.addCommand("teleport", new CommandSetTeleport());
+		set.addCommand("itemdelay", new CommandSetItemDelay());
+		set.addCommand("maxstack", new CommandSetMaxStack());
+		set.addCommand("maxlength", new CommandSetMaxLength());
+		mainCommand.addCommand("set", set);
+		
+		SubCommand remove = new SubCommand();
+		remove.addCommand("chest", new CommandRemoveChest());
+		remove.addCommand("item", new CommandRemoveItempoint());
+		mainCommand.addCommand("remove", remove);
+		
+		SubCommand list = new SubCommand();
+		list.addCommand("parties", new CommandListParties());
+		list.addCommand("chests", new CommandListChests());
+		list.addCommand("items", new CommandListItempoints());
+		list.addCommand("settings", new CommandListSettings());
+		list.addCommand("teleport", new CommandListTeleport());
+		mainCommand.addCommand("list", list);
+		
+		SubCommand delete = new SubCommand();
+		delete.addCommand("", new CommandDelete());
+		mainCommand.addCommand("delete", delete);
 	}
 
 	@Override
@@ -68,11 +95,6 @@ public class CommandController extends JavaPlugin {
 
 		if (!(sender instanceof Player)) {
 			sender.sendMessage("This command can only be run by a player.");
-			return true;
-		}
-
-		if (!sender.hasPermission("dropparty.admin")) {
-			sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
 			return true;
 		}
 

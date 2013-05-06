@@ -16,10 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.DropParty;
+package me.ampayne2.DropParty.listeners;
 
-import me.ampayne2.DropParty.command.commands.CommandRemoveChest;
-import me.ampayne2.DropParty.command.commands.CommandSetChest;
 import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.database.tables.DropPartyChestsTable;
 
@@ -39,19 +37,7 @@ public class DropPartyChestListener implements Listener {
 		if (event.getAction() != org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK) {
 			return;
 		}
-		String playerName = event.getPlayer().getDisplayName();
-		Player player = event.getPlayer();
-		if (!CommandSetChest.isSetting(playerName)
-				&& !CommandRemoveChest.isRemoving(playerName)) {
-			return;
-		}
-		if (CommandSetChest.isSetting(playerName)
-				&& CommandRemoveChest.isRemoving(playerName)) {
-			return;
-		}
-
 		Block clickedBlock = event.getClickedBlock();
-
 		try {
 			if (clickedBlock.getType() != Material.CHEST) {
 				return;
@@ -60,29 +46,6 @@ public class DropPartyChestListener implements Listener {
 			return;
 		}
 		clickedBlock.getWorld().getName();
-
-		if (CommandSetChest.isSetting(playerName)) {
-			CommandSetChest.saveChest(player, playerName, clickedBlock
-					.getWorld().getName(), clickedBlock.getX(), clickedBlock
-					.getY(), clickedBlock.getZ());
-		}
-
-		if (CommandRemoveChest.isRemoving(playerName)) {
-			if (DatabaseManager.getDatabase()
-					.select(DropPartyChestsTable.class).where()
-					.equal("world", clickedBlock.getWorld().getName()).and()
-					.equal("x", clickedBlock.getX()).and()
-					.equal("y", clickedBlock.getY()).and()
-					.equal("z", clickedBlock.getZ()).execute().findOne() == null) {
-				player.sendMessage(ChatColor.RED
-						+ "This chest is not a drop party chest.");
-				event.setCancelled(true);
-				return;
-			}
-			CommandRemoveChest.deleteChest(player, playerName, clickedBlock
-					.getWorld().getName(), clickedBlock.getX(), clickedBlock
-					.getY(), clickedBlock.getZ());
-		}
 		event.setCancelled(true);
 	}
 
@@ -90,8 +53,6 @@ public class DropPartyChestListener implements Listener {
 	public void onChestBreak(BlockBreakEvent event) {
 		Block clickedBlock = event.getBlock();
 		Player player = event.getPlayer();
-		String playerName = event.getPlayer().getDisplayName();
-
 		try {
 			if (clickedBlock.getType() != Material.CHEST) {
 				return;
@@ -99,10 +60,24 @@ public class DropPartyChestListener implements Listener {
 		} catch (NullPointerException ex) {
 			return;
 		}
-
-		CommandRemoveChest.deleteChest(player, playerName, clickedBlock
-				.getWorld().getName(), clickedBlock.getX(),
-				clickedBlock.getY(), clickedBlock.getZ());
+		if(DatabaseManager.getDatabase()
+				.select(DropPartyChestsTable.class).where()
+				.equal("world", clickedBlock.getWorld()).and()
+				.equal("x", clickedBlock.getX()).and()
+				.equal("y", clickedBlock.getY()).and()
+				.equal("z", clickedBlock.getZ()).execute().find() != null){
+			if(!player.hasPermission("dropparty.removechest")){
+				player.sendMessage("You do not have permission to break a Drop Party Chest.");
+				event.setCancelled(true);
+				return;
+			}
+			DatabaseManager.getDatabase().remove(DatabaseManager.getDatabase()
+					.select(DropPartyChestsTable.class).where()
+					.equal("world", clickedBlock.getWorld()).and()
+					.equal("x", clickedBlock.getX()).and()
+					.equal("y", clickedBlock.getY()).and()
+					.equal("z", clickedBlock.getZ()).execute().find());
+			player.sendMessage(ChatColor.AQUA + "Drop Party Chest Removed.");
+		}
 	}
-
 }

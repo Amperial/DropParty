@@ -22,25 +22,13 @@ import com.alta189.simplesave.Field;
 import com.alta189.simplesave.Id;
 import com.alta189.simplesave.Table;
 
-@Table("DropPartyChest")
-public class DropPartyChestsTable {
-
+@Table("DropPartyParties")
+public class DropPartyPartiesTable {
+	
 	@Id
 	public int id;
 	
 	@Field
 	public String dpid;
-
-	@Field
-	public String world;
-
-	@Field
-	public int x;
-
-	@Field
-	public int y;
-
-	@Field
-	public int z;
 
 }

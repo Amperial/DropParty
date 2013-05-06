@@ -16,31 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.DropParty.database.tables;
+package me.ampayne2.DropParty.command.commands.remove;
 
-import com.alta189.simplesave.Field;
-import com.alta189.simplesave.Id;
-import com.alta189.simplesave.Table;
+import me.ampayne2.DropParty.command.interfaces.DropPartyCommand;
+import org.bukkit.command.CommandSender;
 
-@Table("DropPartyChest")
-public class DropPartyChestsTable {
+public class CommandRemoveChest implements DropPartyCommand {
 
-	@Id
-	public int id;
-	
-	@Field
-	public String dpid;
-
-	@Field
-	public String world;
-
-	@Field
-	public int x;
-
-	@Field
-	public int y;
-
-	@Field
-	public int z;
-
+	@Override
+	public void execute(CommandSender sender, String[] args) {
+	}
 }

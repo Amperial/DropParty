@@ -22,9 +22,9 @@ import com.alta189.simplesave.Field;
 import com.alta189.simplesave.Id;
 import com.alta189.simplesave.Table;
 
-@Table("DropPartyChest")
-public class DropPartyChestsTable {
-
+@Table("DropPartySetting")
+public class DropPartySettingsTable {
+	
 	@Id
 	public int id;
 	
@@ -32,15 +32,12 @@ public class DropPartyChestsTable {
 	public String dpid;
 
 	@Field
-	public String world;
+	public int itemdelay;
 
 	@Field
-	public int x;
+	public int maxlength;
 
 	@Field
-	public int y;
-
-	@Field
-	public int z;
+	public int maxstack;
 
 }

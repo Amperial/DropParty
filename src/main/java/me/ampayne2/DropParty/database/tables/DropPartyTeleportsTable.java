@@ -22,9 +22,9 @@ import com.alta189.simplesave.Field;
 import com.alta189.simplesave.Id;
 import com.alta189.simplesave.Table;
 
-@Table("DropPartyChest")
-public class DropPartyChestsTable {
-
+@Table("DropPartyTeleport")
+public class DropPartyTeleportsTable {
+	
 	@Id
 	public int id;
 	
@@ -35,12 +35,18 @@ public class DropPartyChestsTable {
 	public String world;
 
 	@Field
-	public int x;
+	public double x;
 
 	@Field
-	public int y;
+	public double y;
 
 	@Field
-	public int z;
+	public double z;
+	
+	@Field
+	public float pitch;
+	
+	@Field
+	public float yaw;
 
 }

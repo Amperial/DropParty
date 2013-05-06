@@ -16,31 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.DropParty.database.tables;
+package me.ampayne2.DropParty;
 
-import com.alta189.simplesave.Field;
-import com.alta189.simplesave.Id;
-import com.alta189.simplesave.Table;
-
-@Table("DropPartyChest")
-public class DropPartyChestsTable {
-
-	@Id
-	public int id;
-	
-	@Field
-	public String dpid;
-
-	@Field
-	public String world;
-
-	@Field
-	public int x;
-
-	@Field
-	public int y;
-
-	@Field
-	public int z;
+public class DropPartyHM {
 
 }
