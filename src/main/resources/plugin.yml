@@ -7,7 +7,6 @@ commands:
   dropparty:
     aliases: dp
     permission: dropparty.admin
-    permission-message: You do note have permission for Drop Party.
 permissions:
   dropparty.admin:
     description: Gives access to all Drop Party commands

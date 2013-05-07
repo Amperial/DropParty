@@ -19,12 +19,12 @@
 package me.ampayne2.DropParty.command.commands;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import me.ampayne2.DropParty.DropPartyMessageController;
 import me.ampayne2.DropParty.command.interfaces.DropPartyCommand;
 import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.database.tables.DropPartyPartiesTable;
@@ -45,7 +45,8 @@ public class CommandTeleport implements DropPartyCommand{
 			return;
 		}
 		if(DatabaseManager.getDatabase().select(DropPartyPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null){
-			sender.sendMessage(ChatColor.RED + "Drop Party '" + dpid + "' Does Not Exist.");
+			String message = DropPartyMessageController.getMessage("dppartydoesntexist");
+			DropPartyMessageController.sendMessage(player, message, dpid);
 			return;
 		}
 		if(DatabaseManager.getDatabase().select(DropPartyTeleportsTable.class)
@@ -56,7 +57,8 @@ public class CommandTeleport implements DropPartyCommand{
 			 loc.setPitch(entry.pitch);
 			 loc.setYaw(entry.yaw);
 			 player.teleport(loc);
-			 sender.sendMessage(ChatColor.AQUA + "Teleported To Drop Party " + dpid);
+			 String message = DropPartyMessageController.getMessage("dpteleport");
+			 DropPartyMessageController.sendMessage(player, message, dpid);
 		}
 	}
 }

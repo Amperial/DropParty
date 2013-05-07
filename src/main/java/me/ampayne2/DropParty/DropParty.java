@@ -35,6 +35,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class DropParty extends JavaPlugin {
 
 	private DatabaseManager dbManager = null;
+	private DropPartyMessageController msgController = null;
 	private static DropParty instance;
 
 	public static DropParty getInstance() {
@@ -50,7 +51,7 @@ public class DropParty extends JavaPlugin {
 		saveConfig();
 
 		getCommand("dropparty").setExecutor(new CommandController());
-
+		msgController = new DropPartyMessageController(this);
 		try {
 			dbManager = new DatabaseManager(this);
 		} catch (TableRegistrationException e) {
@@ -80,6 +81,10 @@ public class DropParty extends JavaPlugin {
 
 	public DatabaseManager getDatabaseManager() {
 		return dbManager;
+	}
+	
+	public DropPartyMessageController getMessageController(){
+		return msgController;
 	}
 	
 	private static int isRunning = 0;
