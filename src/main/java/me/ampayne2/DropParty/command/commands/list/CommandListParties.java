@@ -24,11 +24,11 @@ import java.util.ListIterator;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import me.ampayne2.DropParty.command.interfaces.DropPartyCommand;
+import me.ampayne2.DropParty.command.interfaces.DPCommand;
 import me.ampayne2.DropParty.database.DatabaseManager;
-import me.ampayne2.DropParty.database.tables.DropPartyPartiesTable;
+import me.ampayne2.DropParty.database.tables.DPPartiesTable;
 
-public class CommandListParties implements DropPartyCommand{
+public class CommandListParties implements DPCommand{
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
@@ -36,16 +36,16 @@ public class CommandListParties implements DropPartyCommand{
 		}else{
 			return;
 		}
-		List<DropPartyPartiesTable> list = DatabaseManager.getDatabase()
-				.select(DropPartyPartiesTable.class).execute().find();
-		ListIterator<DropPartyPartiesTable> li = list.listIterator();
+		List<DPPartiesTable> list = DatabaseManager.getDatabase()
+				.select(DPPartiesTable.class).execute().find();
+		ListIterator<DPPartiesTable> li = list.listIterator();
 		if (list.size() == 0) {
 			sender.sendMessage(ChatColor.AQUA + "No Drop Parties Found.");
 			return;
 		}
 		sender.sendMessage(ChatColor.AQUA + "Drop Parties:");
 		while (li.hasNext()) {
-			DropPartyPartiesTable entry = li.next();
+			DPPartiesTable entry = li.next();
 			sender.sendMessage(ChatColor.AQUA + "  -" + entry.dpid);
 		}
 	}

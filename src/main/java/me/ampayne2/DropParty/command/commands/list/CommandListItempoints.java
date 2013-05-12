@@ -20,9 +20,9 @@ package me.ampayne2.DropParty.command.commands.list;
 
 import org.bukkit.command.CommandSender;
 
-import me.ampayne2.DropParty.command.interfaces.DropPartyCommand;
+import me.ampayne2.DropParty.command.interfaces.DPCommand;
 
-public class CommandListItempoints implements DropPartyCommand {
+public class CommandListItempoints implements DPCommand {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {

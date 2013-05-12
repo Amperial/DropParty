@@ -24,18 +24,16 @@ import com.alta189.simplesave.exceptions.TableRegistrationException;
 
 import me.ampayne2.DropParty.command.CommandController;
 import me.ampayne2.DropParty.database.DatabaseManager;
-import me.ampayne2.DropParty.listeners.DropPartyChestListener;
-import me.ampayne2.DropParty.listeners.DropPartyGlowstoneListener;
+import me.ampayne2.DropParty.listeners.DPChestListener;
+import me.ampayne2.DropParty.listeners.DPGlowstoneListener;
 
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class DropParty extends JavaPlugin {
 
 	private DatabaseManager dbManager = null;
-	private DropPartyMessageController msgController = null;
+	private DPMessageController DPMessageController = null;
 	private static DropParty instance;
 
 	public static DropParty getInstance() {
@@ -45,13 +43,13 @@ public class DropParty extends JavaPlugin {
 	public void onEnable() {
 		instance = this;
 		PluginManager manager = this.getServer().getPluginManager();
-		manager.registerEvents(new DropPartyChestListener(), this);
-		manager.registerEvents(new DropPartyGlowstoneListener(), this);
+		manager.registerEvents(new DPChestListener(), this);
+		manager.registerEvents(new DPGlowstoneListener(), this);
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 
 		getCommand("dropparty").setExecutor(new CommandController());
-		msgController = new DropPartyMessageController(this);
+		
 		try {
 			dbManager = new DatabaseManager(this);
 		} catch (TableRegistrationException e) {
@@ -67,11 +65,14 @@ public class DropParty extends JavaPlugin {
 			getServer().getPluginManager().disablePlugin(this);
 			return;
 		}
+		
+		DPMessageController = new DPMessageController(this);
+		DPPartyController.getParties();
+		
 		try {
 		    Metrics metrics = new Metrics(this);
 		    metrics.start();
 		} catch (IOException e) {
-		    // Failed to submit the stats :-(
 		}
 	}
 
@@ -83,28 +84,7 @@ public class DropParty extends JavaPlugin {
 		return dbManager;
 	}
 	
-	public DropPartyMessageController getMessageController(){
-		return msgController;
+	public DPMessageController getDPMessageController() {
+		return DPMessageController;
 	}
-	
-	private static int isRunning = 0;
-	
-	public static void toggleRunning(String playerName, CommandSender sender) {
-		if (isRunning == 1) {
-			isRunning = 0;
-			sender.sendMessage(ChatColor.AQUA + "DropParty stopped.");
-		} else {
-			isRunning = 1;
-			sender.sendMessage(ChatColor.AQUA + "DropParty started.");
-		}
-	}
-	
-	public static boolean isRunning(){
-		if (isRunning == 1){
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 }

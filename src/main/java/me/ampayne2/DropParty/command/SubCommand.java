@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.ampayne2.DropParty.command.interfaces.Command;
-import me.ampayne2.DropParty.command.interfaces.DropPartyCommand;
+import me.ampayne2.DropParty.command.interfaces.DPCommand;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -44,8 +44,8 @@ public class SubCommand implements Command {
 	public void execute(String command, CommandSender sender, String[] args) {
 		if (commandExist(command)) {
 			Command entry = commandList.get(command);
-			if (entry instanceof DropPartyCommand) {
-				((DropPartyCommand) entry).execute(sender,args);
+			if (entry instanceof DPCommand) {
+				((DPCommand) entry).execute(sender,args);
 			} else if (entry instanceof SubCommand) {
 				SubCommand subCommand = (SubCommand) entry;
 

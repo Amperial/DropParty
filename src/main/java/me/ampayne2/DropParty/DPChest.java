@@ -16,27 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.DropParty.command.commands;
+package me.ampayne2.DropParty;
 
-import me.ampayne2.DropParty.DPMessageController;
-import me.ampayne2.DropParty.DPPartyController;
-import me.ampayne2.DropParty.command.interfaces.DPCommand;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.block.Chest;
 
-public class CommandStop implements DPCommand{
-
-	@Override
-	public void execute(CommandSender sender, String[] args) {
-		if(args.length == 0){
-			return;
-		}
-		Player player = (Player) sender;
-		if(DPPartyController.stop(args[0])){
-			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpstop"), args[0]);
-		}else{
-			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpstoperror"), args[0]);
-		}
+public class DPChest {
+	
+	public static Map<String, Chest[]> chests = new HashMap<String, Chest[]>();
+	
+	public static Chest[] getChests(String dpid){
+		return null;
 	}
 }

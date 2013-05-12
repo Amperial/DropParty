@@ -18,20 +18,24 @@
  */
 package me.ampayne2.DropParty.command.commands;
 
-import me.ampayne2.DropParty.DropParty;
-import me.ampayne2.DropParty.DropPartyDrop;
-import me.ampayne2.DropParty.command.interfaces.DropPartyCommand;
-
+import me.ampayne2.DropParty.DPMessageController;
+import me.ampayne2.DropParty.DPPartyController;
+import me.ampayne2.DropParty.command.interfaces.DPCommand;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
-public class CommandStart implements DropPartyCommand {
+public class CommandStart implements DPCommand {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
-		if(DropParty.isRunning() == false){
-			DropPartyDrop.setSender(sender);
-			DropParty.toggleRunning(sender.getName(), sender);
-			DropPartyDrop.dropItems(sender);
+		if(args.length == 0){
+			return;
+		}
+		Player player = (Player) sender;
+		if(DPPartyController.start(args[0])){
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpstart"), args[0]);
+		}else{
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpstarterror"), args[0]);
 		}
 	}
 }

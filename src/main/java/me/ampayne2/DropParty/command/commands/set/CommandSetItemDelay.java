@@ -22,13 +22,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import me.ampayne2.DropParty.command.interfaces.DropPartyCommand;
+import me.ampayne2.DropParty.command.interfaces.DPCommand;
 import me.ampayne2.DropParty.database.DatabaseManager;
-import me.ampayne2.DropParty.database.tables.DropPartyPartiesTable;
-import me.ampayne2.DropParty.database.tables.DropPartySettingsTable;
-import me.ampayne2.DropParty.database.tables.DropPartyTeleportsTable;
+import me.ampayne2.DropParty.database.tables.DPPartiesTable;
+import me.ampayne2.DropParty.database.tables.DPSettingsTable;
+import me.ampayne2.DropParty.database.tables.DPTeleportsTable;
 
-public class CommandSetItemDelay implements DropPartyCommand {
+public class CommandSetItemDelay implements DPCommand {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
@@ -47,21 +47,21 @@ public class CommandSetItemDelay implements DropPartyCommand {
 		}else{
 			return;
 		}
-		if(DatabaseManager.getDatabase().select(DropPartyPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null){
+		if(DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null){
 			sender.sendMessage(ChatColor.RED + "Drop Party '" + dpid + "' Does Not Exist.");
 			return;
 		}
-		DropPartySettingsTable table = new DropPartySettingsTable();
+		DPSettingsTable table = new DPSettingsTable();
 		table.dpid = dpid;
 		table.itemdelay = itemdelay;
-		if (DatabaseManager.getDatabase().select(DropPartyTeleportsTable.class)
+		if (DatabaseManager.getDatabase().select(DPTeleportsTable.class)
 				.where().equal("dpid", dpid).execute().findOne() == null) {
 			DatabaseManager.getDatabase().save(table);
 			player.sendMessage(ChatColor.AQUA
 					+ "Drop Party '" + dpid + "' ItemDelay Set Successfully.");
 			return;
 		}else{
-			DropPartySettingsTable entry = DatabaseManager.getDatabase().select(DropPartySettingsTable.class).where().equal("dpid", dpid).execute().findOne();
+			DPSettingsTable entry = DatabaseManager.getDatabase().select(DPSettingsTable.class).where().equal("dpid", dpid).execute().findOne();
 			table.id = entry.id;
 		}
 		DatabaseManager.getDatabase().save(table);

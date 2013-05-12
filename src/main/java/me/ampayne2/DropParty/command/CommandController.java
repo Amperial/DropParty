@@ -62,7 +62,7 @@ public class CommandController extends JavaPlugin {
 		
 		SubCommand set = new SubCommand();
 		set.addCommand("chest", new CommandSetChest());
-		set.addCommand("item", new CommandSetItempoint());
+		set.addCommand("itempoint", new CommandSetItempoint());
 		set.addCommand("teleport", new CommandSetTeleport());
 		set.addCommand("itemdelay", new CommandSetItemDelay());
 		set.addCommand("maxstack", new CommandSetMaxStack());
@@ -71,19 +71,18 @@ public class CommandController extends JavaPlugin {
 		
 		SubCommand remove = new SubCommand();
 		remove.addCommand("chest", new CommandRemoveChest());
-		remove.addCommand("item", new CommandRemoveItempoint());
+		remove.addCommand("itempoint", new CommandRemoveItempoint());
 		mainCommand.addCommand("remove", remove);
 		
 		SubCommand list = new SubCommand();
 		list.addCommand("parties", new CommandListParties());
 		list.addCommand("chests", new CommandListChests());
-		list.addCommand("items", new CommandListItempoints());
+		list.addCommand("itempoints", new CommandListItempoints());
 		list.addCommand("settings", new CommandListSettings());
 		list.addCommand("teleport", new CommandListTeleport());
 		mainCommand.addCommand("list", list);
 		
-		SubCommand delete = new SubCommand();
-		delete.addCommand("", new CommandDelete());
+		CommandDelete delete = new CommandDelete();
 		mainCommand.addCommand("delete", delete);
 	}
 

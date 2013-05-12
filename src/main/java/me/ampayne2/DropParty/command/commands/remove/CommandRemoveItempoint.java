@@ -18,10 +18,10 @@
  */
 package me.ampayne2.DropParty.command.commands.remove;
 
-import me.ampayne2.DropParty.command.interfaces.DropPartyCommand;
+import me.ampayne2.DropParty.command.interfaces.DPCommand;
 import org.bukkit.command.CommandSender;
 
-public class CommandRemoveItempoint implements DropPartyCommand {
+public class CommandRemoveItempoint implements DPCommand {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {

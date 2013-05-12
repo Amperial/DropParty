@@ -18,10 +18,11 @@
  */
 package me.ampayne2.DropParty.listeners;
 
+import me.ampayne2.DropParty.DPMessageController;
+import me.ampayne2.DropParty.command.commands.set.CommandSetChest;
 import me.ampayne2.DropParty.database.DatabaseManager;
-import me.ampayne2.DropParty.database.tables.DropPartyChestsTable;
+import me.ampayne2.DropParty.database.tables.DPChestsTable;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -30,7 +31,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class DropPartyChestListener implements Listener {
+public class DPChestListener implements Listener {
 
 	@EventHandler
 	public void onChestHit(PlayerInteractEvent event) {
@@ -38,6 +39,7 @@ public class DropPartyChestListener implements Listener {
 			return;
 		}
 		Block clickedBlock = event.getClickedBlock();
+		Player player = event.getPlayer();
 		try {
 			if (clickedBlock.getType() != Material.CHEST) {
 				return;
@@ -45,7 +47,11 @@ public class DropPartyChestListener implements Listener {
 		} catch (NullPointerException ex) {
 			return;
 		}
-		clickedBlock.getWorld().getName();
+		if (!CommandSetChest.isSetting(player.getName())) {
+			return;
+		}
+		String dpid = CommandSetChest.getSetting(player.getName());
+		CommandSetChest.saveChest(player, player.getName(), dpid, clickedBlock.getWorld().getName(), clickedBlock.getX(), clickedBlock.getY(), clickedBlock.getZ());
 		event.setCancelled(true);
 	}
 
@@ -60,24 +66,18 @@ public class DropPartyChestListener implements Listener {
 		} catch (NullPointerException ex) {
 			return;
 		}
-		if(DatabaseManager.getDatabase()
-				.select(DropPartyChestsTable.class).where()
-				.equal("world", clickedBlock.getWorld()).and()
-				.equal("x", clickedBlock.getX()).and()
-				.equal("y", clickedBlock.getY()).and()
-				.equal("z", clickedBlock.getZ()).execute().find() != null){
-			if(!player.hasPermission("dropparty.removechest")){
-				player.sendMessage("You do not have permission to break a Drop Party Chest.");
-				event.setCancelled(true);
-				return;
-			}
-			DatabaseManager.getDatabase().remove(DatabaseManager.getDatabase()
-					.select(DropPartyChestsTable.class).where()
-					.equal("world", clickedBlock.getWorld()).and()
-					.equal("x", clickedBlock.getX()).and()
-					.equal("y", clickedBlock.getY()).and()
-					.equal("z", clickedBlock.getZ()).execute().find());
-			player.sendMessage(ChatColor.AQUA + "Drop Party Chest Removed.");
+		if (DatabaseManager.getDatabase().select(DPChestsTable.class).where().equal("world", clickedBlock.getWorld().getName()).and().equal("x", clickedBlock.getX()).and().equal("y",
+				clickedBlock.getY()).and().equal("z", clickedBlock.getZ()).execute().find() == null) {
+			return;
 		}
+		DPChestsTable table = DatabaseManager.getDatabase().select(DPChestsTable.class).where().equal("world", clickedBlock.getWorld().getName()).and().equal("x", clickedBlock.getX()).and()
+				.equal("y", clickedBlock.getY()).and().equal("z", clickedBlock.getZ()).execute().findOne();
+		if (!player.hasPermission("dropparty.admin")) {
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpnopermission"), table.dpid);
+			event.setCancelled(true);
+			return;
+		}
+		DatabaseManager.getDatabase().remove(table);
+		DPMessageController.sendMessage(player, DPMessageController.getMessage("dpremovechest"), table.dpid);
 	}
 }

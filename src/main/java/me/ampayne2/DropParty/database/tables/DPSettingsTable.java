@@ -23,7 +23,7 @@ import com.alta189.simplesave.Id;
 import com.alta189.simplesave.Table;
 
 @Table("DropPartySetting")
-public class DropPartySettingsTable {
+public class DPSettingsTable {
 	
 	@Id
 	public int id;

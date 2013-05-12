@@ -25,11 +25,11 @@ import com.alta189.simplesave.exceptions.TableRegistrationException;
 import com.alta189.simplesave.mysql.MySQLConfiguration;
 
 import me.ampayne2.DropParty.DropParty;
-import me.ampayne2.DropParty.database.tables.DropPartyChestsTable;
-import me.ampayne2.DropParty.database.tables.DropPartyItempointsTable;
-import me.ampayne2.DropParty.database.tables.DropPartyPartiesTable;
-import me.ampayne2.DropParty.database.tables.DropPartySettingsTable;
-import me.ampayne2.DropParty.database.tables.DropPartyTeleportsTable;
+import me.ampayne2.DropParty.database.tables.DPChestsTable;
+import me.ampayne2.DropParty.database.tables.DPItemPointsTable;
+import me.ampayne2.DropParty.database.tables.DPPartiesTable;
+import me.ampayne2.DropParty.database.tables.DPSettingsTable;
+import me.ampayne2.DropParty.database.tables.DPTeleportsTable;
 
 public class DatabaseManager {
 
@@ -44,11 +44,11 @@ public class DatabaseManager {
 		config.setPort(plugin.getConfig().getInt("mysql.port"));
 		config.setPrefix(plugin.getConfig().getString("mysql.prefix"));
 		db = DatabaseFactory.createNewDatabase(config);
-		db.registerTable(DropPartyChestsTable.class);
-		db.registerTable(DropPartyItempointsTable.class);
-		db.registerTable(DropPartyTeleportsTable.class);
-		db.registerTable(DropPartySettingsTable.class);
-		db.registerTable(DropPartyPartiesTable.class);
+		db.registerTable(DPChestsTable.class);
+		db.registerTable(DPItemPointsTable.class);
+		db.registerTable(DPTeleportsTable.class);
+		db.registerTable(DPSettingsTable.class);
+		db.registerTable(DPPartiesTable.class);
 		db.connect();
 	}
 

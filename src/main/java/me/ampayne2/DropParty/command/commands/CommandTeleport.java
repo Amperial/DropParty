@@ -24,41 +24,46 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import me.ampayne2.DropParty.DropPartyMessageController;
-import me.ampayne2.DropParty.command.interfaces.DropPartyCommand;
+import me.ampayne2.DropParty.DPMessageController;
+import me.ampayne2.DropParty.command.interfaces.DPCommand;
 import me.ampayne2.DropParty.database.DatabaseManager;
-import me.ampayne2.DropParty.database.tables.DropPartyPartiesTable;
-import me.ampayne2.DropParty.database.tables.DropPartyTeleportsTable;
+import me.ampayne2.DropParty.database.tables.DPPartiesTable;
+import me.ampayne2.DropParty.database.tables.DPTeleportsTable;
 
-public class CommandTeleport implements DropPartyCommand{
+public class CommandTeleport implements DPCommand {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
 		Player player = (Player) sender;
-		if(!sender.hasPermission("dropparty.teleport")){
+		if (!sender.hasPermission("dropparty.teleport")) {
 			return;
 		}
 		String dpid;
 		if (args.length == 1) {
 			dpid = args[0];
-		}else{
+		} else {
 			return;
 		}
-		if(DatabaseManager.getDatabase().select(DropPartyPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null){
-			String message = DropPartyMessageController.getMessage("dppartydoesntexist");
-			DropPartyMessageController.sendMessage(player, message, dpid);
+		if (DatabaseManager.getDatabase().select(DPPartiesTable.class)
+				.where().equal("dpid", dpid).execute().findOne() == null) {
+			String message = DPMessageController
+					.getMessage("dppartydoesntexist");
+			DPMessageController.sendMessage(player, message, dpid);
 			return;
 		}
-		if(DatabaseManager.getDatabase().select(DropPartyTeleportsTable.class)
-				.where().equal("dpid", dpid).execute().findOne() != null){
-			 DropPartyTeleportsTable entry = DatabaseManager.getDatabase().select(DropPartyTeleportsTable.class).where().equal("dpid", dpid).execute().findOne();
-			 World world = Bukkit.getServer().getWorld(entry.world);
-			 Location loc = new Location(world, entry.x, entry.y, entry.z);
-			 loc.setPitch(entry.pitch);
-			 loc.setYaw(entry.yaw);
-			 player.teleport(loc);
-			 String message = DropPartyMessageController.getMessage("dpteleport");
-			 DropPartyMessageController.sendMessage(player, message, dpid);
+		if (DatabaseManager.getDatabase().select(DPTeleportsTable.class)
+				.where().equal("dpid", dpid).execute().findOne() != null) {
+			DPTeleportsTable entry = DatabaseManager.getDatabase()
+					.select(DPTeleportsTable.class).where()
+					.equal("dpid", dpid).execute().findOne();
+			World world = Bukkit.getServer().getWorld(entry.world);
+			Location loc = new Location(world, entry.x, entry.y, entry.z);
+			loc.setPitch(entry.pitch);
+			loc.setYaw(entry.yaw);
+			player.teleport(loc);
+			String message = DPMessageController
+					.getMessage("dpteleport");
+			DPMessageController.sendMessage(player, message, dpid);
 		}
 	}
 }

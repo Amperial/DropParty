@@ -18,13 +18,73 @@
  */
 package me.ampayne2.DropParty.command.commands.set;
 
-import me.ampayne2.DropParty.command.interfaces.DropPartyCommand;
-import org.bukkit.command.CommandSender;
+import java.util.HashMap;
+import java.util.Map;
 
-public class CommandSetChest implements DropPartyCommand {
+import me.ampayne2.DropParty.DPMessageController;
+import me.ampayne2.DropParty.command.interfaces.DPCommand;
+import me.ampayne2.DropParty.database.DatabaseManager;
+import me.ampayne2.DropParty.database.tables.DPChestsTable;
+import me.ampayne2.DropParty.database.tables.DPPartiesTable;
+
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+public class CommandSetChest implements DPCommand {
+
+	public static Map<String,String> playersSetting = new HashMap<String,String>();
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
 
+		if (args.length != 1) {
+			return;
+		}
+		Player player = (Player) sender;
+		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", args[0]).execute().find() == null) {
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartydoesntexist"), args[0]);
+			return;
+		}
+		toggleSetting(player, args[0]);
+	}
+
+	public static void toggleSetting(Player player, String dpid) {
+		String playername = player.getName();
+		if(isSetting(playername) && getSetting(playername).equals(dpid)){
+			playersSetting.remove(playername);
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpsetchestmodeoff"), dpid);
+		}else{
+			playersSetting.put(playername,dpid);
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpsetchestmode"), dpid);
+		}
+	}
+
+	public static boolean isSetting(String playername) {
+		if (playersSetting.containsKey(playername)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public static String getSetting(String playername) {
+		return playersSetting.get(playername);
+	}
+
+	public static void saveChest(Player player, String playerName, String dpid, String world, int x, int y, int z) {
+
+		if (DatabaseManager.getDatabase().select(DPChestsTable.class).where().equal("dpid", dpid).and().equal("x", x).and().equal("y", y).and().equal("z", z).execute().findOne() != null) {
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpchestalreadyexists"), dpid);
+			return;
+		}
+
+		DPChestsTable table = new DPChestsTable();
+		table.dpid = dpid;
+		table.world = world;
+		table.x = x;
+		table.y = y;
+		table.z = z;
+		DatabaseManager.getDatabase().save(table);
+		DPMessageController.sendMessage(player, DPMessageController.getMessage("dpsetchest"), dpid);
 	}
 }

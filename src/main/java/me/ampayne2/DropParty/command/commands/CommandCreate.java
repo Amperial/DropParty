@@ -18,32 +18,34 @@
  */
 package me.ampayne2.DropParty.command.commands;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import me.ampayne2.DropParty.command.interfaces.DropPartyCommand;
-import me.ampayne2.DropParty.database.DatabaseManager;
-import me.ampayne2.DropParty.database.tables.DropPartyPartiesTable;
+import org.bukkit.entity.Player;
 
-public class CommandCreate implements DropPartyCommand{
+import me.ampayne2.DropParty.DPMessageController;
+import me.ampayne2.DropParty.command.interfaces.DPCommand;
+import me.ampayne2.DropParty.database.DatabaseManager;
+import me.ampayne2.DropParty.database.tables.DPPartiesTable;
+
+public class CommandCreate implements DPCommand{
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
+		Player player = (Player) sender;
 		String dpid;
 		if (args.length == 1) {
 			dpid = args[0];
 		}else{
 			return;
 		}
-		DropPartyPartiesTable table = new DropPartyPartiesTable();
+		DPPartiesTable table = new DPPartiesTable();
 		table.dpid = dpid;
-		if (DatabaseManager.getDatabase().select(DropPartyPartiesTable.class)
+		if (DatabaseManager.getDatabase().select(DPPartiesTable.class)
 				.where().equal("dpid", dpid).execute().findOne() == null) {
 			DatabaseManager.getDatabase().save(table);
-			sender.sendMessage(ChatColor.AQUA
-					+ "Drop Party '" + dpid + "' Created Successfully.");
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpcreate"), dpid);
 			return;
 		}else{
-			sender.sendMessage(ChatColor.RED + "Drop Party '" + dpid + "' Already Exists.");
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartyalreadyexists"), dpid);
 		}
 	}
 

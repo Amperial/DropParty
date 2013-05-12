@@ -21,12 +21,12 @@ package me.ampayne2.DropParty.command.commands.list;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import me.ampayne2.DropParty.command.interfaces.DropPartyCommand;
+import me.ampayne2.DropParty.command.interfaces.DPCommand;
 import me.ampayne2.DropParty.database.DatabaseManager;
-import me.ampayne2.DropParty.database.tables.DropPartyPartiesTable;
-import me.ampayne2.DropParty.database.tables.DropPartyTeleportsTable;
+import me.ampayne2.DropParty.database.tables.DPPartiesTable;
+import me.ampayne2.DropParty.database.tables.DPTeleportsTable;
 
-public class CommandListTeleport implements DropPartyCommand{
+public class CommandListTeleport implements DPCommand{
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
@@ -36,12 +36,12 @@ public class CommandListTeleport implements DropPartyCommand{
 		}else{
 			return;
 		}
-		if(DatabaseManager.getDatabase().select(DropPartyPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null){
+		if(DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null){
 			sender.sendMessage(ChatColor.RED + "Drop Party '" + dpid + "' Does Not Exist.");
 			return;
 		}
-		DropPartyTeleportsTable entry = DatabaseManager.getDatabase()
-				.select(DropPartyTeleportsTable.class).where().equal("dpid", dpid).execute().findOne();
+		DPTeleportsTable entry = DatabaseManager.getDatabase()
+				.select(DPTeleportsTable.class).where().equal("dpid", dpid).execute().findOne();
 		if (entry == null){
 			sender.sendMessage(ChatColor.AQUA + "No Drop Party Teleports Found.");
 			return;

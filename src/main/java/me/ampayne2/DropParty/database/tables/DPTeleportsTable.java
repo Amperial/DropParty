@@ -16,22 +16,37 @@
  * You should have received a copy of the GNU General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.DropParty.command.interfaces;
+package me.ampayne2.DropParty.database.tables;
 
-import org.bukkit.command.CommandSender;
+import com.alta189.simplesave.Field;
+import com.alta189.simplesave.Id;
+import com.alta189.simplesave.Table;
 
-/**
- * The base layout for a command.
- */
-public interface DropPartyCommand extends Command {
+@Table("DropPartyTeleport")
+public class DPTeleportsTable {
+	
+	@Id
+	public int id;
+	
+	@Field
+	public String dpid;
 
-	/**
-	 * The command executor
-	 * 
-	 * @param sender
-	 *            The sender of the command
-	 * @param args
-	 *            The arguments sent with the command
-	 */
-	public void execute(CommandSender sender, String[] args);
+	@Field
+	public String world;
+
+	@Field
+	public double x;
+
+	@Field
+	public double y;
+
+	@Field
+	public double z;
+	
+	@Field
+	public float pitch;
+	
+	@Field
+	public float yaw;
+
 }

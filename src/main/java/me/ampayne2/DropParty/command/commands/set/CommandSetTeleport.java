@@ -23,12 +23,12 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import me.ampayne2.DropParty.command.interfaces.DropPartyCommand;
+import me.ampayne2.DropParty.command.interfaces.DPCommand;
 import me.ampayne2.DropParty.database.DatabaseManager;
-import me.ampayne2.DropParty.database.tables.DropPartyPartiesTable;
-import me.ampayne2.DropParty.database.tables.DropPartyTeleportsTable;
+import me.ampayne2.DropParty.database.tables.DPPartiesTable;
+import me.ampayne2.DropParty.database.tables.DPTeleportsTable;
 
-public class CommandSetTeleport implements DropPartyCommand{
+public class CommandSetTeleport implements DPCommand{
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
@@ -45,11 +45,11 @@ public class CommandSetTeleport implements DropPartyCommand{
 		}else{
 			return;
 		}
-		if(DatabaseManager.getDatabase().select(DropPartyPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null){
+		if(DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null){
 			sender.sendMessage(ChatColor.RED + "Drop Party '" + dpid + "' Does Not Exist.");
 			return;
 		}
-		DropPartyTeleportsTable table = new DropPartyTeleportsTable();
+		DPTeleportsTable table = new DPTeleportsTable();
 		table.dpid = dpid;
 		table.world = player.getWorld().getName();
 		table.x = x;
@@ -58,9 +58,9 @@ public class CommandSetTeleport implements DropPartyCommand{
 		table.pitch = pitch;
 		table.yaw = yaw;
 		try {
-			if (DatabaseManager.getDatabase().select(DropPartyTeleportsTable.class)
+			if (DatabaseManager.getDatabase().select(DPTeleportsTable.class)
 					.where().equal("dpid", dpid).execute().findOne() == null) {
-				DropPartyTeleportsTable entry = DatabaseManager.getDatabase().select(DropPartyTeleportsTable.class).where().equal("dpid", dpid).execute().findOne();
+				DPTeleportsTable entry = DatabaseManager.getDatabase().select(DPTeleportsTable.class).where().equal("dpid", dpid).execute().findOne();
 				table.id = entry.id;
 			}
 		} catch (NullPointerException ex) {

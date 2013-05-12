@@ -21,12 +21,12 @@ package me.ampayne2.DropParty.command.commands.list;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import me.ampayne2.DropParty.command.interfaces.DropPartyCommand;
+import me.ampayne2.DropParty.command.interfaces.DPCommand;
 import me.ampayne2.DropParty.database.DatabaseManager;
-import me.ampayne2.DropParty.database.tables.DropPartyPartiesTable;
-import me.ampayne2.DropParty.database.tables.DropPartySettingsTable;
+import me.ampayne2.DropParty.database.tables.DPPartiesTable;
+import me.ampayne2.DropParty.database.tables.DPSettingsTable;
 
-public class CommandListSettings implements DropPartyCommand{
+public class CommandListSettings implements DPCommand{
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
@@ -36,12 +36,12 @@ public class CommandListSettings implements DropPartyCommand{
 		}else{
 			return;
 		}
-		if(DatabaseManager.getDatabase().select(DropPartyPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null){
+		if(DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null){
 			sender.sendMessage(ChatColor.RED + "Drop Party '" + dpid + "' Does Not Exist.");
 			return;
 		}
-		DropPartySettingsTable entry = DatabaseManager.getDatabase()
-				.select(DropPartySettingsTable.class).where().equal("dpid", dpid).execute().findOne();
+		DPSettingsTable entry = DatabaseManager.getDatabase()
+				.select(DPSettingsTable.class).where().equal("dpid", dpid).execute().findOne();
 		if (entry == null){
 			sender.sendMessage(ChatColor.AQUA + "No Drop Party Settings Found.");
 			return;
