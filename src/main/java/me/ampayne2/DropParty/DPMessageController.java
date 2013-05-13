@@ -26,13 +26,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-public class DPMessageController{
+public class DPMessageController {
 	public static Map<String, String> messages = new HashMap<String, String>();
-	public DPMessageController(Plugin plugin){
-		//prefix
+
+	public DPMessageController(Plugin plugin) {
+		// prefix
 		messages.put("dpprefix", plugin.getConfig().getString("messages.dpprefix"));
-		
-		//command messages
+
+		// command messages
 		messages.put("dpcreate", plugin.getConfig().getString("messages.dpcreate"));
 		messages.put("dpdelete", plugin.getConfig().getString("messages.dpdelete"));
 		messages.put("dpstart", plugin.getConfig().getString("messages.dpstart"));
@@ -50,12 +51,12 @@ public class DPMessageController{
 		messages.put("dpremovechest", plugin.getConfig().getString("messages.dpremovechest"));
 		messages.put("dpremoveitempoint", plugin.getConfig().getString("messages.dpremoveitempoint"));
 		messages.put("dpteleport", plugin.getConfig().getString("messages.dpteleport"));
-		
-		//broadcasts
+
+		// broadcasts
 		messages.put("dpannouncestart", plugin.getConfig().getString("messages.dpannouncestart"));
 		messages.put("dpannouncestop", plugin.getConfig().getString("messages.dpannouncestop"));
 
-		//errors
+		// errors
 		messages.put("dpcreateerror", plugin.getConfig().getString("messages.dpcreateerror"));
 		messages.put("dpdeleteerror", plugin.getConfig().getString("messages.dpdeleteerror"));
 		messages.put("dpstarterror", plugin.getConfig().getString("messages.dpstarterror"));
@@ -70,7 +71,7 @@ public class DPMessageController{
 		messages.put("dpremoveitempointerror", plugin.getConfig().getString("messages.dpremoveitempointerror"));
 		messages.put("dpteleporterror", plugin.getConfig().getString("messages.dpteleporterror"));
 
-		//other
+		// other
 		messages.put("dpchestalreadyexists", plugin.getConfig().getString("messages.dpchestalreadyexists"));
 		messages.put("dpitempointalreadyexists", plugin.getConfig().getString("messages.dpitempointalreadyexists"));
 		messages.put("dppartydoesntexist", plugin.getConfig().getString("messages.dppartydoesntexist"));
@@ -80,13 +81,13 @@ public class DPMessageController{
 		messages.put("dpargumentserror", plugin.getConfig().getString("messages.dpargumentserror"));
 		messages.put("dpnopermission", plugin.getConfig().getString("messages.dpnopermission"));
 	}
-	
-	public static String getMessage(String messagetype){
+
+	public static String getMessage(String messagetype) {
 		return messages.get(messagetype);
 	}
-	
-	public static void sendMessage(Player player, String message, String dpid){
-		if(message == null){
+
+	public static void sendMessage(Player player, String message, String dpid) {
+		if (message == null) {
 			player.sendMessage("null");
 			return;
 		}
@@ -94,9 +95,10 @@ public class DPMessageController{
 		message = messages.get("dpprefix").concat(" " + message);
 		player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
 	}
-	
-	public static void broadcastMessage(String message, String dpid){
-		if(message == null)return;
+
+	public static void broadcastMessage(String message, String dpid) {
+		if (message == null)
+			return;
 		message = message.replace("%PartyName%", dpid);
 		message = messages.get("dpprefix").concat(" " + message);
 		Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', message));

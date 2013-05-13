@@ -21,7 +21,9 @@ package me.ampayne2.DropParty.command.commands.set;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
+import me.ampayne2.DropParty.DPMessageController;
 import me.ampayne2.DropParty.command.interfaces.DPCommand;
 import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.database.tables.DPPartiesTable;
@@ -29,6 +31,12 @@ import me.ampayne2.DropParty.database.tables.DPSettingsTable;
 import me.ampayne2.DropParty.database.tables.DPTeleportsTable;
 
 public class CommandSetMaxLength implements DPCommand {
+	
+	public static Long defaultMaxLength = null;
+	
+	public static void getDefaultMaxLength(Plugin plugin){
+		defaultMaxLength = plugin.getConfig().getLong("defaultpartysettings.maxlength");
+	}
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
@@ -39,33 +47,29 @@ public class CommandSetMaxLength implements DPCommand {
 			try {
 				maxlength = Integer.parseInt(args[0]);
 			} catch (NumberFormatException e) {
-				sender.sendMessage(ChatColor.RED + "'" + args[0] + "'"
-						+ " is not an integer.");
+				sender.sendMessage(ChatColor.RED + "'" + args[0] + "'" + " is not an integer.");
 				return;
 			}
 			dpid = args[1];
-		}else{
+		} else {
 			return;
 		}
-		if(DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null){
-			sender.sendMessage(ChatColor.RED + "Drop Party '" + dpid + "' Does Not Exist.");
+		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null) {
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartydoesntexist"), dpid);
 			return;
 		}
 		DPSettingsTable table = new DPSettingsTable();
 		table.dpid = dpid;
 		table.maxlength = maxlength;
-		if (DatabaseManager.getDatabase().select(DPTeleportsTable.class)
-				.where().equal("dpid", dpid).execute().findOne() == null) {
+		if (DatabaseManager.getDatabase().select(DPTeleportsTable.class).where().equal("dpid", dpid).execute().findOne() == null) {
 			DatabaseManager.getDatabase().save(table);
-			player.sendMessage(ChatColor.AQUA
-					+ "Drop Party '" + dpid + "' MaxLength Set Successfully.");
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpsetmaxlength"), dpid);
 			return;
-		}else{
+		} else {
 			DPSettingsTable entry = DatabaseManager.getDatabase().select(DPSettingsTable.class).where().equal("dpid", dpid).execute().findOne();
 			table.id = entry.id;
 		}
 		DatabaseManager.getDatabase().save(table);
-		player.sendMessage(ChatColor.AQUA
-				+ "Drop Party '" + dpid + "' MaxLength Set Successfully.");
+		DPMessageController.sendMessage(player, DPMessageController.getMessage("dpsetmaxlength"), dpid);
 	}
 }

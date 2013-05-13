@@ -24,12 +24,15 @@ import java.util.ListIterator;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import me.ampayne2.DropParty.DPPartyController;
 import me.ampayne2.DropParty.command.interfaces.DPCommand;
 import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.database.tables.DPPartiesTable;
 
 public class CommandListParties implements DPCommand{
 
+	public static String isRunning;
+	
 	@Override
 	public void execute(CommandSender sender, String[] args) {
 		if (args.length == 0) {
@@ -46,7 +49,12 @@ public class CommandListParties implements DPCommand{
 		sender.sendMessage(ChatColor.AQUA + "Drop Parties:");
 		while (li.hasNext()) {
 			DPPartiesTable entry = li.next();
-			sender.sendMessage(ChatColor.AQUA + "  -" + entry.dpid);
+			if(DPPartyController.isRunning(entry.dpid)){
+				isRunning = "Running";
+			}else{
+				isRunning = "Not Running";
+			}
+			sender.sendMessage(ChatColor.AQUA + "  -" + entry.dpid + " : " + isRunning);
 		}
 	}
 }

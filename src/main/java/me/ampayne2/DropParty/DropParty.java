@@ -23,6 +23,9 @@ import com.alta189.simplesave.exceptions.ConnectionException;
 import com.alta189.simplesave.exceptions.TableRegistrationException;
 
 import me.ampayne2.DropParty.command.CommandController;
+import me.ampayne2.DropParty.command.commands.set.CommandSetItemDelay;
+import me.ampayne2.DropParty.command.commands.set.CommandSetMaxLength;
+import me.ampayne2.DropParty.command.commands.set.CommandSetMaxStack;
 import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.listeners.DPChestListener;
 import me.ampayne2.DropParty.listeners.DPGlowstoneListener;
@@ -68,6 +71,9 @@ public class DropParty extends JavaPlugin {
 		
 		DPMessageController = new DPMessageController(this);
 		DPPartyController.getParties();
+		CommandSetItemDelay.getDefaultItemDelay(this);
+		CommandSetMaxLength.getDefaultMaxLength(this);
+		CommandSetMaxStack.getDefaultMaxStack(this);
 		
 		try {
 		    Metrics metrics = new Metrics(this);

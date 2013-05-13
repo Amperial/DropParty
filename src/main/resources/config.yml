@@ -6,6 +6,16 @@ mysql:
   database: "database"
   port: 3306
   prefix: "dp_"
+
+#Default settings for a drop party.
+defaultpartysettings:
+  #Delay between dropping each itemstack in a drop party, in ticks.
+  itemdelay: 5
+  #Max Drop Party Length, in seconds.
+  maxlength: 300
+  #Max Stack Size of an item stack being dropped. itemstacks bigger than this will be split up.
+  maxstack: 8
+  
 messages:
 #NOTE: %PartyName% will be replaced with the name of the drop party you created/started/modified/etc.
 #NOTE: You may use color codes &0-&9, &a-&f, &k-&o, and &r. http://www.minecraftwiki.net/wiki/Formatting_codes
