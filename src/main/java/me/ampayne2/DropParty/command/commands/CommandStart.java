@@ -28,13 +28,13 @@ public class CommandStart implements DPCommand {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
-		if(args.length == 0){
+		if (args.length == 0) {
 			return;
 		}
 		Player player = (Player) sender;
-		if(DPPartyController.start(args[0])){
+		if (DPPartyController.start(args[0])) {
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpstart"), args[0]);
-		}else{
+		} else {
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpstarterror"), args[0]);
 		}
 	}

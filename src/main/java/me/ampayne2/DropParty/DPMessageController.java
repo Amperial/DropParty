@@ -52,6 +52,25 @@ public class DPMessageController {
 		messages.put("dpremoveitempoint", plugin.getConfig().getString("messages.dpremoveitempoint"));
 		messages.put("dpteleport", plugin.getConfig().getString("messages.dpteleport"));
 
+		// list messages
+		messages.put("dplistparties", plugin.getConfig().getString("messages.dplistparties"));
+		messages.put("dplistparties.party", plugin.getConfig().getString("messages.dplistparties.party"));
+		messages.put("dplistsettings", plugin.getConfig().getString("messages.dplistsettings"));
+		messages.put("dplistsettings.itemdelay", plugin.getConfig().getString("messages.dplistsettings.itemdelay"));
+		messages.put("dplistsettings.maxlength", plugin.getConfig().getString("messages.dplistsettings.maxlength"));
+		messages.put("dplistsettings.maxstack", plugin.getConfig().getString("messages.dplistsettings.maxstack"));
+		messages.put("dplistteleport", plugin.getConfig().getString("messages.dplistteleport"));
+		messages.put("dplistteleport.world", plugin.getConfig().getString("messages.dplistteleport.world"));
+		messages.put("dplistteleport.x", plugin.getConfig().getString("messages.dplistteleport.x"));
+		messages.put("dplistteleport.y", plugin.getConfig().getString("messages.dplistteleport.y"));
+		messages.put("dplistteleport.z", plugin.getConfig().getString("messages.dplistteleport.z"));
+		messages.put("dplistteleport.pitch", plugin.getConfig().getString("messages.dplistteleport.pitch"));
+		messages.put("dplistteleport.yaw", plugin.getConfig().getString("messages.dplistteleport.yaw"));
+		messages.put("dplistchests", plugin.getConfig().getString("messages.dplistchests"));
+		messages.put("dplistchests.chest", plugin.getConfig().getString("messages.dplistchests.chest"));
+		messages.put("dplistitempoints", plugin.getConfig().getString("messages.dplistitempoints"));
+		messages.put("dplistitempoints.itempoint", plugin.getConfig().getString("messages.dplistitempoints.itempoint"));
+
 		// broadcasts
 		messages.put("dpannouncestart", plugin.getConfig().getString("messages.dpannouncestart"));
 		messages.put("dpannouncestop", plugin.getConfig().getString("messages.dpannouncestop"));
@@ -76,6 +95,8 @@ public class DPMessageController {
 		messages.put("dpitempointalreadyexists", plugin.getConfig().getString("messages.dpitempointalreadyexists"));
 		messages.put("dppartydoesntexist", plugin.getConfig().getString("messages.dppartydoesntexist"));
 		messages.put("dppartyoutofitems", plugin.getConfig().getString("messages.dppartyoutofitems"));
+		messages.put("dpnopartiesfound", plugin.getConfig().getString("messages.dpnopartiesfound"));
+		messages.put("dpnoteleportfound", plugin.getConfig().getString("messages.dpnoteleportfound"));
 		messages.put("dpnochestsfound", plugin.getConfig().getString("messages.dpnochestsfound"));
 		messages.put("dpnoitempointsfound", plugin.getConfig().getString("messages.dpnoitempointsfound"));
 		messages.put("dpargumentserror", plugin.getConfig().getString("messages.dpargumentserror"));

@@ -45,30 +45,30 @@ public class CommandDelete implements DPCommand {
 			return;
 		}
 		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() != null) {
-			//remove the party
+			// remove the party
 			DatabaseManager.getDatabase().remove(DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne());
-			//remove the settings
+			// remove the settings
 			List<DPSettingsTable> settingslist = DatabaseManager.getDatabase().select(DPSettingsTable.class).where().equal("dpid", dpid).execute().find();
 			ListIterator<DPSettingsTable> settingsli = settingslist.listIterator();
-			while(settingsli.hasNext()){
+			while (settingsli.hasNext()) {
 				DatabaseManager.getDatabase().remove(settingsli.next());
 			}
-			//remove the teleports
+			// remove the teleports
 			List<DPTeleportsTable> teleportslist = DatabaseManager.getDatabase().select(DPTeleportsTable.class).where().equal("dpid", dpid).execute().find();
 			ListIterator<DPTeleportsTable> teleportsli = teleportslist.listIterator();
-			while(teleportsli.hasNext()){
+			while (teleportsli.hasNext()) {
 				DatabaseManager.getDatabase().remove(teleportsli.next());
 			}
-			//remove the chests
+			// remove the chests
 			List<DPChestsTable> chestslist = DatabaseManager.getDatabase().select(DPChestsTable.class).where().equal("dpid", dpid).execute().find();
 			ListIterator<DPChestsTable> chestsli = chestslist.listIterator();
-			while(chestsli.hasNext()){
+			while (chestsli.hasNext()) {
 				DatabaseManager.getDatabase().remove(chestsli.next());
 			}
-			//remove the itempoints
+			// remove the itempoints
 			List<DPItemPointsTable> itempointslist = DatabaseManager.getDatabase().select(DPItemPointsTable.class).where().equal("dpid", dpid).execute().find();
 			ListIterator<DPItemPointsTable> itempointsli = itempointslist.listIterator();
-			while(itempointsli.hasNext()){
+			while (itempointsli.hasNext()) {
 				DatabaseManager.getDatabase().remove(itempointsli.next());
 			}
 

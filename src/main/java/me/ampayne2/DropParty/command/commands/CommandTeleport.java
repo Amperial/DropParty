@@ -44,26 +44,18 @@ public class CommandTeleport implements DPCommand {
 		} else {
 			return;
 		}
-		if (DatabaseManager.getDatabase().select(DPPartiesTable.class)
-				.where().equal("dpid", dpid).execute().findOne() == null) {
-			String message = DPMessageController
-					.getMessage("dppartydoesntexist");
-			DPMessageController.sendMessage(player, message, dpid);
+		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null) {
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartydoesntexist"), dpid);
 			return;
 		}
-		if (DatabaseManager.getDatabase().select(DPTeleportsTable.class)
-				.where().equal("dpid", dpid).execute().findOne() != null) {
-			DPTeleportsTable entry = DatabaseManager.getDatabase()
-					.select(DPTeleportsTable.class).where()
-					.equal("dpid", dpid).execute().findOne();
+		if (DatabaseManager.getDatabase().select(DPTeleportsTable.class).where().equal("dpid", dpid).execute().findOne() != null) {
+			DPTeleportsTable entry = DatabaseManager.getDatabase().select(DPTeleportsTable.class).where().equal("dpid", dpid).execute().findOne();
 			World world = Bukkit.getServer().getWorld(entry.world);
 			Location loc = new Location(world, entry.x, entry.y, entry.z);
 			loc.setPitch(entry.pitch);
 			loc.setYaw(entry.yaw);
 			player.teleport(loc);
-			String message = DPMessageController
-					.getMessage("dpteleport");
-			DPMessageController.sendMessage(player, message, dpid);
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpteleport"), dpid);
 		}
 	}
 }

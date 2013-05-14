@@ -21,40 +21,41 @@ package me.ampayne2.DropParty.command.commands.list;
 import java.util.List;
 import java.util.ListIterator;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
+import me.ampayne2.DropParty.DPMessageController;
 import me.ampayne2.DropParty.DPPartyController;
 import me.ampayne2.DropParty.command.interfaces.DPCommand;
 import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.database.tables.DPPartiesTable;
 
-public class CommandListParties implements DPCommand{
+public class CommandListParties implements DPCommand {
 
 	public static String isRunning;
-	
+
 	@Override
 	public void execute(CommandSender sender, String[] args) {
-		if (args.length == 0) {
-		}else{
+		Player player = (Player) sender;
+		String dpid = "";
+		if (args.length != 0) {
 			return;
 		}
-		List<DPPartiesTable> list = DatabaseManager.getDatabase()
-				.select(DPPartiesTable.class).execute().find();
+		List<DPPartiesTable> list = DatabaseManager.getDatabase().select(DPPartiesTable.class).execute().find();
 		ListIterator<DPPartiesTable> li = list.listIterator();
 		if (list.size() == 0) {
-			sender.sendMessage(ChatColor.AQUA + "No Drop Parties Found.");
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpnopartiesfound"), dpid);
 			return;
 		}
-		sender.sendMessage(ChatColor.AQUA + "Drop Parties:");
+		DPMessageController.sendMessage(player, DPMessageController.getMessage("dplistparties"), dpid);
 		while (li.hasNext()) {
 			DPPartiesTable entry = li.next();
-			if(DPPartyController.isRunning(entry.dpid)){
+			if (DPPartyController.isRunning(entry.dpid)) {
 				isRunning = "Running";
-			}else{
+			} else {
 				isRunning = "Not Running";
 			}
-			sender.sendMessage(ChatColor.AQUA + "  -" + entry.dpid + " : " + isRunning);
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dplistparties.party") + isRunning, dpid);
 		}
 	}
 }

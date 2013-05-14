@@ -21,7 +21,6 @@ package me.ampayne2.DropParty.command.commands.list;
 import java.util.List;
 import java.util.ListIterator;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -53,11 +52,12 @@ public class CommandListChests implements DPCommand {
 			return;
 		} else {
 			int id = 0;
-			sender.sendMessage(ChatColor.AQUA + "Drop Party '" + dpid + "' Chests:");
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dplistchests"), dpid);
 			while (li.hasNext()) {
 				DPChestsTable entry = li.next();
 				id++;
-				sender.sendMessage(ChatColor.AQUA + "Chest " + id + " World: " + entry.world + " X: " + entry.x + " Y: " + entry.y + " Z: " + entry.z);
+				DPMessageController.sendMessage(player, DPMessageController.getMessage("dplistchests.chest") + id + " World: " + entry.world + " X: " + entry.x + " Y: " + entry.y + " Z: " + entry.z,
+						dpid);
 			}
 		}
 	}

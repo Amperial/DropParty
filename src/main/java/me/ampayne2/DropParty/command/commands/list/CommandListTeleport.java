@@ -18,41 +18,42 @@
  */
 package me.ampayne2.DropParty.command.commands.list;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
+import me.ampayne2.DropParty.DPMessageController;
 import me.ampayne2.DropParty.command.interfaces.DPCommand;
 import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.database.tables.DPPartiesTable;
 import me.ampayne2.DropParty.database.tables.DPTeleportsTable;
 
-public class CommandListTeleport implements DPCommand{
+public class CommandListTeleport implements DPCommand {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
+		Player player = (Player) sender;
 		String dpid;
 		if (args.length == 1) {
 			dpid = args[0];
-		}else{
+		} else {
 			return;
 		}
-		if(DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null){
-			sender.sendMessage(ChatColor.RED + "Drop Party '" + dpid + "' Does Not Exist.");
+		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null) {
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartydoesntexist"), dpid);
 			return;
 		}
-		DPTeleportsTable entry = DatabaseManager.getDatabase()
-				.select(DPTeleportsTable.class).where().equal("dpid", dpid).execute().findOne();
-		if (entry == null){
-			sender.sendMessage(ChatColor.AQUA + "No Drop Party Teleports Found.");
+		DPTeleportsTable entry = DatabaseManager.getDatabase().select(DPTeleportsTable.class).where().equal("dpid", dpid).execute().findOne();
+		if (entry == null) {
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpnoteleportfound"), dpid);
 			return;
-		}else{
-			sender.sendMessage(ChatColor.AQUA + "Drop Party " + dpid + " Teleport:");
-			sender.sendMessage(ChatColor.AQUA + "  X: " + entry.x);
-			sender.sendMessage(ChatColor.AQUA + "  Y: " + entry.y);
-			sender.sendMessage(ChatColor.AQUA + "  Z: " + entry.z);
-			sender.sendMessage(ChatColor.AQUA + "  Pitch: " + entry.pitch);
-			sender.sendMessage(ChatColor.AQUA + "  Yaw: " + entry.yaw);
+		} else {
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dplistteleport"), dpid);
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dplistteleport.world") + entry.world, dpid);
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dplistteleport.x") + entry.x, dpid);
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dplistteleport.y") + entry.y, dpid);
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dplistteleport.z") + entry.z, dpid);
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dplistteleport.pitch") + entry.pitch, dpid);
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dplistteleport.yaw") + entry.yaw, dpid);
 		}
 	}
 }
-

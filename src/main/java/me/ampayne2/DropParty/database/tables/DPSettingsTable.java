@@ -24,18 +24,18 @@ import com.alta189.simplesave.Table;
 
 @Table("DropPartySetting")
 public class DPSettingsTable {
-	
+
 	@Id
 	public int id;
-	
+
 	@Field
 	public String dpid;
 
 	@Field
-	public int itemdelay;
+	public Long itemdelay;
 
 	@Field
-	public int maxlength;
+	public Long maxlength;
 
 	@Field
 	public int maxstack;

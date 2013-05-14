@@ -32,7 +32,7 @@ import org.bukkit.entity.Player;
 
 public class CommandSetChest implements DPCommand {
 
-	public static Map<String,String> playersSetting = new HashMap<String,String>();
+	public static Map<String, String> playersSetting = new HashMap<String, String>();
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
@@ -50,11 +50,11 @@ public class CommandSetChest implements DPCommand {
 
 	public static void toggleSetting(Player player, String dpid) {
 		String playername = player.getName();
-		if(isSetting(playername) && getSetting(playername).equals(dpid)){
+		if (isSetting(playername) && getSetting(playername).equals(dpid)) {
 			playersSetting.remove(playername);
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpsetchestmodeoff"), dpid);
-		}else{
-			playersSetting.put(playername,dpid);
+		} else {
+			playersSetting.put(playername, dpid);
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpsetchestmode"), dpid);
 		}
 	}

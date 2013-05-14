@@ -32,7 +32,6 @@ public class SubCommand implements Command {
 
 	private Map<String, Command> commandList = new HashMap<String, Command>();
 
-
 	public void addCommand(String name, Command command) {
 		commandList.put(name, command);
 	}
@@ -45,7 +44,7 @@ public class SubCommand implements Command {
 		if (commandExist(command)) {
 			Command entry = commandList.get(command);
 			if (entry instanceof DPCommand) {
-				((DPCommand) entry).execute(sender,args);
+				((DPCommand) entry).execute(sender, args);
 			} else if (entry instanceof SubCommand) {
 				SubCommand subCommand = (SubCommand) entry;
 

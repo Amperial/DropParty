@@ -22,11 +22,16 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.ampayne2.DropParty.DPMessageController;
+import me.ampayne2.DropParty.DPPartyController;
+import me.ampayne2.DropParty.command.commands.set.CommandSetItemDelay;
+import me.ampayne2.DropParty.command.commands.set.CommandSetMaxLength;
+import me.ampayne2.DropParty.command.commands.set.CommandSetMaxStack;
 import me.ampayne2.DropParty.command.interfaces.DPCommand;
 import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.database.tables.DPPartiesTable;
+import me.ampayne2.DropParty.database.tables.DPSettingsTable;
 
-public class CommandCreate implements DPCommand{
+public class CommandCreate implements DPCommand {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
@@ -34,19 +39,25 @@ public class CommandCreate implements DPCommand{
 		String dpid;
 		if (args.length == 1) {
 			dpid = args[0];
-		}else{
+		} else {
 			return;
 		}
-		DPPartiesTable table = new DPPartiesTable();
-		table.dpid = dpid;
-		if (DatabaseManager.getDatabase().select(DPPartiesTable.class)
-				.where().equal("dpid", dpid).execute().findOne() == null) {
-			DatabaseManager.getDatabase().save(table);
+		DPPartiesTable partytable = new DPPartiesTable();
+		DPSettingsTable settingstable = new DPSettingsTable();
+		partytable.dpid = dpid;
+		settingstable.dpid = dpid;
+		settingstable.itemdelay = CommandSetItemDelay.getDefaultItemDelay();
+		settingstable.maxlength = CommandSetMaxLength.getDefaultMaxLength();
+		settingstable.maxstack = CommandSetMaxStack.getDefaultMaxStack();
+		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null) {
+			DatabaseManager.getDatabase().save(partytable);
+			DatabaseManager.getDatabase().save(settingstable);
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpcreate"), dpid);
 			return;
-		}else{
+		} else {
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartyalreadyexists"), dpid);
 		}
+		DPPartyController.getParties();
 	}
 
 }

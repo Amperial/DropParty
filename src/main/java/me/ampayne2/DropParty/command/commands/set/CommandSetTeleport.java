@@ -28,7 +28,7 @@ import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.database.tables.DPPartiesTable;
 import me.ampayne2.DropParty.database.tables.DPTeleportsTable;
 
-public class CommandSetTeleport implements DPCommand{
+public class CommandSetTeleport implements DPCommand {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
@@ -42,10 +42,10 @@ public class CommandSetTeleport implements DPCommand{
 		String dpid;
 		if (args.length == 1) {
 			dpid = args[0];
-		}else{
+		} else {
 			return;
 		}
-		if(DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null){
+		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null) {
 			sender.sendMessage(ChatColor.RED + "Drop Party '" + dpid + "' Does Not Exist.");
 			return;
 		}
@@ -58,16 +58,14 @@ public class CommandSetTeleport implements DPCommand{
 		table.pitch = pitch;
 		table.yaw = yaw;
 		try {
-			if (DatabaseManager.getDatabase().select(DPTeleportsTable.class)
-					.where().equal("dpid", dpid).execute().findOne() == null) {
+			if (DatabaseManager.getDatabase().select(DPTeleportsTable.class).where().equal("dpid", dpid).execute().findOne() == null) {
 				DPTeleportsTable entry = DatabaseManager.getDatabase().select(DPTeleportsTable.class).where().equal("dpid", dpid).execute().findOne();
 				table.id = entry.id;
 			}
 		} catch (NullPointerException ex) {
 		}
 		DatabaseManager.getDatabase().save(table);
-		player.sendMessage(ChatColor.AQUA
-				+ "Drop Party '" + dpid + "' Teleport Set Successfully.");
-		
+		player.sendMessage(ChatColor.AQUA + "Drop Party '" + dpid + "' Teleport Set Successfully.");
+
 	}
 }

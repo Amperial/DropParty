@@ -29,6 +29,7 @@ import me.ampayne2.DropParty.command.commands.list.CommandListSettings;
 import me.ampayne2.DropParty.command.commands.list.CommandListTeleport;
 import me.ampayne2.DropParty.command.commands.remove.CommandRemoveChest;
 import me.ampayne2.DropParty.command.commands.remove.CommandRemoveItempoint;
+import me.ampayne2.DropParty.command.commands.remove.CommandRemoveTeleport;
 import me.ampayne2.DropParty.command.commands.set.CommandSetChest;
 import me.ampayne2.DropParty.command.commands.set.CommandSetItempoint;
 import me.ampayne2.DropParty.command.commands.set.CommandSetItemDelay;
@@ -53,13 +54,13 @@ public class CommandController extends JavaPlugin {
 
 		CommandStart stop = new CommandStart();
 		mainCommand.addCommand("stop", stop);
-		
+
 		CommandTeleport teleport = new CommandTeleport();
 		mainCommand.addCommand("teleport", teleport);
-		
+
 		CommandCreate create = new CommandCreate();
 		mainCommand.addCommand("create", create);
-		
+
 		SubCommand set = new SubCommand();
 		set.addCommand("chest", new CommandSetChest());
 		set.addCommand("itempoint", new CommandSetItempoint());
@@ -68,12 +69,13 @@ public class CommandController extends JavaPlugin {
 		set.addCommand("maxstack", new CommandSetMaxStack());
 		set.addCommand("maxlength", new CommandSetMaxLength());
 		mainCommand.addCommand("set", set);
-		
+
 		SubCommand remove = new SubCommand();
 		remove.addCommand("chest", new CommandRemoveChest());
 		remove.addCommand("itempoint", new CommandRemoveItempoint());
+		remove.addCommand("teleport", new CommandRemoveTeleport());
 		mainCommand.addCommand("remove", remove);
-		
+
 		SubCommand list = new SubCommand();
 		list.addCommand("parties", new CommandListParties());
 		list.addCommand("chests", new CommandListChests());
@@ -81,7 +83,7 @@ public class CommandController extends JavaPlugin {
 		list.addCommand("settings", new CommandListSettings());
 		list.addCommand("teleport", new CommandListTeleport());
 		mainCommand.addCommand("list", list);
-		
+
 		CommandDelete delete = new CommandDelete();
 		mainCommand.addCommand("delete", delete);
 	}

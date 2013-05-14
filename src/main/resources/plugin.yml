@@ -10,3 +10,5 @@ commands:
 permissions:
   dropparty.admin:
     description: Gives access to all Drop Party commands
+  dropparty.teleport:
+    description: Gives player access to Drop Party Teleport

@@ -50,11 +50,11 @@ public class CommandSetItempoint implements DPCommand {
 
 	public static void toggleSetting(Player player, String dpid) {
 		String playername = player.getName();
-		if(isSetting(playername) && getSetting(playername).equals(dpid)){
+		if (isSetting(playername) && getSetting(playername).equals(dpid)) {
 			playersSetting.remove(playername);
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpsetitempointmodeoff"), dpid);
-		}else{
-			playersSetting.put(playername,dpid);
+		} else {
+			playersSetting.put(playername, dpid);
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpsetitempointmode"), dpid);
 		}
 	}

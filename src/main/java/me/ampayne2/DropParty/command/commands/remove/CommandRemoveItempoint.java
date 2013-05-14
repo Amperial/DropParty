@@ -25,6 +25,6 @@ public class CommandRemoveItempoint implements DPCommand {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
-		
+
 	}
 }

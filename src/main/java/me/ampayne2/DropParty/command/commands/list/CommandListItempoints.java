@@ -21,7 +21,6 @@ package me.ampayne2.DropParty.command.commands.list;
 import java.util.List;
 import java.util.ListIterator;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -53,11 +52,12 @@ public class CommandListItempoints implements DPCommand {
 			return;
 		} else {
 			int id = 0;
-			sender.sendMessage(ChatColor.AQUA + "Drop Party '" + dpid + "' ItemPoints:");
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dplistitempoints"), dpid);
 			while (li.hasNext()) {
 				DPItemPointsTable entry = li.next();
 				id++;
-				sender.sendMessage(ChatColor.AQUA + "ItemPoint " + id + " World: " + entry.world + " X: " + entry.x + " Y: " + entry.y + " Z: " + entry.z);
+				DPMessageController.sendMessage(player, DPMessageController.getMessage("dplistitempoints.itempoint") + id + " World: " + entry.world + " X: " + entry.x + " Y: " + entry.y + " Z: "
+						+ entry.z, dpid);
 			}
 		}
 	}

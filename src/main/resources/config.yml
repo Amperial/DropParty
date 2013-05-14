@@ -6,7 +6,6 @@ mysql:
   database: "database"
   port: 3306
   prefix: "dp_"
-
 #Default settings for a drop party.
 defaultpartysettings:
   #Delay between dropping each itemstack in a drop party, in ticks.
@@ -15,7 +14,6 @@ defaultpartysettings:
   maxlength: 300
   #Max Stack Size of an item stack being dropped. itemstacks bigger than this will be split up.
   maxstack: 8
-  
 messages:
 #NOTE: %PartyName% will be replaced with the name of the drop party you created/started/modified/etc.
 #NOTE: You may use color codes &0-&9, &a-&f, &k-&o, and &r. http://www.minecraftwiki.net/wiki/Formatting_codes
@@ -38,7 +36,25 @@ messages:
   dpsetmaxstack: "&bSet Max Stack Size for Drop Party '%PartyName%' Successfully."
   dpremovechest: "&bRemoved Chest from Drop Party '%PartyName%' Successfully."
   dpremoveitempoint: "&bRemoved ItemPoint from Drop Party '%PartyName%' Successfully."
-  dpteleport: "&bTeleported To Drop Party '%PartyName%'."  
+  dpteleport: "&bTeleported To Drop Party '%PartyName%'."
+#List Messages
+  dplistparties: "&bDrop Parties:"
+    party: "&b  -'%PartyName%' : "
+  dplistsettings: "&bDrop Party '%PartyName%' Settings:"
+    itemdelay: "&b  Item Delay: "
+    maxlength: "&b  Max Length: "
+    maxstack: "&b  Max Stack:  "
+  dplistteleport: "&bDrop Party '%PartyName%' Teleport:"
+    world: "&b  World: "
+    x: "&b  X: "
+    y: "&b  Y: "
+    z: "&b  Z: "
+    pitch: "&b  Pitch: "
+    yaw: "&b  Yaw: "
+  dplistchests: "&bDrop Party '%PartyName%' Chests:"
+    chest: "&bChest "
+  dplistitempoints: "&bDrop Party '%PartyName%' Item Points:"
+    itempoint: "&bItem Point "
 #Broadcasts
   dpannouncestart: "&bDrop Party '%PartyName%' Started! Teleport With /dp teleport %PartyName%"
   dpannouncestop: "&bDrop Party '%PartyName%' Has Ended!"
@@ -62,6 +78,8 @@ messages:
   dppartydoesntexist: "&4Drop Party '%PartyName%' Does Not Exist."
   dppartyalreadyexists: "&4Drop Party '%PartyName%' Already Exists."
   dppartyoutofitems: "&4Drop Party '%PartyName%' Has Run Out Of Items."
+  dpnopartiesfound: "&4No Drop Parties Found."
+  dpnoteleportfound: "&4No Drop Party '%PartyName%' Teleport Found."
   dpnochestsfound: "&4No Drop Party '%PartyName%' Chests Found."
   dpnoitempointsfound: "&4No Drop Party '%PartyName%' Item Points Found."
   dpargumentserror: "&4Incorrect Amount Of Arguments."

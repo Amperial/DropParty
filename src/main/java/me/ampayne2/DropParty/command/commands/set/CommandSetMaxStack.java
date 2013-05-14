@@ -28,14 +28,17 @@ import me.ampayne2.DropParty.command.interfaces.DPCommand;
 import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.database.tables.DPPartiesTable;
 import me.ampayne2.DropParty.database.tables.DPSettingsTable;
-import me.ampayne2.DropParty.database.tables.DPTeleportsTable;
 
 public class CommandSetMaxStack implements DPCommand {
-	
-	public static Long defaultMaxStack = null;
-	
-	public static void getDefaultMaxStack(Plugin plugin){
-		defaultMaxStack = plugin.getConfig().getLong("defaultpartysettings.maxstack");
+
+	public static int defaultMaxStack;
+
+	public static void getDefaults(Plugin plugin) {
+		defaultMaxStack = plugin.getConfig().getInt("defaultpartysettings.maxstack");
+	}
+
+	public static int getDefaultMaxStack() {
+		return defaultMaxStack;
 	}
 
 	@Override
@@ -43,7 +46,13 @@ public class CommandSetMaxStack implements DPCommand {
 		Player player = (Player) sender;
 		String dpid;
 		int maxstack;
-		if (args.length == 2) {
+		if (args.length != 2) {
+			return;
+		}
+		if (args[0].equals("default")) {
+			maxstack = defaultMaxStack;
+			dpid = args[1];
+		} else {
 			try {
 				maxstack = Integer.parseInt(args[0]);
 			} catch (NumberFormatException e) {
@@ -51,8 +60,6 @@ public class CommandSetMaxStack implements DPCommand {
 				return;
 			}
 			dpid = args[1];
-		} else {
-			return;
 		}
 		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null) {
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartydoesntexist"), dpid);
@@ -61,13 +68,15 @@ public class CommandSetMaxStack implements DPCommand {
 		DPSettingsTable table = new DPSettingsTable();
 		table.dpid = dpid;
 		table.maxstack = maxstack;
-		if (DatabaseManager.getDatabase().select(DPTeleportsTable.class).where().equal("dpid", dpid).execute().findOne() == null) {
+		if (DatabaseManager.getDatabase().select(DPSettingsTable.class).where().equal("dpid", dpid).execute().findOne() == null) {
 			DatabaseManager.getDatabase().save(table);
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpsetmaxstack"), dpid);
 			return;
 		} else {
 			DPSettingsTable entry = DatabaseManager.getDatabase().select(DPSettingsTable.class).where().equal("dpid", dpid).execute().findOne();
 			table.id = entry.id;
+			table.itemdelay = entry.itemdelay;
+			table.maxlength = entry.maxlength;
 		}
 		DatabaseManager.getDatabase().save(table);
 		DPMessageController.sendMessage(player, DPMessageController.getMessage("dpsetmaxstack"), dpid);

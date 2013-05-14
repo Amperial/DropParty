@@ -52,32 +52,30 @@ public class DropParty extends JavaPlugin {
 		saveConfig();
 
 		getCommand("dropparty").setExecutor(new CommandController());
-		
+
 		try {
 			dbManager = new DatabaseManager(this);
 		} catch (TableRegistrationException e) {
-			getLogger().severe(
-					"A error occured while connecting to the database!");
+			getLogger().severe("A error occured while connecting to the database!");
 			e.printStackTrace();
 			getServer().getPluginManager().disablePlugin(this);
 			return;
 		} catch (ConnectionException e) {
-			getLogger().severe(
-					"A error occured while connecting to the database!");
+			getLogger().severe("A error occured while connecting to the database!");
 			e.printStackTrace();
 			getServer().getPluginManager().disablePlugin(this);
 			return;
 		}
-		
+
 		DPMessageController = new DPMessageController(this);
 		DPPartyController.getParties();
-		CommandSetItemDelay.getDefaultItemDelay(this);
-		CommandSetMaxLength.getDefaultMaxLength(this);
-		CommandSetMaxStack.getDefaultMaxStack(this);
-		
+		CommandSetItemDelay.getDefaults(this);
+		CommandSetMaxLength.getDefaults(this);
+		CommandSetMaxStack.getDefaults(this);
+
 		try {
-		    Metrics metrics = new Metrics(this);
-		    metrics.start();
+			Metrics metrics = new Metrics(this);
+			metrics.start();
 		} catch (IOException e) {
 		}
 	}
@@ -89,7 +87,7 @@ public class DropParty extends JavaPlugin {
 	public DatabaseManager getDatabaseManager() {
 		return dbManager;
 	}
-	
+
 	public DPMessageController getDPMessageController() {
 		return DPMessageController;
 	}

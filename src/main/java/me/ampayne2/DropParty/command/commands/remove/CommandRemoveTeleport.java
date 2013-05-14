@@ -16,27 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.DropParty.command.commands;
+package me.ampayne2.DropParty.command.commands.remove;
 
-import me.ampayne2.DropParty.DPMessageController;
-import me.ampayne2.DropParty.DPPartyController;
 import me.ampayne2.DropParty.command.interfaces.DPCommand;
-
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
-public class CommandStop implements DPCommand {
+public class CommandRemoveTeleport implements DPCommand {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
-		if (args.length == 0) {
-			return;
-		}
-		Player player = (Player) sender;
-		if (DPPartyController.stop(args[0])) {
-			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpstop"), args[0]);
-		} else {
-			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpstoperror"), args[0]);
-		}
+		
 	}
+
 }

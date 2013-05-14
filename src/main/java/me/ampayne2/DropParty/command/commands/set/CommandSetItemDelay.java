@@ -28,34 +28,38 @@ import me.ampayne2.DropParty.command.interfaces.DPCommand;
 import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.database.tables.DPPartiesTable;
 import me.ampayne2.DropParty.database.tables.DPSettingsTable;
-import me.ampayne2.DropParty.database.tables.DPTeleportsTable;
 
 public class CommandSetItemDelay implements DPCommand {
-	
+
 	public static Long defaultItemDelay = null;
-	
-	public static void getDefaultItemDelay(Plugin plugin){
+
+	public static void getDefaults(Plugin plugin) {
 		defaultItemDelay = plugin.getConfig().getLong("defaultpartysettings.itemdelay");
+	}
+
+	public static Long getDefaultItemDelay() {
+		return defaultItemDelay;
 	}
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
 		Player player = (Player) sender;
 		String dpid;
-		int itemdelay;
-		if (args.length == 2) {
-			if(args[0].equals("default")){
-				
-			}
+		Long itemdelay;
+		if (args.length != 2) {
+			return;
+		}
+		if (args[0].equals("default")) {
+			itemdelay = defaultItemDelay;
+			dpid = args[1];
+		} else {
 			try {
-				itemdelay = Integer.parseInt(args[0]);
+				itemdelay = Long.parseLong(args[0]);
 			} catch (NumberFormatException e) {
 				sender.sendMessage(ChatColor.RED + "'" + args[0] + "'" + " is not an integer.");
 				return;
 			}
 			dpid = args[1];
-		} else {
-			return;
 		}
 		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null) {
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartydoesntexist"), dpid);
@@ -64,13 +68,15 @@ public class CommandSetItemDelay implements DPCommand {
 		DPSettingsTable table = new DPSettingsTable();
 		table.dpid = dpid;
 		table.itemdelay = itemdelay;
-		if (DatabaseManager.getDatabase().select(DPTeleportsTable.class).where().equal("dpid", dpid).execute().findOne() == null) {
+		if (DatabaseManager.getDatabase().select(DPSettingsTable.class).where().equal("dpid", dpid).execute().findOne() == null) {
 			DatabaseManager.getDatabase().save(table);
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpsetitemdelay"), dpid);
 			return;
 		} else {
 			DPSettingsTable entry = DatabaseManager.getDatabase().select(DPSettingsTable.class).where().equal("dpid", dpid).execute().findOne();
 			table.id = entry.id;
+			table.maxlength = entry.maxlength;
+			table.maxstack = entry.maxstack;
 		}
 		DatabaseManager.getDatabase().save(table);
 		DPMessageController.sendMessage(player, DPMessageController.getMessage("dpsetitemdelay"), dpid);

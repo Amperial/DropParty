@@ -18,9 +18,10 @@
  */
 package me.ampayne2.DropParty.command.commands.list;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
+import me.ampayne2.DropParty.DPMessageController;
 import me.ampayne2.DropParty.command.interfaces.DPCommand;
 import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.database.tables.DPPartiesTable;
@@ -30,6 +31,7 @@ public class CommandListSettings implements DPCommand {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
+		Player player = (Player) sender;
 		String dpid;
 		if (args.length == 1) {
 			dpid = args[0];
@@ -37,18 +39,13 @@ public class CommandListSettings implements DPCommand {
 			return;
 		}
 		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null) {
-			sender.sendMessage(ChatColor.RED + "Drop Party '" + dpid + "' Does Not Exist.");
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartydoesntexist"), dpid);
 			return;
 		}
 		DPSettingsTable entry = DatabaseManager.getDatabase().select(DPSettingsTable.class).where().equal("dpid", dpid).execute().findOne();
-		if (entry == null) {
-			sender.sendMessage(ChatColor.AQUA + "No Drop Party Settings Found.");
-			return;
-		} else {
-			sender.sendMessage(ChatColor.AQUA + "Drop Party " + dpid + " Settings:");
-			sender.sendMessage(ChatColor.AQUA + "  Item Delay: " + entry.itemdelay);
-			sender.sendMessage(ChatColor.AQUA + "  Max Length: " + entry.maxlength);
-			sender.sendMessage(ChatColor.AQUA + "  Max Stack Size: " + entry.maxstack);
-		}
+		DPMessageController.sendMessage(player, DPMessageController.getMessage("dplistsettings"), dpid);
+		DPMessageController.sendMessage(player, DPMessageController.getMessage("dplistsettings.itemdelay") + entry.itemdelay, dpid);
+		DPMessageController.sendMessage(player, DPMessageController.getMessage("dplistsettings.maxlength") + entry.maxlength, dpid);
+		DPMessageController.sendMessage(player, DPMessageController.getMessage("dplistsettings.maxstack") + entry.maxstack, dpid);
 	}
 }

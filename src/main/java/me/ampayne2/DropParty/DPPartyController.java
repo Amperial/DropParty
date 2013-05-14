@@ -34,6 +34,9 @@ public class DPPartyController {
 	public static ListIterator<DPPartiesTable> li = parties.listIterator();
 
 	public static void getParties() {
+		if (!isRunning.isEmpty()) {
+			isRunning.clear();
+		}
 		parties = DatabaseManager.getDatabase().select(DPPartiesTable.class).execute().find();
 		li = parties.listIterator();
 		if (parties.size() == 0) {
@@ -53,19 +56,21 @@ public class DPPartyController {
 		if (!isRunning.containsKey(dpid)) {
 			return false;
 		}
-		if (!isRunning.get(dpid)) {
+		if (isRunning.get(dpid).equals(dpid)) {
 			isRunning.put(dpid, true);
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	public static boolean stop(String dpid) {
 		if (!isRunning.containsKey(dpid)) {
 			return false;
 		}
-		if (!isRunning.get(dpid)) {
+		if (isRunning.get(dpid).equals(dpid)) {
 			isRunning.put(dpid, false);
+			return true;
 		}
-		return true;
+		return false;
 	}
 }
