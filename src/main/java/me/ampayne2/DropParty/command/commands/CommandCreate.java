@@ -53,11 +53,10 @@ public class CommandCreate implements DPCommand {
 			DatabaseManager.getDatabase().save(partytable);
 			DatabaseManager.getDatabase().save(settingstable);
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpcreate"), dpid);
+			DPPartyController.getParties();
 			return;
 		} else {
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartyalreadyexists"), dpid);
 		}
-		DPPartyController.getParties();
 	}
-
 }

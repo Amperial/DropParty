@@ -18,7 +18,6 @@
  */
 package me.ampayne2.DropParty.command.commands;
 
-import me.ampayne2.DropParty.DPMessageController;
 import me.ampayne2.DropParty.DPPartyController;
 import me.ampayne2.DropParty.command.interfaces.DPCommand;
 import org.bukkit.command.CommandSender;
@@ -32,10 +31,6 @@ public class CommandStart implements DPCommand {
 			return;
 		}
 		Player player = (Player) sender;
-		if (DPPartyController.start(args[0])) {
-			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpstart"), args[0]);
-		} else {
-			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpstarterror"), args[0]);
-		}
+		DPPartyController.start(player, args[0]);
 	}
 }

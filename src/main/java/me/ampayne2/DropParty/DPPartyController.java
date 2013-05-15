@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
+import org.bukkit.entity.Player;
+
 import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.database.tables.DPPartiesTable;
 
@@ -52,25 +54,37 @@ public class DPPartyController {
 		return isRunning.get(dpid);
 	}
 
-	public static boolean start(String dpid) {
+	public static void start(Player player, String dpid) {
 		if (!isRunning.containsKey(dpid)) {
-			return false;
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartydoesntexist"), dpid);
+			return;
 		}
-		if (isRunning.get(dpid).equals(dpid)) {
+		if (!isRunning.get(dpid)) {
 			isRunning.put(dpid, true);
-			return true;
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpstart"), dpid);
+			DPMessageController.broadcastMessage(DPMessageController.getMessage("dpannouncestart"), dpid);
+			return;
+		}else if (isRunning.get(dpid)){
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartyalreadyrunning"), dpid);
+		}else{
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpstarterror"), dpid);
 		}
-		return false;
 	}
 
-	public static boolean stop(String dpid) {
+	public static void stop(Player player, String dpid) {
 		if (!isRunning.containsKey(dpid)) {
-			return false;
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartydoesntexist"), dpid);
+			return;
 		}
-		if (isRunning.get(dpid).equals(dpid)) {
+		if (isRunning.get(dpid)) {
 			isRunning.put(dpid, false);
-			return true;
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpstop"), dpid);
+			DPMessageController.broadcastMessage(DPMessageController.getMessage("dpannouncestop"), dpid);
+			return;
+		}else if (!isRunning.get(dpid)){
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartynotrunning"), dpid);
+		}else{
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpstoperror"), dpid);
 		}
-		return false;
 	}
 }

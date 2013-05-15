@@ -21,6 +21,7 @@ package me.ampayne2.DropParty.command;
 import me.ampayne2.DropParty.command.commands.CommandCreate;
 import me.ampayne2.DropParty.command.commands.CommandDelete;
 import me.ampayne2.DropParty.command.commands.CommandStart;
+import me.ampayne2.DropParty.command.commands.CommandStop;
 import me.ampayne2.DropParty.command.commands.CommandTeleport;
 import me.ampayne2.DropParty.command.commands.list.CommandListChests;
 import me.ampayne2.DropParty.command.commands.list.CommandListItempoints;
@@ -52,7 +53,7 @@ public class CommandController extends JavaPlugin {
 		CommandStart start = new CommandStart();
 		mainCommand.addCommand("start", start);
 
-		CommandStart stop = new CommandStart();
+		CommandStop stop = new CommandStop();
 		mainCommand.addCommand("stop", stop);
 
 		CommandTeleport teleport = new CommandTeleport();

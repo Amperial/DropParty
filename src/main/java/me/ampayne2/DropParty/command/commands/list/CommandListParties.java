@@ -55,6 +55,7 @@ public class CommandListParties implements DPCommand {
 			} else {
 				isRunning = "Not Running";
 			}
+			dpid = entry.dpid;
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dplistparties.party") + isRunning, dpid);
 		}
 	}

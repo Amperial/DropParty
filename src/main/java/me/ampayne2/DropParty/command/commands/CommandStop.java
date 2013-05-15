@@ -18,7 +18,6 @@
  */
 package me.ampayne2.DropParty.command.commands;
 
-import me.ampayne2.DropParty.DPMessageController;
 import me.ampayne2.DropParty.DPPartyController;
 import me.ampayne2.DropParty.command.interfaces.DPCommand;
 
@@ -33,10 +32,6 @@ public class CommandStop implements DPCommand {
 			return;
 		}
 		Player player = (Player) sender;
-		if (DPPartyController.stop(args[0])) {
-			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpstop"), args[0]);
-		} else {
-			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpstoperror"), args[0]);
-		}
+		DPPartyController.stop(player, args[0]);
 	}
 }

@@ -38,22 +38,27 @@ messages:
   dpremoveitempoint: "&bRemoved ItemPoint from Drop Party '%PartyName%' Successfully."
   dpteleport: "&bTeleported To Drop Party '%PartyName%'."
 #List Messages
-  dplistparties: "&bDrop Parties:"
+  dplistparties:
+    dplistparties: "&bDrop Parties:"
     party: "&b  -'%PartyName%' : "
-  dplistsettings: "&bDrop Party '%PartyName%' Settings:"
+  dplistsettings:
+    dplistsettings: "&bDrop Party '%PartyName%' Settings:"
     itemdelay: "&b  Item Delay: "
     maxlength: "&b  Max Length: "
     maxstack: "&b  Max Stack:  "
-  dplistteleport: "&bDrop Party '%PartyName%' Teleport:"
+  dplistteleport:
+    dplistteleport: "&bDrop Party '%PartyName%' Teleport:"
     world: "&b  World: "
     x: "&b  X: "
     y: "&b  Y: "
     z: "&b  Z: "
     pitch: "&b  Pitch: "
     yaw: "&b  Yaw: "
-  dplistchests: "&bDrop Party '%PartyName%' Chests:"
+  dplistchests:
+    dplistchests: "&bDrop Party '%PartyName%' Chests:"
     chest: "&bChest "
-  dplistitempoints: "&bDrop Party '%PartyName%' Item Points:"
+  dplistitempoints:
+    dplistitempoints: "&bDrop Party '%PartyName%' Item Points:"
     itempoint: "&bItem Point "
 #Broadcasts
   dpannouncestart: "&bDrop Party '%PartyName%' Started! Teleport With /dp teleport %PartyName%"
@@ -78,6 +83,8 @@ messages:
   dppartydoesntexist: "&4Drop Party '%PartyName%' Does Not Exist."
   dppartyalreadyexists: "&4Drop Party '%PartyName%' Already Exists."
   dppartyoutofitems: "&4Drop Party '%PartyName%' Has Run Out Of Items."
+  dppartyalreadyrunning: "&4Drop Party '%PartyName%' Is Already Running."
+  dppartynotrunning: "&4Drop Party '%PartyName%' Is Not Running."
   dpnopartiesfound: "&4No Drop Parties Found."
   dpnoteleportfound: "&4No Drop Party '%PartyName%' Teleport Found."
   dpnochestsfound: "&4No Drop Party '%PartyName%' Chests Found."
