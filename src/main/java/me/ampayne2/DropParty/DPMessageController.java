@@ -23,88 +23,98 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 public class DPMessageController {
+	
 	public static Map<String, String> messages = new HashMap<String, String>();
 
 	public DPMessageController(Plugin plugin) {
+		FileConfiguration config = plugin.getConfig();
+
 		// prefix
-		messages.put("dpprefix", plugin.getConfig().getString("messages.dpprefix"));
+		messages.put("dpprefix", config.getString("messages.dpprefix"));
 
 		// command messages
-		messages.put("dpcreate", plugin.getConfig().getString("messages.dpcreate"));
-		messages.put("dpdelete", plugin.getConfig().getString("messages.dpdelete"));
-		messages.put("dpstart", plugin.getConfig().getString("messages.dpstart"));
-		messages.put("dpstop", plugin.getConfig().getString("messages.dpstop"));
-		messages.put("dpsetchest", plugin.getConfig().getString("messages.dpsetchest"));
-		messages.put("dpsetchestmode", plugin.getConfig().getString("messages.dpsetchestmode"));
-		messages.put("dpsetchestmodeoff", plugin.getConfig().getString("messages.dpsetchestmodeoff"));
-		messages.put("dpsetitempoint", plugin.getConfig().getString("messages.dpsetitempoint"));
-		messages.put("dpsetitempointmode", plugin.getConfig().getString("messages.dpsetitempointmode"));
-		messages.put("dpsetitempointmodeoff", plugin.getConfig().getString("messages.dpsetitempointmodeoff"));
-		messages.put("dpsetteleport", plugin.getConfig().getString("messages.dpsetteleport"));
-		messages.put("dpsetitemdelay", plugin.getConfig().getString("messages.dpsetitemdelay"));
-		messages.put("dpsetmaxlength", plugin.getConfig().getString("messages.dpsetmaxlength"));
-		messages.put("dpsetmaxstack", plugin.getConfig().getString("messages.dpsetmaxstack"));
-		messages.put("dpremovechest", plugin.getConfig().getString("messages.dpremovechest"));
-		messages.put("dpremoveitempoint", plugin.getConfig().getString("messages.dpremoveitempoint"));
-		messages.put("dpremoveteleport", plugin.getConfig().getString("messages.dpremoveteleport"));
-		messages.put("dpteleport", plugin.getConfig().getString("messages.dpteleport"));
+		messages.put("dpcreate", config.getString("messages.dpcreate"));
+		messages.put("dpdelete", config.getString("messages.dpdelete"));
+		messages.put("dpstart", config.getString("messages.dpstart"));
+		messages.put("dpstop", config.getString("messages.dpstop"));
+		messages.put("dpsetchest", config.getString("messages.dpsetchest"));
+		messages.put("dpsetchestmode", config.getString("messages.dpsetchestmode"));
+		messages.put("dpsetchestmodeoff", config.getString("messages.dpsetchestmodeoff"));
+		messages.put("dpremovechestmode", config.getString("messages.dpremovechestmode"));
+		messages.put("dpremovechestmodeoff", config.getString("messages.dpremovechestmodeoff"));
+		messages.put("dpsetitempoint", config.getString("messages.dpsetitempoint"));
+		messages.put("dpsetitempointmode", config.getString("messages.dpsetitempointmode"));
+		messages.put("dpsetitempointmodeoff", config.getString("messages.dpsetitempointmodeoff"));
+		messages.put("dpsetteleport", config.getString("messages.dpsetteleport"));
+		messages.put("dpsetitemdelay", config.getString("messages.dpsetitemdelay"));
+		messages.put("dpsetmaxlength", config.getString("messages.dpsetmaxlength"));
+		messages.put("dpsetmaxstack", config.getString("messages.dpsetmaxstack"));
+		messages.put("dpremovechest", config.getString("messages.dpremovechest"));
+		messages.put("dpremoveitempoint", config.getString("messages.dpremoveitempoint"));
+		messages.put("dpremoveteleport", config.getString("messages.dpremoveteleport"));
+		messages.put("dpteleport", config.getString("messages.dpteleport"));
 
 		// list messages
-		messages.put("dplistparties", plugin.getConfig().getString("messages.dplistparties.dplistparties"));
-		messages.put("dplistparties.party", plugin.getConfig().getString("messages.dplistparties.party"));
-		messages.put("dplistsettings", plugin.getConfig().getString("messages.dplistsettings.dplistsettings"));
-		messages.put("dplistsettings.itemdelay", plugin.getConfig().getString("messages.dplistsettings.itemdelay"));
-		messages.put("dplistsettings.maxlength", plugin.getConfig().getString("messages.dplistsettings.maxlength"));
-		messages.put("dplistsettings.maxstack", plugin.getConfig().getString("messages.dplistsettings.maxstack"));
-		messages.put("dplistteleport", plugin.getConfig().getString("messages.dplistteleport.dplistteleport"));
-		messages.put("dplistteleport.world", plugin.getConfig().getString("messages.dplistteleport.world"));
-		messages.put("dplistteleport.x", plugin.getConfig().getString("messages.dplistteleport.x"));
-		messages.put("dplistteleport.y", plugin.getConfig().getString("messages.dplistteleport.y"));
-		messages.put("dplistteleport.z", plugin.getConfig().getString("messages.dplistteleport.z"));
-		messages.put("dplistteleport.pitch", plugin.getConfig().getString("messages.dplistteleport.pitch"));
-		messages.put("dplistteleport.yaw", plugin.getConfig().getString("messages.dplistteleport.yaw"));
-		messages.put("dplistchests", plugin.getConfig().getString("messages.dplistchests.dplistchests"));
-		messages.put("dplistchests.chest", plugin.getConfig().getString("messages.dplistchests.chest"));
-		messages.put("dplistitempoints", plugin.getConfig().getString("messages.dplistitempoints.dplistitempoints"));
-		messages.put("dplistitempoints.itempoint", plugin.getConfig().getString("messages.dplistitempoints.itempoint"));
+		messages.put("dplistparties", config.getString("messages.dplistparties.dplistparties"));
+		messages.put("dplistparties.party", config.getString("messages.dplistparties.party"));
+		messages.put("dplistsettings", config.getString("messages.dplistsettings.dplistsettings"));
+		messages.put("dplistsettings.itemdelay", config.getString("messages.dplistsettings.itemdelay"));
+		messages.put("dplistsettings.maxlength", config.getString("messages.dplistsettings.maxlength"));
+		messages.put("dplistsettings.maxstack", config.getString("messages.dplistsettings.maxstack"));
+		messages.put("dplistteleport", config.getString("messages.dplistteleport.dplistteleport"));
+		messages.put("dplistteleport.world", config.getString("messages.dplistteleport.world"));
+		messages.put("dplistteleport.x", config.getString("messages.dplistteleport.x"));
+		messages.put("dplistteleport.y", config.getString("messages.dplistteleport.y"));
+		messages.put("dplistteleport.z", config.getString("messages.dplistteleport.z"));
+		messages.put("dplistteleport.pitch", config.getString("messages.dplistteleport.pitch"));
+		messages.put("dplistteleport.yaw", config.getString("messages.dplistteleport.yaw"));
+		messages.put("dplistchests", config.getString("messages.dplistchests.dplistchests"));
+		messages.put("dplistchests.chest", config.getString("messages.dplistchests.chest"));
+		messages.put("dplistitempoints", config.getString("messages.dplistitempoints.dplistitempoints"));
+		messages.put("dplistitempoints.itempoint", config.getString("messages.dplistitempoints.itempoint"));
 
 		// broadcasts
-		messages.put("dpannouncestart", plugin.getConfig().getString("messages.dpannouncestart"));
-		messages.put("dpannouncestop", plugin.getConfig().getString("messages.dpannouncestop"));
+		messages.put("dpannouncestart", config.getString("messages.dpannouncestart"));
+		messages.put("dpannouncestop", config.getString("messages.dpannouncestop"));
 
 		// errors
-		messages.put("dpcreateerror", plugin.getConfig().getString("messages.dpcreateerror"));
-		messages.put("dpdeleteerror", plugin.getConfig().getString("messages.dpdeleteerror"));
-		messages.put("dpstarterror", plugin.getConfig().getString("messages.dpstarterror"));
-		messages.put("dpstoperror", plugin.getConfig().getString("messages.dpstoperror"));
-		messages.put("dpsetchesterror", plugin.getConfig().getString("messages.dpsetchesterror"));
-		messages.put("dpsetitempointerror", plugin.getConfig().getString("messages.dpsetitempointerror"));
-		messages.put("dpsetteleporterror", plugin.getConfig().getString("messages.dpsetteleporterror"));
-		messages.put("dpsetitemdelayerror", plugin.getConfig().getString("messages.dpsetitemdelayerror"));
-		messages.put("dpsetmaxlengtherror", plugin.getConfig().getString("messages.dpsetmaxlengtherror"));
-		messages.put("dpsetmaxstackerror", plugin.getConfig().getString("messages.dpsetmaxstackerror"));
-		messages.put("dpremovechesterror", plugin.getConfig().getString("messages.dpremovechesterror"));
-		messages.put("dpremoveitempointerror", plugin.getConfig().getString("messages.dpremoveitempointerror"));
-		messages.put("dpremoveteleporterror", plugin.getConfig().getString("messages.dpremoveteleporterror"));
-		messages.put("dpteleporterror", plugin.getConfig().getString("messages.dpteleporterror"));
+		messages.put("dpcreateerror", config.getString("messages.dpcreateerror"));
+		messages.put("dpdeleteerror", config.getString("messages.dpdeleteerror"));
+		messages.put("dpstarterror", config.getString("messages.dpstarterror"));
+		messages.put("dpstoperror", config.getString("messages.dpstoperror"));
+		messages.put("dpsetchesterror", config.getString("messages.dpsetchesterror"));
+		messages.put("dpsetitempointerror", config.getString("messages.dpsetitempointerror"));
+		messages.put("dpsetteleporterror", config.getString("messages.dpsetteleporterror"));
+		messages.put("dpsetitemdelayerror", config.getString("messages.dpsetitemdelayerror"));
+		messages.put("dpsetmaxlengtherror", config.getString("messages.dpsetmaxlengtherror"));
+		messages.put("dpsetmaxstackerror", config.getString("messages.dpsetmaxstackerror"));
+		messages.put("dpremovechesterror", config.getString("messages.dpremovechesterror"));
+		messages.put("dpremoveitempointerror", config.getString("messages.dpremoveitempointerror"));
+		messages.put("dpremoveteleporterror", config.getString("messages.dpremoveteleporterror"));
+		messages.put("dpteleporterror", config.getString("messages.dpteleporterror"));
 
 		// other
-		messages.put("dpchestalreadyexists", plugin.getConfig().getString("messages.dpchestalreadyexists"));
-		messages.put("dpitempointalreadyexists", plugin.getConfig().getString("messages.dpitempointalreadyexists"));
-		messages.put("dppartydoesntexist", plugin.getConfig().getString("messages.dppartydoesntexist"));
-		messages.put("dppartyoutofitems", plugin.getConfig().getString("messages.dppartyoutofitems"));
-		messages.put("dppartyalreadyrunning", plugin.getConfig().getString("messages.dppartyalreadyrunning"));
-		messages.put("dppartynotrunning", plugin.getConfig().getString("messages.dppartynotrunning"));
-		messages.put("dpnopartiesfound", plugin.getConfig().getString("messages.dpnopartiesfound"));
-		messages.put("dpnoteleportfound", plugin.getConfig().getString("messages.dpnoteleportfound"));
-		messages.put("dpnochestsfound", plugin.getConfig().getString("messages.dpnochestsfound"));
-		messages.put("dpnoitempointsfound", plugin.getConfig().getString("messages.dpnoitempointsfound"));
-		messages.put("dpargumentserror", plugin.getConfig().getString("messages.dpargumentserror"));
-		messages.put("dpnopermission", plugin.getConfig().getString("messages.dpnopermission"));
+		messages.put("dpchestalreadyexists", config.getString("messages.dpchestalreadyexists"));
+		messages.put("dpitempointalreadyexists", config.getString("messages.dpitempointalreadyexists"));
+		messages.put("dpitempointiddoesntexist", config.getString("messages.dpitempointiddoesntexist"));
+		messages.put("dppartydoesntexist", config.getString("messages.dppartydoesntexist"));
+		messages.put("dpchestdoesntexist", config.getString("messages.dpchestdoesntexist"));
+		messages.put("dpchestiddoesntexist", config.getString("messages.dpchestiddoesntexist"));
+		messages.put("dppartyalreadyexists", config.getString("messages.dppartyalreadyexists"));
+		messages.put("dppartyoutofitems", config.getString("messages.dppartyoutofitems"));
+		messages.put("dppartyalreadyrunning", config.getString("messages.dppartyalreadyrunning"));
+		messages.put("dppartynotrunning", config.getString("messages.dppartynotrunning"));
+		messages.put("dpnopartiesfound", config.getString("messages.dpnopartiesfound"));
+		messages.put("dpnoteleportfound", config.getString("messages.dpnoteleportfound"));
+		messages.put("dpnochestsfound", config.getString("messages.dpnochestsfound"));
+		messages.put("dpnoitempointsfound", config.getString("messages.dpnoitempointsfound"));
+		messages.put("dpargumentserror", config.getString("messages.dpargumentserror"));
+		messages.put("dpnopermission", config.getString("messages.dpnopermission"));
 	}
 
 	public static String getMessage(String messagetype) {

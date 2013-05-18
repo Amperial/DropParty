@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.ampayne2.DropParty.DPMessageController;
+import me.ampayne2.DropParty.command.commands.remove.CommandRemoveChest;
 import me.ampayne2.DropParty.command.interfaces.DPCommand;
 import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.database.tables.DPChestsTable;
@@ -36,16 +37,21 @@ public class CommandSetChest implements DPCommand {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
-
-		if (args.length != 1) {
+		String dpid;
+		if (args.length == 1) {
+			dpid = args[0];
+		}else{
 			return;
 		}
 		Player player = (Player) sender;
-		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", args[0]).execute().find() == null) {
-			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartydoesntexist"), args[0]);
+		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().find() == null) {
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartydoesntexist"), dpid);
 			return;
 		}
-		toggleSetting(player, args[0]);
+		if(CommandRemoveChest.isRemoving(player.getName()) && !isSetting(player.getName())){
+			CommandRemoveChest.toggleRemoving(player, dpid);
+		}
+		toggleSetting(player, dpid);
 	}
 
 	public static void toggleSetting(Player player, String dpid) {
@@ -73,7 +79,7 @@ public class CommandSetChest implements DPCommand {
 
 	public static void saveChest(Player player, String playerName, String dpid, String world, int x, int y, int z) {
 
-		if (DatabaseManager.getDatabase().select(DPChestsTable.class).where().equal("dpid", dpid).and().equal("x", x).and().equal("y", y).and().equal("z", z).execute().findOne() != null) {
+		if (DatabaseManager.getDatabase().select(DPChestsTable.class).where().equal("world", world).and().equal("x", x).and().equal("y", y).and().equal("z", z).execute().findOne() != null) {
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpchestalreadyexists"), dpid);
 			return;
 		}

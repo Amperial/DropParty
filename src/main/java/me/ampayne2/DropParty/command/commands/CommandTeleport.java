@@ -56,6 +56,9 @@ public class CommandTeleport implements DPCommand {
 			loc.setYaw(entry.yaw);
 			player.teleport(loc);
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpteleport"), dpid);
+			return;
+		}else{
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpnoteleportfound"), dpid);
 		}
 	}
 }

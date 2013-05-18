@@ -19,6 +19,7 @@
 package me.ampayne2.DropParty.listeners;
 
 import me.ampayne2.DropParty.DPMessageController;
+import me.ampayne2.DropParty.command.commands.remove.CommandRemoveChest;
 import me.ampayne2.DropParty.command.commands.set.CommandSetChest;
 import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.database.tables.DPChestsTable;
@@ -47,12 +48,17 @@ public class DPChestListener implements Listener {
 		} catch (NullPointerException ex) {
 			return;
 		}
-		if (!CommandSetChest.isSetting(player.getName())) {
-			return;
+		String playername = player.getName();
+		if (CommandSetChest.isSetting(playername)) {
+			String dpid = CommandSetChest.getSetting(playername);
+			CommandSetChest.saveChest(player, playername, dpid, clickedBlock.getWorld().getName(), clickedBlock.getX(), clickedBlock.getY(), clickedBlock.getZ());
+			event.setCancelled(true);
+		}else if(CommandRemoveChest.isRemoving(playername)){
+			String dpid = CommandRemoveChest.getRemoving(playername);
+			CommandRemoveChest.removeChest(player, playername, dpid, clickedBlock.getWorld().getName(), clickedBlock.getX(), clickedBlock.getY(), clickedBlock.getZ());
+			event.setCancelled(true);
 		}
-		String dpid = CommandSetChest.getSetting(player.getName());
-		CommandSetChest.saveChest(player, player.getName(), dpid, clickedBlock.getWorld().getName(), clickedBlock.getX(), clickedBlock.getY(), clickedBlock.getZ());
-		event.setCancelled(true);
+
 	}
 
 	@EventHandler
@@ -67,7 +73,7 @@ public class DPChestListener implements Listener {
 			return;
 		}
 		if (DatabaseManager.getDatabase().select(DPChestsTable.class).where().equal("world", clickedBlock.getWorld().getName()).and().equal("x", clickedBlock.getX()).and().equal("y",
-				clickedBlock.getY()).and().equal("z", clickedBlock.getZ()).execute().find() == null) {
+				clickedBlock.getY()).and().equal("z", clickedBlock.getZ()).execute().findOne() == null) {
 			return;
 		}
 		DPChestsTable table = DatabaseManager.getDatabase().select(DPChestsTable.class).where().equal("world", clickedBlock.getWorld().getName()).and().equal("x", clickedBlock.getX()).and()
