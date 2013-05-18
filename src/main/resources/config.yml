@@ -36,6 +36,7 @@ messages:
   dpsetmaxstack: "&bSet Max Stack Size for Drop Party '%PartyName%' Successfully."
   dpremovechest: "&bRemoved Chest from Drop Party '%PartyName%' Successfully."
   dpremoveitempoint: "&bRemoved ItemPoint from Drop Party '%PartyName%' Successfully."
+  dpremoveteleport: "&bRemoved Teleport from Drop Party '%PartyName%' Successfully."
   dpteleport: "&bTeleported To Drop Party '%PartyName%'."
 #List Messages
   dplistparties:
@@ -76,6 +77,7 @@ messages:
   dpsetmaxstackerror: "&4Failed To Set Max Stack Size for Drop Party '%PartyName%'."
   dpremovechesterror: "&4Failed To Remove Chest from Drop Party '%PartyName%'."
   dpremoveitempointerror: "&4Failed To Remove ItemPoint from Drop Party '%PartyName%'."
+  dpremoveteleporterror: "&4Failed To Remove Teleport from Drop Party '%PartyName%'."
   dpteleporterror: "&4Failed To Teleport to Drop Party '%PartyName%'."
 #Other
   dpchestalreadyexists: "&4There Is Already A Drop Party '%PartyName%' Chest Here."

@@ -50,6 +50,7 @@ public class DPMessageController {
 		messages.put("dpsetmaxstack", plugin.getConfig().getString("messages.dpsetmaxstack"));
 		messages.put("dpremovechest", plugin.getConfig().getString("messages.dpremovechest"));
 		messages.put("dpremoveitempoint", plugin.getConfig().getString("messages.dpremoveitempoint"));
+		messages.put("dpremoveteleport", plugin.getConfig().getString("messages.dpremoveteleport"));
 		messages.put("dpteleport", plugin.getConfig().getString("messages.dpteleport"));
 
 		// list messages
@@ -88,6 +89,7 @@ public class DPMessageController {
 		messages.put("dpsetmaxstackerror", plugin.getConfig().getString("messages.dpsetmaxstackerror"));
 		messages.put("dpremovechesterror", plugin.getConfig().getString("messages.dpremovechesterror"));
 		messages.put("dpremoveitempointerror", plugin.getConfig().getString("messages.dpremoveitempointerror"));
+		messages.put("dpremoveteleporterror", plugin.getConfig().getString("messages.dpremoveteleporterror"));
 		messages.put("dpteleporterror", plugin.getConfig().getString("messages.dpteleporterror"));
 
 		// other
