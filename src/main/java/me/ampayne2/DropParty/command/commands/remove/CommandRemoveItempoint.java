@@ -18,13 +18,44 @@
  */
 package me.ampayne2.DropParty.command.commands.remove;
 
+import java.util.List;
+
+import me.ampayne2.DropParty.DPMessageController;
 import me.ampayne2.DropParty.command.interfaces.DPCommand;
+import me.ampayne2.DropParty.database.DatabaseManager;
+import me.ampayne2.DropParty.database.tables.DPItemPointsTable;
+
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class CommandRemoveItempoint implements DPCommand {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
-
+		String dpid;
+		String itempoint;
+		if(args.length == 2){
+			dpid = args[1];
+			itempoint = args[0];
+		}else{
+			return;
+		}
+		List<DPItemPointsTable> list = DatabaseManager.getDatabase().select(DPItemPointsTable.class).where().equal("dpid", dpid).execute().find();
+		Player player = (Player) sender;
+		int itempointid;
+		try {
+			itempointid = Integer.parseInt(itempoint);
+		} catch (NumberFormatException e) {
+			sender.sendMessage(ChatColor.RED + "'" + itempoint + "'" + " is not an integer.");
+			return;
+		}
+		if (!(list.size() >= itempointid)) {
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpitempointiddoesntexist"), dpid);
+			return;
+		}
+		DPItemPointsTable entry = list.get(itempointid - 1);
+		DatabaseManager.getDatabase().remove(entry);
+		DPMessageController.sendMessage(player, DPMessageController.getMessage("dpremoveitempoint"), dpid);
 	}
 }

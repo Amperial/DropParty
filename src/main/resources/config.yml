@@ -84,7 +84,7 @@ messages:
 #Other
   dpchestalreadyexists: "&4There Is Already A Drop Party Chest Here."
   dpitempointalreadyexists: "&4There Is Already A Drop Party ItemPoint Here."
-  dpitempointiddoesntexist: "&4There Is No Drop Party '%PartyName%' ItemPoint Here."
+  dpitempointiddoesntexist: "&4There Is No Drop Party '%PartyName%' ItemPoint With That ID."
   dppartydoesntexist: "&4Drop Party '%PartyName%' Does Not Exist."
   dpchestdoesntexist: "&4There Is No Drop Party '%PartyName%' Chest Here."
   dpchestiddoesntexist: "&4There Is No Drop Party '%PartyName%' Chest With That ID."
