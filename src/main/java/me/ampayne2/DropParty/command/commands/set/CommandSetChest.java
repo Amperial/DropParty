@@ -40,7 +40,7 @@ public class CommandSetChest implements DPCommand {
 		String dpid;
 		if (args.length == 1) {
 			dpid = args[0];
-		}else{
+		} else {
 			return;
 		}
 		Player player = (Player) sender;
@@ -48,7 +48,7 @@ public class CommandSetChest implements DPCommand {
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartydoesntexist"), dpid);
 			return;
 		}
-		if(CommandRemoveChest.isRemoving(player.getName()) && !isSetting(player.getName())){
+		if (CommandRemoveChest.isRemoving(player.getName()) && !isSetting(player.getName())) {
 			CommandRemoveChest.toggleRemoving(player, dpid);
 		}
 		toggleSetting(player, dpid);

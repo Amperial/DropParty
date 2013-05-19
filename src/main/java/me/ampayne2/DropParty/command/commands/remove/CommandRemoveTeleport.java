@@ -42,7 +42,7 @@ public class CommandRemoveTeleport implements DPCommand {
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartydoesntexist"), dpid);
 			return;
 		}
-		if (DatabaseManager.getDatabase().select(DPTeleportsTable.class).where().equal("dpid", dpid).execute().findOne() == null){
+		if (DatabaseManager.getDatabase().select(DPTeleportsTable.class).where().equal("dpid", dpid).execute().findOne() == null) {
 			return;
 		}
 		DatabaseManager.getDatabase().remove(DatabaseManager.getDatabase().select(DPTeleportsTable.class).where().equal("dpid", dpid).execute().findOne());

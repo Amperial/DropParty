@@ -35,10 +35,10 @@ public class CommandRemoveItempoint implements DPCommand {
 	public void execute(CommandSender sender, String[] args) {
 		String dpid;
 		String itempoint;
-		if(args.length == 2){
+		if (args.length == 2) {
 			dpid = args[1];
 			itempoint = args[0];
-		}else{
+		} else {
 			return;
 		}
 		List<DPItemPointsTable> list = DatabaseManager.getDatabase().select(DPItemPointsTable.class).where().equal("dpid", dpid).execute().find();

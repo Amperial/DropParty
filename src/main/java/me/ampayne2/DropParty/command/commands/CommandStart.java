@@ -21,7 +21,6 @@ package me.ampayne2.DropParty.command.commands;
 import me.ampayne2.DropParty.DPPartyController;
 import me.ampayne2.DropParty.command.interfaces.DPCommand;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class CommandStart implements DPCommand {
 
@@ -30,7 +29,6 @@ public class CommandStart implements DPCommand {
 		if (args.length == 0) {
 			return;
 		}
-		Player player = (Player) sender;
-		DPPartyController.start(player, args[0]);
+		DPPartyController.start(sender, args[0]);
 	}
 }

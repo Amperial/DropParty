@@ -99,6 +99,10 @@ public class CommandController extends JavaPlugin {
 			sender.sendMessage("This command can only be run by a player.");
 			return true;
 		}
+		
+		if (!sender.hasPermission("dropparty.admin")){
+			return true;
+		}
 
 		if (args.length == 0) {
 			if (mainCommand.commandExist("")) {

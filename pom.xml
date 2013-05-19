@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>me.ampayne2</groupId>
 	<artifactId>DropParty</artifactId>
-	<version>1</version>
+	<version>2</version>
 	<inceptionYear>2013</inceptionYear>
 	<name>DropParty</name>
 	<description>Drop Party Plugin for Bukkit.</description>

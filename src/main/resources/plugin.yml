@@ -1,6 +1,6 @@
 name: DropParty
-version: 1
-description: Create Simple Drop Parties.
+version: 2
+description: Create Awesome Drop Parties.
 author: ampayne2
 main: me.ampayne2.DropParty.DropParty
 commands:
@@ -9,6 +9,4 @@ commands:
     permission: dropparty.admin
 permissions:
   dropparty.admin:
-    description: Gives access to all Drop Party commands
-  dropparty.teleport:
-    description: Gives player access to Drop Party Teleport
+    description: Gives access to all Drop Party Admin commands

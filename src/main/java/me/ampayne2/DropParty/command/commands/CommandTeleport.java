@@ -35,9 +35,6 @@ public class CommandTeleport implements DPCommand {
 	@Override
 	public void execute(CommandSender sender, String[] args) {
 		Player player = (Player) sender;
-		if (!sender.hasPermission("dropparty.teleport")) {
-			return;
-		}
 		String dpid;
 		if (args.length == 1) {
 			dpid = args[0];
@@ -57,7 +54,7 @@ public class CommandTeleport implements DPCommand {
 			player.teleport(loc);
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpteleport"), dpid);
 			return;
-		}else{
+		} else {
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpnoteleportfound"), dpid);
 		}
 	}

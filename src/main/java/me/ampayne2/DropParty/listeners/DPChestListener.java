@@ -53,7 +53,7 @@ public class DPChestListener implements Listener {
 			String dpid = CommandSetChest.getSetting(playername);
 			CommandSetChest.saveChest(player, playername, dpid, clickedBlock.getWorld().getName(), clickedBlock.getX(), clickedBlock.getY(), clickedBlock.getZ());
 			event.setCancelled(true);
-		}else if(CommandRemoveChest.isRemoving(playername)){
+		} else if (CommandRemoveChest.isRemoving(playername)) {
 			String dpid = CommandRemoveChest.getRemoving(playername);
 			CommandRemoveChest.removeChest(player, playername, dpid, clickedBlock.getWorld().getName(), clickedBlock.getX(), clickedBlock.getY(), clickedBlock.getZ());
 			event.setCancelled(true);
@@ -76,8 +76,8 @@ public class DPChestListener implements Listener {
 				clickedBlock.getY()).and().equal("z", clickedBlock.getZ()).execute().findOne() == null) {
 			return;
 		}
-		DPChestsTable table = DatabaseManager.getDatabase().select(DPChestsTable.class).where().equal("world", clickedBlock.getWorld().getName()).and().equal("x", clickedBlock.getX()).and()
-				.equal("y", clickedBlock.getY()).and().equal("z", clickedBlock.getZ()).execute().findOne();
+		DPChestsTable table = DatabaseManager.getDatabase().select(DPChestsTable.class).where().equal("world", clickedBlock.getWorld().getName()).and().equal("x", clickedBlock.getX()).and().equal(
+				"y", clickedBlock.getY()).and().equal("z", clickedBlock.getZ()).execute().findOne();
 		if (!player.hasPermission("dropparty.admin")) {
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpnopermission"), table.dpid);
 			event.setCancelled(true);

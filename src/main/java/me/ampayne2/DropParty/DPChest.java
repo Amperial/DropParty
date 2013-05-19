@@ -19,15 +19,73 @@
 package me.ampayne2.DropParty;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
+import me.ampayne2.DropParty.database.DatabaseManager;
+import me.ampayne2.DropParty.database.tables.DPChestsTable;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Chest;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 public class DPChest {
-	
+
 	public static Map<String, Chest[]> chests = new HashMap<String, Chest[]>();
-	
-	public static Chest[] getChests(String dpid){
+
+	public static Chest[] getChests(CommandSender sender, String dpid) {
+		Player player = (Player) sender;
+		List<DPChestsTable> list = DatabaseManager.getDatabase().select(DPChestsTable.class).where().equal("dpid", dpid).execute().find();
+		ListIterator<DPChestsTable> li = list.listIterator();
+		Chest[] chests = new Chest[list.size()];
+		if (list.size() == 0) {
+			DPPartyController.stop(player, dpid);
+		}
+		int id = 0;
+		while (li.hasNext()) {
+			DPChestsTable entry = li.next();
+			World tworld = Bukkit.getServer().getWorld(entry.world);
+			Location chestloc = new Location(tworld, entry.x, entry.y, entry.z);
+			chests[id] = (Chest) chestloc.getBlock().getState();
+			id++;
+		}
+		return chests;
+	}
+
+	public static ItemStack getNextItemStack(CommandSender sender, Chest[] chests, String dpid, Integer maxstack) {
+		int chest = 0;
+		Inventory inv = chests[chest].getBlockInventory();
+		int slotindex = 0;
+		while (DPPartyController.isRunning(dpid)) {
+			if (slotindex == 27) {
+				slotindex = 0;
+				if (chests.length == chest + 1) {
+					Player player = (Player) sender;
+					DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartyoutofitems"), dpid);
+					DPPartyController.stop(player, dpid);
+				} else {
+					chest++;
+					inv = chests[chest].getBlockInventory();
+				}
+			}
+			if (inv.getItem(slotindex) != null) {
+				ItemStack itemStack = inv.getItem(slotindex);
+				if (itemStack.getAmount() <= maxstack) {
+					inv.setItem(slotindex, null);
+					return itemStack;
+				} else {
+					itemStack.setAmount(itemStack.getAmount() - maxstack);
+					return new ItemStack(itemStack.getType(), maxstack);
+				}
+			}
+			slotindex++;
+		}
 		return null;
 	}
 }

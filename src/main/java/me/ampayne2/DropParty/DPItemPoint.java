@@ -19,15 +19,50 @@
 package me.ampayne2.DropParty;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
+import java.util.Random;
 
+import me.ampayne2.DropParty.database.DatabaseManager;
+import me.ampayne2.DropParty.database.tables.DPItemPointsTable;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class DPItemPoint {
-	
+
 	public static Map<String, Location[]> itempoints = new HashMap<String, Location[]>();
-	
-	public static Location[] getItemPoints(String dpid){
-		return null;
+
+	public static Location[] getItemPoints(CommandSender sender, String dpid) {
+		List<DPItemPointsTable> list = DatabaseManager.getDatabase().select(DPItemPointsTable.class).where().equal("dpid", dpid).execute().find();
+		ListIterator<DPItemPointsTable> li = list.listIterator();
+		Location[] itemPoints = new Location[list.size()];
+		if (list.size() == 0) {
+			Player player = (Player) sender;
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpnoitempointsfound"), dpid);
+			DPPartyController.stop(player, dpid);
+		}
+		int id = 0;
+		while (li.hasNext()) {
+			DPItemPointsTable entry = li.next();
+			World tworld = Bukkit.getServer().getWorld(entry.world);
+			itemPoints[id] = new Location(tworld, entry.x, entry.y, entry.z);
+			id++;
+		}
+		return itemPoints;
+	}
+
+	public static void dropItemStack(ItemStack itemStack, Location[] itemPoints) {
+		Random generator = new Random();
+		int itempoint = generator.nextInt(itemPoints.length);
+		World world = itemPoints[itempoint].getWorld();
+		if (itemStack != null) {
+			world.dropItemNaturally(itemPoints[itempoint], itemStack);
+		}
 	}
 }

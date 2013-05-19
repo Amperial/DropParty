@@ -23,10 +23,12 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.database.tables.DPPartiesTable;
+import me.ampayne2.DropParty.database.tables.DPSettingsTable;
 
 public class DPPartyController {
 
@@ -54,7 +56,8 @@ public class DPPartyController {
 		return isRunning.get(dpid);
 	}
 
-	public static void start(Player player, String dpid) {
+	public static void start(CommandSender sender, String dpid) {
+		Player player = (Player) sender;
 		if (!isRunning.containsKey(dpid)) {
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartydoesntexist"), dpid);
 			return;
@@ -63,10 +66,12 @@ public class DPPartyController {
 			isRunning.put(dpid, true);
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpstart"), dpid);
 			DPMessageController.broadcastMessage(DPMessageController.getMessage("dpannouncestart"), dpid);
+			DPSettingsTable entry = DatabaseManager.getDatabase().select(DPSettingsTable.class).where().equal("dpid", dpid).execute().findOne();
+			DPDrop.dropItems(sender, dpid, entry.itemdelay, entry.maxlength, entry.itemdelay, entry.maxstack);
 			return;
-		}else if (isRunning.get(dpid)){
+		} else if (isRunning.get(dpid)) {
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartyalreadyrunning"), dpid);
-		}else{
+		} else {
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpstarterror"), dpid);
 		}
 	}
@@ -81,9 +86,9 @@ public class DPPartyController {
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpstop"), dpid);
 			DPMessageController.broadcastMessage(DPMessageController.getMessage("dpannouncestop"), dpid);
 			return;
-		}else if (!isRunning.get(dpid)){
+		} else if (!isRunning.get(dpid)) {
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartynotrunning"), dpid);
-		}else{
+		} else {
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpstoperror"), dpid);
 		}
 	}

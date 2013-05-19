@@ -19,4 +19,5 @@
 package me.ampayne2.DropParty.command.interfaces;
 
 public interface Command {
+	
 }

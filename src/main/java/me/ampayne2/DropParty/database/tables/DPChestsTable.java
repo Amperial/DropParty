@@ -27,7 +27,7 @@ public class DPChestsTable {
 
 	@Id
 	public int id;
-	
+
 	@Field
 	public String dpid;
 

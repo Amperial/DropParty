@@ -24,10 +24,10 @@ import com.alta189.simplesave.Table;
 
 @Table("DropPartyParties")
 public class DPPartiesTable {
-	
+
 	@Id
 	public int id;
-	
+
 	@Field
 	public String dpid;
 

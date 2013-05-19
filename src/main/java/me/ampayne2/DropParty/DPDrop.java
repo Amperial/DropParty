@@ -18,13 +18,47 @@
  */
 package me.ampayne2.DropParty;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.block.Chest;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class DPDrop extends BukkitRunnable{
+public class DPDrop extends BukkitRunnable {
+
+	CommandSender sender = null;
+	String party = null;
+	Long delay = null;
+	Long length = null;
+	Long currentLength = null;
+	int stack = 0;
+
+	public DPDrop(CommandSender ssender, String dpid, Long itemdelay, Long maxlength, Long clength, int maxstack) {
+		sender = ssender;
+		party = dpid;
+		delay = itemdelay;
+		length = maxlength;
+		currentLength = clength + delay;
+		stack = maxstack;
+	}
 
 	@Override
 	public void run() {
-		
+		dropItems(sender, party, delay, length, currentLength, stack);
 	}
-	
+
+	public static void dropItems(CommandSender sender, String dpid, Long delay, Long length, Long clength, int stack) {
+		Chest[] chests = DPChest.getChests(sender, dpid);
+		Location[] itemPoints = DPItemPoint.getItemPoints(sender, dpid);
+		ItemStack itemStack = DPChest.getNextItemStack(sender, chests, dpid, stack);
+		DPItemPoint.dropItemStack(itemStack, itemPoints);
+		if (DPPartyController.isRunning(dpid) && clength < length) {
+			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DropParty.getInstance(), new DPDrop(sender, dpid, delay, length, clength, stack), delay);
+		} else if (clength >= length) {
+			DPPartyController.stop((Player) sender, dpid);
+		}
+	}
+
 }

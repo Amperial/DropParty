@@ -28,7 +28,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 public class DPMessageController {
-	
+
 	public static Map<String, String> messages = new HashMap<String, String>();
 
 	public DPMessageController(Plugin plugin) {

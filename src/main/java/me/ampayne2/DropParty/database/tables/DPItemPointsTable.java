@@ -27,13 +27,13 @@ public class DPItemPointsTable {
 
 	@Id
 	public int id;
-	
+
 	@Field
 	public String dpid;
-	
+
 	@Field
 	public String world;
-	
+
 	@Field
 	public int x;
 

@@ -24,10 +24,10 @@ import com.alta189.simplesave.Table;
 
 @Table("DropPartyTeleport")
 public class DPTeleportsTable {
-	
+
 	@Id
 	public int id;
-	
+
 	@Field
 	public String dpid;
 
@@ -42,10 +42,10 @@ public class DPTeleportsTable {
 
 	@Field
 	public double z;
-	
+
 	@Field
 	public float pitch;
-	
+
 	@Field
 	public float yaw;
 

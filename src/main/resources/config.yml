@@ -1,4 +1,6 @@
 # Default Configuration File for DropParty Plugin.
+autoupdater:
+  enabled: true
 mysql:
   host: "localhost"
   username: "yourdatabaseuser"
