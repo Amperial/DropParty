@@ -38,6 +38,9 @@ public class CommandSetChest implements DPCommand {
 	@Override
 	public void execute(CommandSender sender, String[] args) {
 		String dpid;
+		if (!sender.hasPermission("dropparty.set.chest") && !sender.hasPermission("dropparty.set.*") && !sender.hasPermission("dropparty.*")) {
+			return;
+		}
 		if (args.length == 1) {
 			dpid = args[0];
 		} else {
@@ -50,6 +53,9 @@ public class CommandSetChest implements DPCommand {
 		}
 		if (CommandRemoveChest.isRemoving(player.getName()) && !isSetting(player.getName())) {
 			CommandRemoveChest.toggleRemoving(player, dpid);
+		}
+		if (CommandSetItempoint.isSetting(player.getName()) && !isSetting(player.getName())) {
+			CommandSetItempoint.toggleSetting(player, dpid);
 		}
 		toggleSetting(player, dpid);
 	}

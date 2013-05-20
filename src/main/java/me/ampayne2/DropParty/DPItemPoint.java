@@ -29,9 +29,9 @@ import me.ampayne2.DropParty.database.tables.DPItemPointsTable;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class DPItemPoint {
@@ -43,18 +43,26 @@ public class DPItemPoint {
 		ListIterator<DPItemPointsTable> li = list.listIterator();
 		Location[] itemPoints = new Location[list.size()];
 		if (list.size() == 0) {
-			Player player = (Player) sender;
-			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpnoitempointsfound"), dpid);
-			DPPartyController.stop(player, dpid);
+			return null;
 		}
 		int id = 0;
 		while (li.hasNext()) {
 			DPItemPointsTable entry = li.next();
 			World tworld = Bukkit.getServer().getWorld(entry.world);
-			itemPoints[id] = new Location(tworld, entry.x, entry.y, entry.z);
-			id++;
+			Location itemPoint = new Location(tworld, entry.x, entry.y, entry.z);
+			if (itemPoint.getBlock().getType() == Material.AIR) {
+				itemPoints[id] = itemPoint;
+				id++;
+			} else {
+				DatabaseManager.getDatabase().remove(DatabaseManager.getDatabase().select(DPItemPointsTable.class).where().equal("dpid", dpid).execute().find().get(id));
+			}
 		}
-		return itemPoints;
+		if (id == 0) {
+			return null;
+		}
+		Location[] newItemPoints = new Location[id];
+		System.arraycopy(itemPoints, 0, newItemPoints, 0, newItemPoints.length);
+		return newItemPoints;
 	}
 
 	public static void dropItemStack(ItemStack itemStack, Location[] itemPoints) {

@@ -28,10 +28,16 @@ public class CommandStop implements DPCommand {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
-		if (args.length == 0) {
+		String dpid;
+		if (args.length == 1) {
+			dpid = args[0];
+		} else {
+			return;
+		}
+		if (!sender.hasPermission("dropparty.stop." + dpid) && !sender.hasPermission("dropparty.stop.*") && !sender.hasPermission("dropparty.*")) {
 			return;
 		}
 		Player player = (Player) sender;
-		DPPartyController.stop(player, args[0]);
+		DPPartyController.stop(player, dpid);
 	}
 }

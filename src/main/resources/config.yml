@@ -12,8 +12,8 @@ mysql:
 defaultpartysettings:
   #Delay between dropping each itemstack in a drop party, in ticks.
   itemdelay: 5
-  #Max Drop Party Length, in seconds.
-  maxlength: 300
+  #Max Drop Party Length, in ticks.
+  maxlength: 6000
   #Max Stack Size of an item stack being dropped. itemstacks bigger than this will be split up.
   maxstack: 8
 messages:

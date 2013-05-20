@@ -25,6 +25,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.ampayne2.DropParty.DPMessageController;
+import me.ampayne2.DropParty.DPPartyController;
 import me.ampayne2.DropParty.command.interfaces.DPCommand;
 import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.database.tables.DPChestsTable;
@@ -44,9 +45,13 @@ public class CommandDelete implements DPCommand {
 		} else {
 			return;
 		}
+		if (!sender.hasPermission("dropparty.delete") && !sender.hasPermission("dropparty.*")) {
+			return;
+		}
 		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() != null) {
 			// remove the party
 			DatabaseManager.getDatabase().remove(DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne());
+			DPPartyController.remove(dpid);
 			// remove the settings
 			List<DPSettingsTable> settingslist = DatabaseManager.getDatabase().select(DPSettingsTable.class).where().equal("dpid", dpid).execute().find();
 			ListIterator<DPSettingsTable> settingsli = settingslist.listIterator();

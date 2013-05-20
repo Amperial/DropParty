@@ -92,4 +92,10 @@ public class DPPartyController {
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpstoperror"), dpid);
 		}
 	}
+
+	public static void remove(String dpid) {
+		if (isRunning.containsKey(dpid)) {
+			isRunning.remove(dpid);
+		}
+	}
 }

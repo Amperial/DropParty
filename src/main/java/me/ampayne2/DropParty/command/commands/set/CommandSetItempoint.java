@@ -36,14 +36,22 @@ public class CommandSetItempoint implements DPCommand {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
-
-		if (args.length != 1) {
+		String dpid;
+		if (args.length == 1) {
+			dpid = args[0];
+		} else {
+			return;
+		}
+		if (!sender.hasPermission("dropparty.set.itempoint") && !sender.hasPermission("dropparty.set.*") && !sender.hasPermission("dropparty.*")) {
 			return;
 		}
 		Player player = (Player) sender;
 		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", args[0]).execute().find() == null) {
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartydoesntexist"), args[0]);
 			return;
+		}
+		if (CommandSetChest.isSetting(player.getName()) && !isSetting(player.getName())) {
+			CommandSetChest.toggleSetting(player, dpid);
 		}
 		toggleSetting(player, args[0]);
 	}

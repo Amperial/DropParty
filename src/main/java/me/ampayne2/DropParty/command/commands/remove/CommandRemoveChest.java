@@ -40,6 +40,9 @@ public class CommandRemoveChest implements DPCommand {
 	@Override
 	public void execute(CommandSender sender, String[] args) {
 		String dpid;
+		if (!sender.hasPermission("dropparty.remove.chest") && !sender.hasPermission("dropparty.remove.*") && !sender.hasPermission("dropparty.*")) {
+			return;
+		}
 		if (args.length == 1) {
 			dpid = args[0];
 		} else if (args.length == 2) {

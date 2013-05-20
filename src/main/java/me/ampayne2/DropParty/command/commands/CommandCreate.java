@@ -42,6 +42,9 @@ public class CommandCreate implements DPCommand {
 		} else {
 			return;
 		}
+		if (!sender.hasPermission("dropparty.create") && !sender.hasPermission("dropparty.*")) {
+			return;
+		}
 		DPPartiesTable partytable = new DPPartiesTable();
 		DPSettingsTable settingstable = new DPSettingsTable();
 		partytable.dpid = dpid;

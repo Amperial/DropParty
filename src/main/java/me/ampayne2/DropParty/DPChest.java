@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
+import me.ampayne2.DropParty.command.commands.remove.CommandRemoveChest;
 import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.database.tables.DPChestsTable;
 
@@ -42,6 +43,9 @@ public class DPChest {
 	public static Chest[] getChests(CommandSender sender, String dpid) {
 		Player player = (Player) sender;
 		List<DPChestsTable> list = DatabaseManager.getDatabase().select(DPChestsTable.class).where().equal("dpid", dpid).execute().find();
+		if (list.size() == 0) {
+			return null;
+		}
 		ListIterator<DPChestsTable> li = list.listIterator();
 		Chest[] chests = new Chest[list.size()];
 		if (list.size() == 0) {
@@ -52,8 +56,12 @@ public class DPChest {
 			DPChestsTable entry = li.next();
 			World tworld = Bukkit.getServer().getWorld(entry.world);
 			Location chestloc = new Location(tworld, entry.x, entry.y, entry.z);
-			chests[id] = (Chest) chestloc.getBlock().getState();
-			id++;
+			if (chestloc.getBlock().getState() instanceof Chest) {
+				chests[id] = (Chest) chestloc.getBlock().getState();
+				id++;
+			} else {
+				CommandRemoveChest.removeChest(player, player.getName(), dpid, entry.world, entry.x, entry.y, entry.z);
+			}
 		}
 		return chests;
 	}

@@ -32,6 +32,9 @@ public class CommandSetTeleport implements DPCommand {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
+		if (!sender.hasPermission("dropparty.set.teleport") && !sender.hasPermission("dropparty.set.*") && !sender.hasPermission("dropparty.*")) {
+			return;
+		}
 		Player player = (Player) sender;
 		Location loc = player.getLocation();
 		double x = loc.getX();

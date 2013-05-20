@@ -78,8 +78,8 @@ public class DropParty extends JavaPlugin {
 			metrics.start();
 		} catch (IOException e) {
 		}
-		
-		if(this.getConfig().getBoolean("autoupdater.enabled")){
+
+		if (this.getConfig().getBoolean("autoupdater.enabled")) {
 			@SuppressWarnings("unused")
 			Updater updater = new Updater(this, "dropparty", this.getFile(), Updater.UpdateType.DEFAULT, true);
 		}

@@ -46,6 +46,9 @@ public class CommandSetItemDelay implements DPCommand {
 		Player player = (Player) sender;
 		String dpid;
 		Long itemdelay;
+		if (!sender.hasPermission("dropparty.set.itemdelay") && !sender.hasPermission("dropparty.set.*") && !sender.hasPermission("dropparty.*")) {
+			return;
+		}
 		if (args.length != 2) {
 			return;
 		}

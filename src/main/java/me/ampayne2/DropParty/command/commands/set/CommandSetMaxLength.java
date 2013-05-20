@@ -46,6 +46,9 @@ public class CommandSetMaxLength implements DPCommand {
 		Player player = (Player) sender;
 		String dpid;
 		Long maxlength;
+		if (!sender.hasPermission("dropparty.set.maxlength") && !sender.hasPermission("dropparty.set.*") && !sender.hasPermission("dropparty.*")) {
+			return;
+		}
 		if (args.length != 2) {
 			return;
 		}

@@ -46,6 +46,9 @@ public class CommandSetMaxStack implements DPCommand {
 		Player player = (Player) sender;
 		String dpid;
 		int maxstack;
+		if (!sender.hasPermission("dropparty.set.maxstack") && !sender.hasPermission("dropparty.set.*") && !sender.hasPermission("dropparty.*")) {
+			return;
+		}
 		if (args.length != 2) {
 			return;
 		}

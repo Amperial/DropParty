@@ -52,6 +52,16 @@ public class DPDrop extends BukkitRunnable {
 	public static void dropItems(CommandSender sender, String dpid, Long delay, Long length, Long clength, int stack) {
 		Chest[] chests = DPChest.getChests(sender, dpid);
 		Location[] itemPoints = DPItemPoint.getItemPoints(sender, dpid);
+		if (chests == null || itemPoints == null) {
+			if (chests == null) {
+				DPMessageController.sendMessage((Player) sender, DPMessageController.getMessage("dpnochestsfound"), dpid);
+			}
+			if (itemPoints == null) {
+				DPMessageController.sendMessage((Player) sender, DPMessageController.getMessage("dpnoitempointsfound"), dpid);
+			}
+			DPPartyController.stop((Player) sender, dpid);
+			return;
+		}
 		ItemStack itemStack = DPChest.getNextItemStack(sender, chests, dpid, stack);
 		DPItemPoint.dropItemStack(itemStack, itemPoints);
 		if (DPPartyController.isRunning(dpid) && clength < length) {

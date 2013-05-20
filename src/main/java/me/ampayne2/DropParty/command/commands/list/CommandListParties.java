@@ -41,6 +41,9 @@ public class CommandListParties implements DPCommand {
 		if (args.length != 0) {
 			return;
 		}
+		if (!sender.hasPermission("dropparty.list.parties") && !sender.hasPermission("dropparty.list.*") && !sender.hasPermission("dropparty.*")) {
+			return;
+		}
 		List<DPPartiesTable> list = DatabaseManager.getDatabase().select(DPPartiesTable.class).execute().find();
 		ListIterator<DPPartiesTable> li = list.listIterator();
 		if (list.size() == 0) {

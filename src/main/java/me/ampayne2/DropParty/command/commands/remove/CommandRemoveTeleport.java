@@ -33,6 +33,9 @@ public class CommandRemoveTeleport implements DPCommand {
 	public void execute(CommandSender sender, String[] args) {
 		Player player = (Player) sender;
 		String dpid;
+		if (!sender.hasPermission("dropparty.remove.teleport") && !sender.hasPermission("dropparty.remove.*") && !sender.hasPermission("dropparty.*")) {
+			return;
+		}
 		if (args.length == 1) {
 			dpid = args[0];
 		} else {

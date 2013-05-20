@@ -6,7 +6,56 @@ main: me.ampayne2.DropParty.DropParty
 commands:
   dropparty:
     aliases: dp
-    permission: dropparty.admin
 permissions:
-  dropparty.admin:
-    description: Gives access to all Drop Party Admin commands
+  dropparty.*:
+    description: Gives access to all Drop Party commands.
+  dropparty.start.*:
+    description: Gives access to /dropparty start [anyparty]
+  dropparty.stop.*:
+    description: Gives access to /dropparty stop [anyparty]
+  dropparty.teleport.*:
+    description: Gives access to /dropparty teleport [anyparty]
+  dropparty.remove.*:
+    description: Gives access to all Drop Party Remove commands.
+  dropparty.set.*:
+    description: Gives access to all Drop Party Set commands.
+  dropparty.list.*:
+    description: Gives access to all Drop Party List commands.
+  dropparty.create:
+    description: Gives access to /dropparty create [partyname]
+  dropparty.delete:
+    description: Gives access to /dropparty delete [partyname]
+  dropparty.start.aparty:
+    description: Gives access to /dropparty start aparty
+  dropparty.stop.aparty:
+    description: Gives access to /dropparty stop aparty
+  dropparty.teleport.aparty:
+    description: Gives access to /dropparty teleport aparty
+  dropparty.remove.chest:
+    description: Gives access to /dropparty remove chest [partyname]
+  dropparty.remove.itempoint:
+    description: Gives access to /dropparty remove itempoint [partyname]
+  dropparty.remove.teleport:
+    description: Gives access to /dropparty remove teleport [partyname]
+  dropparty.set.teleport:
+    description: Gives access to /dropparty set teleport [partyname]
+  dropparty.set.chest:
+    description: Gives access to /dropparty set chest [partyname]
+  dropparty.set.itempoint:
+    description: Gives access to /dropparty set itempoint [partyname]
+  dropparty.set.itemdelay:
+    description: Gives access to /dropparty set itemdelay [partyname]
+  dropparty.set.maxlength:
+    description: Gives access to /dropparty set maxlength [partyname]
+  dropparty.set.maxstack:
+    description: Gives access to /dropparty set maxstack [partyname]
+  dropparty.list.parties:
+    description: Gives access to /dropparty list parties.
+  dropparty.list.teleport:
+    description: Gives access to /dropparty list teleport [partyname]
+  dropparty.list.settings:
+    description: Gives access to /dropparty list settings [partyname]
+  dropparty.list.chests:
+    description: Gives access to /dropparty list chests [partyname]
+  dropparty.list.itempoints:
+    description: Gives access to /dropparty list itempoints [partyname]

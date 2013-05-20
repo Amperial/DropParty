@@ -26,9 +26,15 @@ public class CommandStart implements DPCommand {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
-		if (args.length == 0) {
+		String dpid;
+		if (args.length == 1) {
+			dpid = args[0];
+		} else {
 			return;
 		}
-		DPPartyController.start(sender, args[0]);
+		if (!sender.hasPermission("dropparty.start." + dpid) && !sender.hasPermission("dropparty.start.*") && !sender.hasPermission("dropparty.*")) {
+			return;
+		}
+		DPPartyController.start(sender, dpid);
 	}
 }
