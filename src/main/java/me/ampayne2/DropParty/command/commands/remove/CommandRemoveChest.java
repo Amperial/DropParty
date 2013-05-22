@@ -24,6 +24,8 @@ import java.util.Map;
 
 import me.ampayne2.DropParty.DPMessageController;
 import me.ampayne2.DropParty.command.commands.set.CommandSetChest;
+import me.ampayne2.DropParty.command.commands.set.CommandSetFireworkpoint;
+import me.ampayne2.DropParty.command.commands.set.CommandSetItempoint;
 import me.ampayne2.DropParty.command.interfaces.DPCommand;
 import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.database.tables.DPChestsTable;
@@ -52,12 +54,19 @@ public class CommandRemoveChest implements DPCommand {
 			return;
 		}
 		Player player = (Player) sender;
-		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().find() == null) {
+		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().find() == null
+				|| !DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne().dpid.equals(dpid)) {
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartydoesntexist"), dpid);
 			return;
 		}
 		if (CommandSetChest.isSetting(player.getName()) && !isRemoving(player.getName())) {
 			CommandSetChest.toggleSetting(player, dpid);
+		}
+		if (CommandSetItempoint.isSetting(player.getName()) && !isRemoving(player.getName())) {
+			CommandSetItempoint.toggleSetting(player, dpid);
+		}
+		if (CommandSetFireworkpoint.isSetting(player.getName()) && !isRemoving(player.getName())) {
+			CommandSetFireworkpoint.toggleSetting(player, dpid);
 		}
 		toggleRemoving(player, dpid);
 	}
@@ -105,7 +114,11 @@ public class CommandRemoveChest implements DPCommand {
 		try {
 			chestid = Integer.parseInt(chest);
 		} catch (NumberFormatException e) {
-			sender.sendMessage(ChatColor.RED + "'" + chest + "'" + " is not an integer.");
+			sender.sendMessage(ChatColor.RED + "'" + chest + "'" + " is not a positive integer above zero.");
+			return;
+		}
+		if (chestid <= 0) {
+			sender.sendMessage(ChatColor.RED + "'" + chest + "'" + " is not a positive integer above zero.");
 			return;
 		}
 		if (!(list.size() >= chestid)) {

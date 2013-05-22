@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.ampayne2.DropParty.DPMessageController;
+import me.ampayne2.DropParty.command.commands.remove.CommandRemoveChest;
 import me.ampayne2.DropParty.command.interfaces.DPCommand;
 import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.database.tables.DPItemPointsTable;
@@ -32,7 +33,7 @@ import org.bukkit.entity.Player;
 
 public class CommandSetItempoint implements DPCommand {
 
-	public static Map<String, String> playersSetting = new HashMap<String, String>();
+	private static Map<String, String> playersSetting = new HashMap<String, String>();
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
@@ -46,14 +47,21 @@ public class CommandSetItempoint implements DPCommand {
 			return;
 		}
 		Player player = (Player) sender;
-		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", args[0]).execute().find() == null) {
-			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartydoesntexist"), args[0]);
+		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null
+				|| !DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne().dpid.equals(dpid)) {
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartydoesntexist"), dpid);
 			return;
+		}
+		if (CommandRemoveChest.isRemoving(player.getName()) && !isSetting(player.getName())) {
+			CommandRemoveChest.toggleRemoving(player, dpid);
 		}
 		if (CommandSetChest.isSetting(player.getName()) && !isSetting(player.getName())) {
 			CommandSetChest.toggleSetting(player, dpid);
 		}
-		toggleSetting(player, args[0]);
+		if (CommandSetFireworkpoint.isSetting(player.getName()) && !isSetting(player.getName())) {
+			CommandSetFireworkpoint.toggleSetting(player, dpid);
+		}
+		toggleSetting(player, dpid);
 	}
 
 	public static void toggleSetting(Player player, String dpid) {

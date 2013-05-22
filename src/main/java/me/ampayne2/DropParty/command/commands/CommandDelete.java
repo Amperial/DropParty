@@ -29,6 +29,7 @@ import me.ampayne2.DropParty.DPPartyController;
 import me.ampayne2.DropParty.command.interfaces.DPCommand;
 import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.database.tables.DPChestsTable;
+import me.ampayne2.DropParty.database.tables.DPFireworkPointsTable;
 import me.ampayne2.DropParty.database.tables.DPItemPointsTable;
 import me.ampayne2.DropParty.database.tables.DPPartiesTable;
 import me.ampayne2.DropParty.database.tables.DPSettingsTable;
@@ -48,7 +49,8 @@ public class CommandDelete implements DPCommand {
 		if (!sender.hasPermission("dropparty.delete") && !sender.hasPermission("dropparty.*")) {
 			return;
 		}
-		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() != null) {
+		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() != null
+				&& DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne().dpid.equals(dpid)) {
 			// remove the party
 			DatabaseManager.getDatabase().remove(DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne());
 			DPPartyController.remove(dpid);
@@ -75,6 +77,12 @@ public class CommandDelete implements DPCommand {
 			ListIterator<DPItemPointsTable> itempointsli = itempointslist.listIterator();
 			while (itempointsli.hasNext()) {
 				DatabaseManager.getDatabase().remove(itempointsli.next());
+			}
+			// remove the fireworkpoints
+			List<DPFireworkPointsTable> fireworkpointslist = DatabaseManager.getDatabase().select(DPFireworkPointsTable.class).where().equal("dpid", dpid).execute().find();
+			ListIterator<DPFireworkPointsTable> fireworkpointsli = fireworkpointslist.listIterator();
+			while (fireworkpointsli.hasNext()) {
+				DatabaseManager.getDatabase().remove(fireworkpointsli.next());
 			}
 
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpdelete"), dpid);

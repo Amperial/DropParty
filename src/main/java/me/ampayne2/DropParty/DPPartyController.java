@@ -83,6 +83,8 @@ public class DPPartyController {
 		}
 		if (isRunning.get(dpid)) {
 			isRunning.put(dpid, false);
+			DPSettingsTable entry = DatabaseManager.getDatabase().select(DPSettingsTable.class).where().equal("dpid", dpid).execute().findOne();
+			DPFirework.spawnFirework(player, dpid, entry.fireworkdelay, entry.fireworkamount, 0);
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpstop"), dpid);
 			DPMessageController.broadcastMessage(DPMessageController.getMessage("dpannouncestop"), dpid);
 			return;

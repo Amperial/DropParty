@@ -41,7 +41,8 @@ public class CommandListSettings implements DPCommand {
 		if (!sender.hasPermission("dropparty.list.settings") && !sender.hasPermission("dropparty.list.*") && !sender.hasPermission("dropparty.*")) {
 			return;
 		}
-		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null) {
+		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null
+				|| !DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne().dpid.equals(dpid)) {
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartydoesntexist"), dpid);
 			return;
 		}
@@ -50,5 +51,7 @@ public class CommandListSettings implements DPCommand {
 		DPMessageController.sendMessage(player, DPMessageController.getMessage("dplistsettings.itemdelay") + entry.itemdelay, dpid);
 		DPMessageController.sendMessage(player, DPMessageController.getMessage("dplistsettings.maxlength") + entry.maxlength, dpid);
 		DPMessageController.sendMessage(player, DPMessageController.getMessage("dplistsettings.maxstack") + entry.maxstack, dpid);
+		DPMessageController.sendMessage(player, DPMessageController.getMessage("dplistsettings.fireworkdelay") + entry.fireworkdelay, dpid);
+		DPMessageController.sendMessage(player, DPMessageController.getMessage("dplistsettings.fireworkamount") + entry.fireworkamount, dpid);
 	}
 }

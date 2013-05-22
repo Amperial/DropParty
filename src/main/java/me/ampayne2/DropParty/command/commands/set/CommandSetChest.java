@@ -33,7 +33,7 @@ import org.bukkit.entity.Player;
 
 public class CommandSetChest implements DPCommand {
 
-	public static Map<String, String> playersSetting = new HashMap<String, String>();
+	private static Map<String, String> playersSetting = new HashMap<String, String>();
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
@@ -47,7 +47,8 @@ public class CommandSetChest implements DPCommand {
 			return;
 		}
 		Player player = (Player) sender;
-		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().find() == null) {
+		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null
+				|| !DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne().dpid.equals(dpid)) {
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartydoesntexist"), dpid);
 			return;
 		}
@@ -57,6 +58,10 @@ public class CommandSetChest implements DPCommand {
 		if (CommandSetItempoint.isSetting(player.getName()) && !isSetting(player.getName())) {
 			CommandSetItempoint.toggleSetting(player, dpid);
 		}
+		if (CommandSetFireworkpoint.isSetting(player.getName()) && !isSetting(player.getName())) {
+			CommandSetFireworkpoint.toggleSetting(player, dpid);
+		}
+		
 		toggleSetting(player, dpid);
 	}
 

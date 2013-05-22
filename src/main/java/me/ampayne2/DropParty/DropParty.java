@@ -23,11 +23,14 @@ import com.alta189.simplesave.exceptions.ConnectionException;
 import com.alta189.simplesave.exceptions.TableRegistrationException;
 
 import me.ampayne2.DropParty.command.CommandController;
+import me.ampayne2.DropParty.command.commands.set.CommandSetFireworkAmount;
+import me.ampayne2.DropParty.command.commands.set.CommandSetFireworkDelay;
 import me.ampayne2.DropParty.command.commands.set.CommandSetItemDelay;
 import me.ampayne2.DropParty.command.commands.set.CommandSetMaxLength;
 import me.ampayne2.DropParty.command.commands.set.CommandSetMaxStack;
 import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.listeners.DPChestListener;
+import me.ampayne2.DropParty.listeners.DPGlassListener;
 import me.ampayne2.DropParty.listeners.DPGlowstoneListener;
 
 import org.bukkit.plugin.PluginManager;
@@ -48,6 +51,7 @@ public class DropParty extends JavaPlugin {
 		PluginManager manager = this.getServer().getPluginManager();
 		manager.registerEvents(new DPChestListener(), this);
 		manager.registerEvents(new DPGlowstoneListener(), this);
+		manager.registerEvents(new DPGlassListener(), this);
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 
@@ -72,6 +76,8 @@ public class DropParty extends JavaPlugin {
 		CommandSetItemDelay.getDefaults(this);
 		CommandSetMaxLength.getDefaults(this);
 		CommandSetMaxStack.getDefaults(this);
+		CommandSetFireworkDelay.getDefaults(this);
+		CommandSetFireworkAmount.getDefaults(this);
 
 		try {
 			Metrics metrics = new Metrics(this);

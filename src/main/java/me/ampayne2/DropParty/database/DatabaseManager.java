@@ -26,6 +26,7 @@ import com.alta189.simplesave.mysql.MySQLConfiguration;
 
 import me.ampayne2.DropParty.DropParty;
 import me.ampayne2.DropParty.database.tables.DPChestsTable;
+import me.ampayne2.DropParty.database.tables.DPFireworkPointsTable;
 import me.ampayne2.DropParty.database.tables.DPItemPointsTable;
 import me.ampayne2.DropParty.database.tables.DPPartiesTable;
 import me.ampayne2.DropParty.database.tables.DPSettingsTable;
@@ -46,6 +47,7 @@ public class DatabaseManager {
 		db = DatabaseFactory.createNewDatabase(config);
 		db.registerTable(DPChestsTable.class);
 		db.registerTable(DPItemPointsTable.class);
+		db.registerTable(DPFireworkPointsTable.class);
 		db.registerTable(DPTeleportsTable.class);
 		db.registerTable(DPSettingsTable.class);
 		db.registerTable(DPPartiesTable.class);

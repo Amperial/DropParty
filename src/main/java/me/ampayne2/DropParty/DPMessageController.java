@@ -50,12 +50,18 @@ public class DPMessageController {
 		messages.put("dpsetitempoint", config.getString("messages.dpsetitempoint"));
 		messages.put("dpsetitempointmode", config.getString("messages.dpsetitempointmode"));
 		messages.put("dpsetitempointmodeoff", config.getString("messages.dpsetitempointmodeoff"));
+		messages.put("dpsetfireworkpoint", config.getString("messages.dpsetfireworkpoint"));
+		messages.put("dpsetfireworkpointmode", config.getString("messages.dpsetfireworkpointmode"));
+		messages.put("dpsetfireworkpointmodeoff", config.getString("messages.dpsetfireworkpointmodeoff"));
 		messages.put("dpsetteleport", config.getString("messages.dpsetteleport"));
 		messages.put("dpsetitemdelay", config.getString("messages.dpsetitemdelay"));
 		messages.put("dpsetmaxlength", config.getString("messages.dpsetmaxlength"));
 		messages.put("dpsetmaxstack", config.getString("messages.dpsetmaxstack"));
+		messages.put("dpsetfireworkdelay", config.getString("messages.dpsetfireworkdelay"));
+		messages.put("dpsetfireworkamount", config.getString("messages.dpsetfireworkamount"));
 		messages.put("dpremovechest", config.getString("messages.dpremovechest"));
 		messages.put("dpremoveitempoint", config.getString("messages.dpremoveitempoint"));
+		messages.put("dpremovefireworkpoint", config.getString("messages.dpremovefireworkpoint"));
 		messages.put("dpremoveteleport", config.getString("messages.dpremoveteleport"));
 		messages.put("dpteleport", config.getString("messages.dpteleport"));
 
@@ -66,6 +72,8 @@ public class DPMessageController {
 		messages.put("dplistsettings.itemdelay", config.getString("messages.dplistsettings.itemdelay"));
 		messages.put("dplistsettings.maxlength", config.getString("messages.dplistsettings.maxlength"));
 		messages.put("dplistsettings.maxstack", config.getString("messages.dplistsettings.maxstack"));
+		messages.put("dplistsettings.fireworkdelay", config.getString("messages.dplistsettings.fireworkdelay"));
+		messages.put("dplistsettings.fireworkamount", config.getString("messages.dplistsettings.fireworkamount"));
 		messages.put("dplistteleport", config.getString("messages.dplistteleport.dplistteleport"));
 		messages.put("dplistteleport.world", config.getString("messages.dplistteleport.world"));
 		messages.put("dplistteleport.x", config.getString("messages.dplistteleport.x"));
@@ -77,6 +85,8 @@ public class DPMessageController {
 		messages.put("dplistchests.chest", config.getString("messages.dplistchests.chest"));
 		messages.put("dplistitempoints", config.getString("messages.dplistitempoints.dplistitempoints"));
 		messages.put("dplistitempoints.itempoint", config.getString("messages.dplistitempoints.itempoint"));
+		messages.put("dplistfireworkpoints", config.getString("messages.dplistfireworkpoints.dplistfireworkpoints"));
+		messages.put("dplistfireworkpoints.fireworkpoint", config.getString("messages.dplistfireworkpoints.fireworkpoint"));
 
 		// broadcasts
 		messages.put("dpannouncestart", config.getString("messages.dpannouncestart"));
@@ -89,18 +99,23 @@ public class DPMessageController {
 		messages.put("dpstoperror", config.getString("messages.dpstoperror"));
 		messages.put("dpsetchesterror", config.getString("messages.dpsetchesterror"));
 		messages.put("dpsetitempointerror", config.getString("messages.dpsetitempointerror"));
+		messages.put("dpsetfireworkpointerror", config.getString("messages.dpsetfireworkpointerror"));
 		messages.put("dpsetteleporterror", config.getString("messages.dpsetteleporterror"));
 		messages.put("dpsetitemdelayerror", config.getString("messages.dpsetitemdelayerror"));
 		messages.put("dpsetmaxlengtherror", config.getString("messages.dpsetmaxlengtherror"));
 		messages.put("dpsetmaxstackerror", config.getString("messages.dpsetmaxstackerror"));
+		messages.put("dpsetfireworkdelayerror", config.getString("messages.dpsetfireworkdelayerror"));
+		messages.put("dpsetfireworkamounterror", config.getString("messages.dpsetfireworkamounterror"));
 		messages.put("dpremovechesterror", config.getString("messages.dpremovechesterror"));
 		messages.put("dpremoveitempointerror", config.getString("messages.dpremoveitempointerror"));
+		messages.put("dpremovefireworkpointerror", config.getString("messages.dpremovefireworkpointerror"));
 		messages.put("dpremoveteleporterror", config.getString("messages.dpremoveteleporterror"));
 		messages.put("dpteleporterror", config.getString("messages.dpteleporterror"));
 
 		// other
 		messages.put("dpchestalreadyexists", config.getString("messages.dpchestalreadyexists"));
 		messages.put("dpitempointalreadyexists", config.getString("messages.dpitempointalreadyexists"));
+		messages.put("dpfireworkpointalreadyexists", config.getString("messages.dpfireworkpointalreadyexists"));
 		messages.put("dpitempointiddoesntexist", config.getString("messages.dpitempointiddoesntexist"));
 		messages.put("dppartydoesntexist", config.getString("messages.dppartydoesntexist"));
 		messages.put("dpchestdoesntexist", config.getString("messages.dpchestdoesntexist"));

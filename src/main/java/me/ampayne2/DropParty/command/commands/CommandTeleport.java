@@ -44,7 +44,7 @@ public class CommandTeleport implements DPCommand {
 		if (!sender.hasPermission("dropparty.teleport." + dpid) && !sender.hasPermission("dropparty.teleport.*") && !sender.hasPermission("dropparty.*")) {
 			return;
 		}
-		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null) {
+		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null || !DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne().dpid.equals(dpid)) {
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartydoesntexist"), dpid);
 			return;
 		}

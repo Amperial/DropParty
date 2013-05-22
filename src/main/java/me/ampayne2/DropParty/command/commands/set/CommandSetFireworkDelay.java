@@ -1,21 +1,3 @@
-/*
- * This file is part of DropParty.
- *
- * Copyright (c) 2013-2013
- *
- * DropParty is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * DropParty is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
- */
 package me.ampayne2.DropParty.command.commands.set;
 
 import org.bukkit.ChatColor;
@@ -29,40 +11,39 @@ import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.database.tables.DPPartiesTable;
 import me.ampayne2.DropParty.database.tables.DPSettingsTable;
 
-public class CommandSetMaxLength implements DPCommand {
-
-	public static Long defaultMaxLength = null;
+public class CommandSetFireworkDelay implements DPCommand {
+	public static Long defaultFireworkDelay = null;
 
 	public static void getDefaults(Plugin plugin) {
-		defaultMaxLength = plugin.getConfig().getLong("defaultpartysettings.maxlength");
+		defaultFireworkDelay = plugin.getConfig().getLong("defaultpartysettings.fireworkdelay");
 	}
 
-	public static Long getDefaultMaxLength() {
-		return defaultMaxLength;
+	public static Long getDefaultFireworkDelay() {
+		return defaultFireworkDelay;
 	}
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
 		Player player = (Player) sender;
 		String dpid;
-		Long maxlength;
-		if (!sender.hasPermission("dropparty.set.maxlength") && !sender.hasPermission("dropparty.set.*") && !sender.hasPermission("dropparty.*")) {
+		Long fireworkdelay;
+		if (!sender.hasPermission("dropparty.set.fireworkdelay") && !sender.hasPermission("dropparty.set.*") && !sender.hasPermission("dropparty.*")) {
 			return;
 		}
 		if (args.length != 2) {
 			return;
 		}
 		if (args[0].equals("default")) {
-			maxlength = defaultMaxLength;
+			fireworkdelay = defaultFireworkDelay;
 			dpid = args[1];
 		} else {
 			try {
-				maxlength = Long.parseLong(args[0]);
+				fireworkdelay = Long.parseLong(args[0]);
 			} catch (NumberFormatException e) {
 				sender.sendMessage(ChatColor.RED + "'" + args[0] + "'" + " is not a positive integer above zero.");
 				return;
 			}
-			if (maxlength <= 0) {
+			if (fireworkdelay <= 0) {
 				sender.sendMessage(ChatColor.RED + "'" + args[0] + "'" + " is not a positive integer above zero.");
 				return;
 			}
@@ -75,20 +56,21 @@ public class CommandSetMaxLength implements DPCommand {
 		}
 		DPSettingsTable table = new DPSettingsTable();
 		table.dpid = dpid;
-		table.maxlength = maxlength;
+		table.fireworkdelay = fireworkdelay;
 		if (DatabaseManager.getDatabase().select(DPSettingsTable.class).where().equal("dpid", dpid).execute().findOne() == null) {
 			DatabaseManager.getDatabase().save(table);
-			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpsetmaxlength"), dpid);
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpsetfireworkdelay"), dpid);
 			return;
 		} else {
 			DPSettingsTable entry = DatabaseManager.getDatabase().select(DPSettingsTable.class).where().equal("dpid", dpid).execute().findOne();
 			table.id = entry.id;
 			table.itemdelay = entry.itemdelay;
+			table.maxlength = entry.maxlength;
 			table.maxstack = entry.maxstack;
-			table.fireworkdelay = entry.fireworkdelay;
 			table.fireworkamount = entry.fireworkamount;
 		}
 		DatabaseManager.getDatabase().save(table);
-		DPMessageController.sendMessage(player, DPMessageController.getMessage("dpsetmaxlength"), dpid);
+		DPMessageController.sendMessage(player, DPMessageController.getMessage("dpsetfireworkdelay"), dpid);
 	}
+
 }

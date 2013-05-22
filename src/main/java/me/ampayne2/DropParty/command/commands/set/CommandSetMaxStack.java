@@ -59,12 +59,17 @@ public class CommandSetMaxStack implements DPCommand {
 			try {
 				maxstack = Integer.parseInt(args[0]);
 			} catch (NumberFormatException e) {
-				sender.sendMessage(ChatColor.RED + "'" + args[0] + "'" + " is not an integer.");
+				sender.sendMessage(ChatColor.RED + "'" + args[0] + "'" + " is not a positive integer above zero.");
+				return;
+			}
+			if (maxstack <= 0) {
+				sender.sendMessage(ChatColor.RED + "'" + args[0] + "'" + " is not a positive integer above zero.");
 				return;
 			}
 			dpid = args[1];
 		}
-		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null) {
+		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null
+				|| !DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne().dpid.equals(dpid)) {
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartydoesntexist"), dpid);
 			return;
 		}
@@ -80,6 +85,8 @@ public class CommandSetMaxStack implements DPCommand {
 			table.id = entry.id;
 			table.itemdelay = entry.itemdelay;
 			table.maxlength = entry.maxlength;
+			table.fireworkdelay = entry.fireworkdelay;
+			table.fireworkamount = entry.fireworkamount;
 		}
 		DatabaseManager.getDatabase().save(table);
 		DPMessageController.sendMessage(player, DPMessageController.getMessage("dpsetmaxstack"), dpid);

@@ -23,6 +23,8 @@ import org.bukkit.entity.Player;
 
 import me.ampayne2.DropParty.DPMessageController;
 import me.ampayne2.DropParty.DPPartyController;
+import me.ampayne2.DropParty.command.commands.set.CommandSetFireworkAmount;
+import me.ampayne2.DropParty.command.commands.set.CommandSetFireworkDelay;
 import me.ampayne2.DropParty.command.commands.set.CommandSetItemDelay;
 import me.ampayne2.DropParty.command.commands.set.CommandSetMaxLength;
 import me.ampayne2.DropParty.command.commands.set.CommandSetMaxStack;
@@ -45,14 +47,16 @@ public class CommandCreate implements DPCommand {
 		if (!sender.hasPermission("dropparty.create") && !sender.hasPermission("dropparty.*")) {
 			return;
 		}
-		DPPartiesTable partytable = new DPPartiesTable();
-		DPSettingsTable settingstable = new DPSettingsTable();
-		partytable.dpid = dpid;
-		settingstable.dpid = dpid;
-		settingstable.itemdelay = CommandSetItemDelay.getDefaultItemDelay();
-		settingstable.maxlength = CommandSetMaxLength.getDefaultMaxLength();
-		settingstable.maxstack = CommandSetMaxStack.getDefaultMaxStack();
 		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null) {
+			DPPartiesTable partytable = new DPPartiesTable();
+			DPSettingsTable settingstable = new DPSettingsTable();
+			partytable.dpid = dpid;
+			settingstable.dpid = dpid;
+			settingstable.itemdelay = CommandSetItemDelay.getDefaultItemDelay();
+			settingstable.maxlength = CommandSetMaxLength.getDefaultMaxLength();
+			settingstable.maxstack = CommandSetMaxStack.getDefaultMaxStack();
+			settingstable.fireworkdelay = CommandSetFireworkDelay.getDefaultFireworkDelay();
+			settingstable.fireworkamount = CommandSetFireworkAmount.getDefaultFireworkAmount();
 			DatabaseManager.getDatabase().save(partytable);
 			DatabaseManager.getDatabase().save(settingstable);
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dpcreate"), dpid);

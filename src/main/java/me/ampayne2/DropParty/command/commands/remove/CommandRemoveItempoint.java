@@ -24,6 +24,7 @@ import me.ampayne2.DropParty.DPMessageController;
 import me.ampayne2.DropParty.command.interfaces.DPCommand;
 import me.ampayne2.DropParty.database.DatabaseManager;
 import me.ampayne2.DropParty.database.tables.DPItemPointsTable;
+import me.ampayne2.DropParty.database.tables.DPPartiesTable;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -33,6 +34,7 @@ public class CommandRemoveItempoint implements DPCommand {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
+		Player player = (Player) sender;
 		String dpid;
 		String itempoint;
 		if (!sender.hasPermission("dropparty.remove.itempoint") && !sender.hasPermission("dropparty.remove.*") && !sender.hasPermission("dropparty.*")) {
@@ -44,13 +46,22 @@ public class CommandRemoveItempoint implements DPCommand {
 		} else {
 			return;
 		}
+		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null
+				|| !DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne().dpid.equals(dpid)) {
+			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartydoesntexist"), dpid);
+			return;
+		}
 		List<DPItemPointsTable> list = DatabaseManager.getDatabase().select(DPItemPointsTable.class).where().equal("dpid", dpid).execute().find();
-		Player player = (Player) sender;
+
 		int itempointid;
 		try {
 			itempointid = Integer.parseInt(itempoint);
 		} catch (NumberFormatException e) {
-			sender.sendMessage(ChatColor.RED + "'" + itempoint + "'" + " is not an integer.");
+			sender.sendMessage(ChatColor.RED + "'" + itempoint + "'" + " is not a positive integer above zero.");
+			return;
+		}
+		if (itempointid <= 0) {
+			sender.sendMessage(ChatColor.RED + "'" + args[0] + "'" + " is not a positive integer above zero.");
 			return;
 		}
 		if (!(list.size() >= itempointid)) {

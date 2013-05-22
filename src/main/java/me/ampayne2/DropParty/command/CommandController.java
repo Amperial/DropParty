@@ -24,14 +24,19 @@ import me.ampayne2.DropParty.command.commands.CommandStart;
 import me.ampayne2.DropParty.command.commands.CommandStop;
 import me.ampayne2.DropParty.command.commands.CommandTeleport;
 import me.ampayne2.DropParty.command.commands.list.CommandListChests;
+import me.ampayne2.DropParty.command.commands.list.CommandListFireworkpoints;
 import me.ampayne2.DropParty.command.commands.list.CommandListItempoints;
 import me.ampayne2.DropParty.command.commands.list.CommandListParties;
 import me.ampayne2.DropParty.command.commands.list.CommandListSettings;
 import me.ampayne2.DropParty.command.commands.list.CommandListTeleport;
 import me.ampayne2.DropParty.command.commands.remove.CommandRemoveChest;
+import me.ampayne2.DropParty.command.commands.remove.CommandRemoveFireworkpoint;
 import me.ampayne2.DropParty.command.commands.remove.CommandRemoveItempoint;
 import me.ampayne2.DropParty.command.commands.remove.CommandRemoveTeleport;
 import me.ampayne2.DropParty.command.commands.set.CommandSetChest;
+import me.ampayne2.DropParty.command.commands.set.CommandSetFireworkAmount;
+import me.ampayne2.DropParty.command.commands.set.CommandSetFireworkDelay;
+import me.ampayne2.DropParty.command.commands.set.CommandSetFireworkpoint;
 import me.ampayne2.DropParty.command.commands.set.CommandSetItempoint;
 import me.ampayne2.DropParty.command.commands.set.CommandSetItemDelay;
 import me.ampayne2.DropParty.command.commands.set.CommandSetMaxLength;
@@ -65,15 +70,19 @@ public class CommandController extends JavaPlugin {
 		SubCommand set = new SubCommand();
 		set.addCommand("chest", new CommandSetChest());
 		set.addCommand("itempoint", new CommandSetItempoint());
+		set.addCommand("fireworkpoint", new CommandSetFireworkpoint());
 		set.addCommand("teleport", new CommandSetTeleport());
 		set.addCommand("itemdelay", new CommandSetItemDelay());
 		set.addCommand("maxstack", new CommandSetMaxStack());
 		set.addCommand("maxlength", new CommandSetMaxLength());
+		set.addCommand("fireworkdelay", new CommandSetFireworkDelay());
+		set.addCommand("fireworkamount", new CommandSetFireworkAmount());
 		mainCommand.addCommand("set", set);
 
 		SubCommand remove = new SubCommand();
 		remove.addCommand("chest", new CommandRemoveChest());
 		remove.addCommand("itempoint", new CommandRemoveItempoint());
+		remove.addCommand("fireworkpoint", new CommandRemoveFireworkpoint());
 		remove.addCommand("teleport", new CommandRemoveTeleport());
 		mainCommand.addCommand("remove", remove);
 
@@ -81,6 +90,7 @@ public class CommandController extends JavaPlugin {
 		list.addCommand("parties", new CommandListParties());
 		list.addCommand("chests", new CommandListChests());
 		list.addCommand("itempoints", new CommandListItempoints());
+		list.addCommand("fireworkpoints", new CommandListFireworkpoints());
 		list.addCommand("settings", new CommandListSettings());
 		list.addCommand("teleport", new CommandListTeleport());
 		mainCommand.addCommand("list", list);
@@ -97,6 +107,10 @@ public class CommandController extends JavaPlugin {
 
 		if (!(sender instanceof Player)) {
 			sender.sendMessage("This command can only be run by a player.");
+			return true;
+		}
+		
+		if (!sender.hasPermission("dropparty.admin")){
 			return true;
 		}
 

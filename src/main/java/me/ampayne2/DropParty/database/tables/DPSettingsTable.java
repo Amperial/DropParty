@@ -39,5 +39,11 @@ public class DPSettingsTable {
 
 	@Field
 	public int maxstack;
+	
+	@Field
+	public Long fireworkdelay;
+	
+	@Field
+	public int fireworkamount;
 
 }

@@ -44,7 +44,8 @@ public class CommandListItempoints implements DPCommand {
 		if (!sender.hasPermission("dropparty.list.itempoints") && !sender.hasPermission("dropparty.list.*") && !sender.hasPermission("dropparty.*")) {
 			return;
 		}
-		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null) {
+		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null
+				|| !DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne().dpid.equals(dpid)) {
 			DPMessageController.sendMessage(player, DPMessageController.getMessage("dppartydoesntexist"), dpid);
 			return;
 		}
@@ -60,7 +61,7 @@ public class CommandListItempoints implements DPCommand {
 				DPItemPointsTable entry = li.next();
 				id++;
 				DPMessageController.sendMessage(player, DPMessageController.getMessage("dplistitempoints.itempoint") + id + " World: " + entry.world + " X: " + entry.x + " Y: " + entry.y + " Z: "
-						+ entry.z, dpid);
+						+ entry.z, entry.dpid);
 			}
 		}
 	}
