@@ -119,5 +119,6 @@ messages:
   dpnoteleportfound: "&4No Drop Party '%PartyName%' Teleport Found."
   dpnochestsfound: "&4No Drop Party '%PartyName%' Chests Found."
   dpnoitempointsfound: "&4No Drop Party '%PartyName%' Item Points Found."
+  dpnofireworkpointsfound: "&4No Drop Party '%PartyName%' Firework Points Found."
   dpargumentserror: "&4Incorrect Amount Of Arguments."
   dpnopermission: "&4You Do Not Have The Permission dropparty.admin"

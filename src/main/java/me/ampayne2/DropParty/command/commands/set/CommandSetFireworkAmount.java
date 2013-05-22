@@ -44,6 +44,10 @@ public class CommandSetFireworkAmount implements DPCommand {
 				sender.sendMessage(ChatColor.RED + "'" + args[0] + "'" + " is not a positive integer above zero.");
 				return;
 			}
+			if (fireworkamount <= 0) {
+				sender.sendMessage(ChatColor.RED + "'" + args[0] + "'" + " is not a positive integer above zero.");
+				return;
+			}
 			dpid = args[1];
 		}
 		if (DatabaseManager.getDatabase().select(DPPartiesTable.class).where().equal("dpid", dpid).execute().findOne() == null

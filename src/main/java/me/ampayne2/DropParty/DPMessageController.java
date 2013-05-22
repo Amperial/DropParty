@@ -117,6 +117,7 @@ public class DPMessageController {
 		messages.put("dpitempointalreadyexists", config.getString("messages.dpitempointalreadyexists"));
 		messages.put("dpfireworkpointalreadyexists", config.getString("messages.dpfireworkpointalreadyexists"));
 		messages.put("dpitempointiddoesntexist", config.getString("messages.dpitempointiddoesntexist"));
+		messages.put("dpfireworkpointiddoesntexist", config.getString("messages.dpfireworkpointiddoesntexist"));
 		messages.put("dppartydoesntexist", config.getString("messages.dppartydoesntexist"));
 		messages.put("dpchestdoesntexist", config.getString("messages.dpchestdoesntexist"));
 		messages.put("dpchestiddoesntexist", config.getString("messages.dpchestiddoesntexist"));
@@ -128,6 +129,7 @@ public class DPMessageController {
 		messages.put("dpnoteleportfound", config.getString("messages.dpnoteleportfound"));
 		messages.put("dpnochestsfound", config.getString("messages.dpnochestsfound"));
 		messages.put("dpnoitempointsfound", config.getString("messages.dpnoitempointsfound"));
+		messages.put("dpnofireworkpointsfound", config.getString("messages.dpnofireworkpointsfound"));
 		messages.put("dpargumentserror", config.getString("messages.dpargumentserror"));
 		messages.put("dpnopermission", config.getString("messages.dpnopermission"));
 	}
