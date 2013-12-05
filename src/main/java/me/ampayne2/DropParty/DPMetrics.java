@@ -16,20 +16,43 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.dropparty.command.interfaces;
+package me.ampayne2.dropparty;
 
-import org.bukkit.command.CommandSender;
+import org.mcstats.Metrics;
+
+import java.io.IOException;
 
 /**
- * The base layout for a drop party command.
+ * A drop party wrapper for the Metrics instance.
  */
-public interface DPCommand extends Command {
+public class DPMetrics {
+    private final DropParty dropParty;
+    private Metrics metrics;
 
     /**
-     * The command executor
+     * Creates a new DPMetrics.
      *
-     * @param sender The sender of the command
-     * @param args   The arguments sent with the command
+     * @param dropParty The DropParty instance.
      */
-    void execute(CommandSender sender, String[] args);
+    public DPMetrics(final DropParty dropParty) {
+        this.dropParty = dropParty;
+        try {
+            metrics = new Metrics(dropParty);
+            metrics.start();
+        } catch (IOException e) {
+            dropParty.getMessage().debug(e);
+        }
+    }
+
+    /**
+     * Creates the custom drop party graphs.
+     */
+    public void createGraphs() {
+    }
+
+    /**
+     * Destroys the custom drop party graphs.
+     */
+    public void destroyGraphs() {
+    }
 }

@@ -16,20 +16,18 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.dropparty.command.interfaces;
-
-import org.bukkit.command.CommandSender;
+package me.ampayne2.dropparty.message;
 
 /**
- * The base layout for a drop party command.
+ * Handles a type of recipient.
  */
-public interface DPCommand extends Command {
+public abstract class RecipientHandler {
 
     /**
-     * The command executor
+     * Sends a message to the recipient.
      *
-     * @param sender The sender of the command
-     * @param args   The arguments sent with the command
+     * @param recipient The recipient.
+     * @param message   The message.
      */
-    void execute(CommandSender sender, String[] args);
+    public abstract void sendMessage(Object recipient, String message);
 }

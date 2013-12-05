@@ -1,0 +1,79 @@
+Messages:
+  prefix: "&6[&5Drop Party&6] &7"
+
+  commands:
+    notaplayer: "&4Must be a player to use this command."
+    invalidsubcommand: "&4%s is not a subcommand of %s."
+    validsubcommands: "Valid subcommands are: %s"
+
+  commandusages:
+    acommand: "&4Usages: /dp command [party name]"
+
+  party:
+    create: "Created drop party &5%s&7."
+    delete: "Deleted drop party &5%s&7."
+    start: "Started drop party &5%s&7."
+    stop: "Stopped drop party &5%s&7."
+    teleport: "Teleported to drop party &5%s&7."
+
+  mode:
+    selectionon: "Turned on &5%s&7 selection mode for drop party &5%s&7."
+    selectionoff: "Turned off &5%s&7 selection mode for drop party &5%s&7."
+    removalon: "Turned on &5%s&7 removal mode for drop party &5%s&7."
+    removaloff: "Turned off &5%s&7 removal mode for drop party &5%s&7."
+
+  set:
+    chest: "Set chest for drop party &5%s&7."
+    itempoint: "Set item point for drop party &5%s&7."
+    fireworkpoint: "Set firework point for drop party &5%s&7."
+    teleport: "Set teleport for drop party &5%s&7."
+    itemdelay: "Set item delay for drop party &5%s&7."
+    maxlength: "Set max length for drop party &5%s&7."
+    maxstack: "Set max stack size for drop party &5%s&7."
+    fireworkdelay: "Set firework delay for drop party &5%s&7."
+    fireworkamount: "Set firework amount for drop party &5%s&7."
+
+  remove:
+    chest: "Removed chest from drop party &5%s&7."
+    itempoint: "Removed item point from drop party &5%s&7."
+    fireworkpoint: "Removed item point from drop party &5%s&7."
+    teleport: "Removed teleport from drop party &5%s&7."
+
+  list:
+    parties: "Drop Parties: &5%s&7."
+
+  broadcast:
+    start: "Drop party &5%s&7 started! Teleport with /dp teleport &5%s&7"
+    stop: "Drop party &5%s&7 has ended!"
+
+  error:
+    party:
+      create: "&4Failed to create drop party &5%s&4."
+      delete: "&4Failed to delete drop party &5%s&4."
+      start: "&4Failed to start drop party &5%s&4."
+      stop: "&4Failed to stop drop party &5%s&4."
+      teleport: "&4Failed to teleport to drop party &5%s&4."
+      alreadyexists: "&4Drop party &5%s&4 already exists."
+      doesntexist: "&4Drop party &5%s&4 doesn't exist."
+      outofitems: "&4Drop party &5%s&4 has run out of items."
+      alreadyrunning: "&4Drop party &5%s&4 is already running."
+      nonefound: "&4No drop parties found."
+    chest:
+      set: "&4Failed to set chest for drop party &5%s&4."
+      remove: "&4Failed to remove chest from drop party &5%s&4."
+      alreadyexists: "&4A drop party chest already exists at this location."
+      doesntexist: "&4No drop party chests exist at this location."
+      iddoesntexist: "&4No chest of the id &5%s&4 of the drop party &5%s&4 found."
+      nonefound: "&4No chests of the drop party &5%s&4 found."
+    itempoint:
+      set: "&4Failed to set item point for drop party &5%s&4."
+      remove: "&4Failed to remove item point for drop party &5%s&4."
+      alreadyexists: "&4An item point already exists at this location."
+      iddoesntexist: "&4No item point of the id &5%s&4 of the drop party &5%s&4 found."
+      nonefound: "&4No item points of the drop party &5%s&4 found."
+    fireworkpoint:
+      set: "&4Failed to set firework point for drop party &5%s&4."
+      remove: "&4Failed to remove item point for drop party &5%s&4."
+      alreadyexists: "&4A firework point already exists at this location."
+      iddoesntexist: "&4No firework point of the id &5%s&4 of the drop party &5%s&4 found."
+      nonefound: "&4No firework point of the drop party &5%s&4 found."
