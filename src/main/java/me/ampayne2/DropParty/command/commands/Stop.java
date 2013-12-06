@@ -18,5 +18,21 @@
  */
 package me.ampayne2.dropparty.command.commands;
 
-public class Stop {
+import me.ampayne2.dropparty.DropParty;
+import me.ampayne2.dropparty.command.DPCommand;
+import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+
+public class Stop extends DPCommand {
+    private final DropParty dropParty;
+
+    public Stop(DropParty dropParty) {
+        super(dropParty, "stop", new Permission("dropparty.stop", PermissionDefault.OP), 1, true);
+        this.dropParty = dropParty;
+    }
+
+    @Override
+    public void execute(String command, CommandSender sender, String[] args) {
+    }
 }

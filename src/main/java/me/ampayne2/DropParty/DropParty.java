@@ -22,6 +22,7 @@ import me.ampayne2.dropparty.command.CommandController;
 import me.ampayne2.dropparty.config.ConfigManager;
 import me.ampayne2.dropparty.message.Message;
 import me.ampayne2.dropparty.message.RecipientHandler;
+import me.ampayne2.dropparty.parties.PartyManager;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -33,22 +34,24 @@ public class DropParty extends JavaPlugin {
     private ConfigManager configManager;
     private Message message;
     private CommandController commandController;
+    private PartyManager partyManager;
     private DPMetrics dpMetrics;
 
     @Override
     public void onEnable() {
         configManager = new ConfigManager(this);
-        message = new Message(this).registerRecipient(CommandSender.class, new RecipientHandler() {
-            @Override
-            public void sendMessage(Object recipient, String message) {
-                ((CommandSender) recipient).sendMessage(message);
-            }
-        }).registerRecipient(Server.class, new RecipientHandler() {
-            @Override
-            public void sendMessage(Object recipient, String message) {
-                ((Server) recipient).broadcastMessage(message);
-            }
-        });
+        message = new Message(this)
+                .registerRecipient(CommandSender.class, new RecipientHandler() {
+                    @Override
+                    public void sendMessage(Object recipient, String message) {
+                        ((CommandSender) recipient).sendMessage(message);
+                    }})
+                .registerRecipient(Server.class, new RecipientHandler() {
+                    @Override
+                    public void sendMessage(Object recipient, String message) {
+                        ((Server) recipient).broadcastMessage(message);
+                    }});
+        partyManager = new PartyManager(this);
         commandController = new CommandController(this);
         getCommand("dropparty").setExecutor(commandController);
         dpMetrics = new DPMetrics(this);
@@ -58,6 +61,8 @@ public class DropParty extends JavaPlugin {
     public void onDisable() {
         dpMetrics.destroyGraphs();
         dpMetrics = null;
+        partyManager.stopParties();
+        partyManager = null;
         message = null;
         configManager = null;
     }
@@ -78,6 +83,15 @@ public class DropParty extends JavaPlugin {
      */
     public Message getMessage() {
         return message;
+    }
+
+    /**
+     * Gets the drop party party manager.
+     *
+     * @return The PartyManager instance.
+     */
+    public PartyManager getPartyManager() {
+        return partyManager;
     }
 
     /**

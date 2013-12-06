@@ -16,20 +16,27 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.dropparty.command.interfaces;
+package me.ampayne2.dropparty.parties;
 
-import org.bukkit.command.CommandSender;
+import me.ampayne2.dropparty.DropParty;
+import org.bukkit.Location;
 
-/**
- * The base layout for a drop party command.
- */
-public interface DPCommand extends Command {
+public class DPFireworkPoint {
+    private final DropParty dropParty;
+    private final Party party;
+    private final Location location;
 
-    /**
-     * The command executor
-     *
-     * @param sender The sender of the command
-     * @param args   The arguments sent with the command
-     */
-    void execute(CommandSender sender, String[] args);
+    public DPFireworkPoint(DropParty dropParty, Party party, Location location) {
+        this.dropParty = dropParty;
+        this.party = party;
+        this.location = location;
+    }
+
+    public Party getParty() {
+        return party;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
 }

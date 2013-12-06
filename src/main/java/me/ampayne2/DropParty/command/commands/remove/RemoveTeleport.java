@@ -18,5 +18,21 @@
  */
 package me.ampayne2.dropparty.command.commands.remove;
 
-public class RemoveTeleport {
+import me.ampayne2.dropparty.DropParty;
+import me.ampayne2.dropparty.command.DPCommand;
+import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+
+public class RemoveTeleport extends DPCommand {
+    private final DropParty dropParty;
+
+    public RemoveTeleport(DropParty dropParty) {
+        super(dropParty, "teleport", new Permission("dropparty.remove.teleport", PermissionDefault.OP), 1, true);
+        this.dropParty = dropParty;
+    }
+
+    @Override
+    public void execute(String command, CommandSender sender, String[] args) {
+    }
 }

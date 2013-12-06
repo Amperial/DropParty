@@ -18,5 +18,21 @@
  */
 package me.ampayne2.dropparty.command.commands.set;
 
-public class SetPartySetting {
+import me.ampayne2.dropparty.DropParty;
+import me.ampayne2.dropparty.command.DPCommand;
+import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+
+public class SetPartySetting extends DPCommand {
+    private final DropParty dropParty;
+
+    public SetPartySetting(DropParty dropParty) {
+        super(dropParty, "partysetting", new Permission("dropparty.set.partysetting", PermissionDefault.OP), 2, false);
+        this.dropParty = dropParty;
+    }
+
+    @Override
+    public void execute(String command, CommandSender sender, String[] args) {
+    }
 }

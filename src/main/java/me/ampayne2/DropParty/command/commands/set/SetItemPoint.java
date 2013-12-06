@@ -18,5 +18,21 @@
  */
 package me.ampayne2.dropparty.command.commands.set;
 
-public class SetItemPoint {
+import me.ampayne2.dropparty.DropParty;
+import me.ampayne2.dropparty.command.DPCommand;
+import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+
+public class SetItemPoint extends DPCommand {
+    private final DropParty dropParty;
+
+    public SetItemPoint(DropParty dropParty) {
+        super(dropParty, "itempoint", new Permission("dropparty.set.itempoint", PermissionDefault.OP), 1, true);
+        this.dropParty = dropParty;
+    }
+
+    @Override
+    public void execute(String command, CommandSender sender, String[] args) {
+    }
 }

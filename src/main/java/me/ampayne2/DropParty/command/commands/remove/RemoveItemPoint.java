@@ -18,5 +18,21 @@
  */
 package me.ampayne2.dropparty.command.commands.remove;
 
-public class RemoveItemPoint {
+import me.ampayne2.dropparty.DropParty;
+import me.ampayne2.dropparty.command.DPCommand;
+import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+
+public class RemoveItemPoint extends DPCommand {
+    private final DropParty dropParty;
+
+    public RemoveItemPoint(DropParty dropParty) {
+        super(dropParty, "itempoint", new Permission("dropparty.remove.itempoint", PermissionDefault.OP), 2, true);
+        this.dropParty = dropParty;
+    }
+
+    @Override
+    public void execute(String command, CommandSender sender, String[] args) {
+    }
 }

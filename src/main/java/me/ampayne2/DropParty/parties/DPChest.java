@@ -16,11 +16,27 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.dropparty.command.interfaces;
+package me.ampayne2.dropparty.parties;
 
-/**
- * The base layout for a command.
- */
-public interface Command {
+import me.ampayne2.dropparty.DropParty;
+import org.bukkit.block.Chest;
 
+public class DPChest {
+    private final DropParty dropParty;
+    private final Party party;
+    private final Chest chest;
+
+    public DPChest(DropParty dropParty, Party party, Chest chest) {
+        this.dropParty = dropParty;
+        this.party = party;
+        this.chest = chest;
+    }
+
+    public Party getParty() {
+        return party;
+    }
+
+    public Chest getChest() {
+        return chest;
+    }
 }

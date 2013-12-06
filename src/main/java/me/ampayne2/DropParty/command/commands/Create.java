@@ -18,5 +18,21 @@
  */
 package me.ampayne2.dropparty.command.commands;
 
-public class Create {
+import me.ampayne2.dropparty.DropParty;
+import me.ampayne2.dropparty.command.DPCommand;
+import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+
+public class Create extends DPCommand {
+    private final DropParty dropParty;
+
+    public Create(DropParty dropParty) {
+        super(dropParty, "create", new Permission("dropparty.create", PermissionDefault.OP), 1, true);
+        this.dropParty = dropParty;
+    }
+
+    @Override
+    public void execute(String command, CommandSender sender, String[] args) {
+    }
 }

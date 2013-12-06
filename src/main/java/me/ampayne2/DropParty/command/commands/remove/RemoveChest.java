@@ -18,5 +18,21 @@
  */
 package me.ampayne2.dropparty.command.commands.remove;
 
-public class RemoveChest {
+import me.ampayne2.dropparty.DropParty;
+import me.ampayne2.dropparty.command.DPCommand;
+import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+
+public class RemoveChest extends DPCommand {
+    private final DropParty dropParty;
+
+    public RemoveChest(DropParty dropParty) {
+        super(dropParty, "chest", new Permission("dropparty.remove.chest", PermissionDefault.OP), 1, 2, true);
+        this.dropParty = dropParty;
+    }
+
+    @Override
+    public void execute(String command, CommandSender sender, String[] args) {
+    }
 }

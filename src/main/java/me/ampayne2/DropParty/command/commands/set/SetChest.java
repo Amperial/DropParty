@@ -18,5 +18,21 @@
  */
 package me.ampayne2.dropparty.command.commands.set;
 
-public class SetChest {
+import me.ampayne2.dropparty.DropParty;
+import me.ampayne2.dropparty.command.DPCommand;
+import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+
+public class SetChest extends DPCommand {
+    private final DropParty dropParty;
+
+    public SetChest(DropParty dropParty) {
+        super(dropParty, "chest", new Permission("dropparty.set.chest", PermissionDefault.OP), 1, true);
+        this.dropParty = dropParty;
+    }
+
+    @Override
+    public void execute(String command, CommandSender sender, String[] args) {
+    }
 }

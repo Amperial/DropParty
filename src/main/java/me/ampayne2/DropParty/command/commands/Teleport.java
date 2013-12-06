@@ -18,5 +18,21 @@
  */
 package me.ampayne2.dropparty.command.commands;
 
-public class Teleport {
+import me.ampayne2.dropparty.DropParty;
+import me.ampayne2.dropparty.command.DPCommand;
+import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+
+public class Teleport extends DPCommand {
+    private final DropParty dropParty;
+
+    public Teleport(DropParty dropParty) {
+        super(dropParty, "teleport", new Permission("dropparty.teleport", PermissionDefault.TRUE), 1, true);
+        this.dropParty = dropParty;
+    }
+
+    @Override
+    public void execute(String command, CommandSender sender, String[] args) {
+    }
 }

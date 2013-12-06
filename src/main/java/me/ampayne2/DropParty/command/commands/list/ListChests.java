@@ -18,5 +18,21 @@
  */
 package me.ampayne2.dropparty.command.commands.list;
 
-public class ListChests {
+import me.ampayne2.dropparty.DropParty;
+import me.ampayne2.dropparty.command.DPCommand;
+import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+
+public class ListChests extends DPCommand {
+    private final DropParty dropParty;
+
+    public ListChests(DropParty dropParty) {
+        super(dropParty, "chests", new Permission("dropparty.list.chests", PermissionDefault.TRUE), 1, false);
+        this.dropParty = dropParty;
+    }
+
+    @Override
+    public void execute(String command, CommandSender sender, String[] args) {
+    }
 }

@@ -16,7 +16,27 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.dropparty.command.commands.list;
+package me.ampayne2.dropparty.parties;
 
-public class ListTeleport {
+import me.ampayne2.dropparty.DropParty;
+import org.bukkit.Location;
+
+public class DPItemPoint {
+    private final DropParty dropParty;
+    private final Party party;
+    private final Location location;
+
+    public DPItemPoint(DropParty dropParty, Party party, Location location) {
+        this.dropParty = dropParty;
+        this.party = party;
+        this.location = location;
+    }
+
+    public Party getParty() {
+        return party;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
 }

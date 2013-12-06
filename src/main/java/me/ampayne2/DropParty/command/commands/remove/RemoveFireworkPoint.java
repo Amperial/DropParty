@@ -18,5 +18,21 @@
  */
 package me.ampayne2.dropparty.command.commands.remove;
 
-public class RemoveFireworkPoint {
+import me.ampayne2.dropparty.DropParty;
+import me.ampayne2.dropparty.command.DPCommand;
+import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+
+public class RemoveFireworkPoint extends DPCommand {
+    private final DropParty dropParty;
+
+    public RemoveFireworkPoint(DropParty dropParty) {
+        super(dropParty, "fireworkpoint", new Permission("dropparty.remove.fireworkpoint", PermissionDefault.OP), 2, true);
+        this.dropParty = dropParty;
+    }
+
+    @Override
+    public void execute(String command, CommandSender sender, String[] args) {
+    }
 }

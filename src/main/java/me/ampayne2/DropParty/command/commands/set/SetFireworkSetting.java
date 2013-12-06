@@ -18,5 +18,21 @@
  */
 package me.ampayne2.dropparty.command.commands.set;
 
-public class SetFireworkSetting {
+import me.ampayne2.dropparty.DropParty;
+import me.ampayne2.dropparty.command.DPCommand;
+import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+
+public class SetFireworkSetting extends DPCommand {
+    private final DropParty dropParty;
+
+    public SetFireworkSetting(DropParty dropParty) {
+        super(dropParty, "fireworksetting", new Permission("dropparty.set.fireworksetting", PermissionDefault.OP), 2, false);
+        this.dropParty = dropParty;
+    }
+
+    @Override
+    public void execute(String command, CommandSender sender, String[] args) {
+    }
 }

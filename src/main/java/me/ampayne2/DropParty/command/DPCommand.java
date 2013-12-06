@@ -16,23 +16,28 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.dropparty.command.commands;
+package me.ampayne2.dropparty.command;
 
 import me.ampayne2.dropparty.DropParty;
-import me.ampayne2.dropparty.command.DPCommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 
-public class Delete extends DPCommand {
-    private final DropParty dropParty;
+/**
+ * The base layout for a drop party command.
+ */
+public abstract class DPCommand extends Command {
+    public DPCommand(DropParty dropParty, String name, Permission permission, int minArgsLength, int maxArgsLength, boolean playerOnly) {
+        super(dropParty, name, permission, minArgsLength, maxArgsLength, playerOnly);
+    }
 
-    public Delete(DropParty dropParty) {
-        super(dropParty, "delete", new Permission("dropparty.delete", PermissionDefault.OP), 1, true);
-        this.dropParty = dropParty;
+    public DPCommand(DropParty dropParty, String name, Permission permission, int exactArgsLength, boolean playerOnly) {
+        this(dropParty, name, permission, exactArgsLength, exactArgsLength, playerOnly);
+    }
+
+    public DPCommand(DropParty dropParty, String name, Permission permission, boolean playerOnly) {
+        this(dropParty, name, permission, -1, -1, playerOnly);
     }
 
     @Override
-    public void execute(String command, CommandSender sender, String[] args) {
-    }
+    public abstract void execute(String command, CommandSender sender, String[] args);
 }

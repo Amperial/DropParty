@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.dropparty.command.commands;
+package me.ampayne2.dropparty.command.commands.list;
 
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.command.DPCommand;
@@ -24,11 +24,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
-public class Delete extends DPCommand {
+public class ListTeleports extends DPCommand {
     private final DropParty dropParty;
 
-    public Delete(DropParty dropParty) {
-        super(dropParty, "delete", new Permission("dropparty.delete", PermissionDefault.OP), 1, true);
+    public ListTeleports(DropParty dropParty) {
+        super(dropParty, "teleports", new Permission("dropparty.list.teleports", PermissionDefault.TRUE), 1, false);
         this.dropParty = dropParty;
     }
 

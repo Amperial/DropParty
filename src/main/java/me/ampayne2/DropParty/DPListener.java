@@ -16,23 +16,35 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.dropparty.command.commands;
+package me.ampayne2.dropparty;
 
-import me.ampayne2.dropparty.DropParty;
-import me.ampayne2.dropparty.command.DPCommand;
-import org.bukkit.command.CommandSender;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 
-public class Delete extends DPCommand {
+public class DPListener implements Listener {
     private final DropParty dropParty;
 
-    public Delete(DropParty dropParty) {
-        super(dropParty, "delete", new Permission("dropparty.delete", PermissionDefault.OP), 1, true);
+    public DPListener(DropParty dropParty) {
         this.dropParty = dropParty;
+        dropParty.getServer().getPluginManager().registerEvents(this, dropParty);
     }
 
-    @Override
-    public void execute(String command, CommandSender sender, String[] args) {
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerInteract(PlayerInteractEvent event) {
+
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onBlockPlace(BlockPlaceEvent event) {
+
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onBlockBreak(BlockBreakEvent event) {
+
     }
 }
