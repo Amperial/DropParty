@@ -35,6 +35,18 @@ public class PartyManager {
         parties.put(party.getName(), party);
     }
 
+    public void removeParty(Party party) {
+        party.stop();
+        parties.remove(party.getName());
+    }
+
+    public void removeParty(String partyName) {
+        Party party = parties.get(partyName);
+        if (party != null) {
+            removeParty(party);
+        }
+    }
+
     public boolean hasParty(String partyName) {
         return parties.containsKey(partyName);
     }

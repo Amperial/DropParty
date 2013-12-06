@@ -20,6 +20,7 @@ package me.ampayne2.dropparty.command.commands;
 
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.command.DPCommand;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -34,5 +35,9 @@ public class About extends DPCommand {
 
     @Override
     public void execute(String command, CommandSender sender, String[] args) {
+        sender.sendMessage(ChatColor.GOLD + "<-------<| " + ChatColor.DARK_PURPLE + "About Drop Party " + ChatColor.GOLD + "|>------->");
+        sender.sendMessage(ChatColor.GRAY + "dev.bukkit.org/server-mods/dropparty/");
+        sender.sendMessage(ChatColor.GRAY + "Author: ampayne2");
+        sender.sendMessage(ChatColor.GRAY + "Version: " + dropParty.getDescription().getVersion());
     }
 }

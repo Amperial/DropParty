@@ -20,7 +20,10 @@ package me.ampayne2.dropparty.command.commands.remove;
 
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.command.DPCommand;
+import me.ampayne2.dropparty.modes.DPMode;
+import me.ampayne2.dropparty.parties.Party;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
@@ -34,5 +37,25 @@ public class RemoveChest extends DPCommand {
 
     @Override
     public void execute(String command, CommandSender sender, String[] args) {
+        String partyName = args[0];
+        if (dropParty.getPartyManager().hasParty(partyName)) {
+            Party party = dropParty.getPartyManager().getParty(partyName);
+            if (args.length == 1) {
+                dropParty.getPlayerModeController().setPlayerMode((Player) sender, DPMode.REMOVING_CHESTS, party);
+            } else {
+                try {
+                    int id = Integer.parseInt(args[1]);
+                    if (party.getChests().size() > id) {
+                        // TODO: Remove chest of id
+                    } else {
+                        dropParty.getMessage().sendMessage(sender, "error.chest.iddoesntexist", args[1], partyName);
+                    }
+                } catch (NumberFormatException e) {
+                    dropParty.getMessage().sendMessage(sender, "error.numberformat");
+                }
+            }
+        } else {
+            dropParty.getMessage().sendMessage(sender, "error.party.doesntexist", partyName);
+        }
     }
 }

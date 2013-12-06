@@ -20,7 +20,9 @@ package me.ampayne2.dropparty.command.commands;
 
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.command.DPCommand;
+import me.ampayne2.dropparty.parties.Party;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
@@ -34,5 +36,12 @@ public class Create extends DPCommand {
 
     @Override
     public void execute(String command, CommandSender sender, String[] args) {
+        String partyName = args[0];
+        if (dropParty.getPartyManager().hasParty(partyName)) {
+            dropParty.getMessage().sendMessage(sender, "error.party.alreadyexists", partyName);
+        } else {
+            dropParty.getPartyManager().addParty(new Party(dropParty, partyName, ((Player) sender).getLocation()));
+            dropParty.getMessage().sendMessage(sender, "party.create", partyName);
+        }
     }
 }

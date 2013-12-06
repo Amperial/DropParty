@@ -19,6 +19,9 @@
 package me.ampayne2.dropparty.parties;
 
 import me.ampayne2.dropparty.DropParty;
+import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -26,24 +29,56 @@ import java.util.Set;
 public class Party {
     private final DropParty dropParty;
     private final String partyName;
-    private long maxLength = 6000;
-    private int itemDelay = 5;
-    private int maxStackSize = 8;
-    private int fireworkAmount = 8;
-    private long fireworkDelay = 2;
+    private long maxLength;
+    private long itemDelay;
+    private int maxStackSize;
+    private int fireworkAmount;
+    private long fireworkDelay;
     private Set<DPChest> chests = new HashSet<>();
     private Set<DPItemPoint> itemPoints = new HashSet<>();
     private Set<DPFireworkPoint> fireworkPoints = new HashSet<>();
+    private Location teleport;
+    private boolean isRunning = false;
+    private int taskId;
 
-    public Party(DropParty dropParty, String partyName) {
+    public Party(DropParty dropParty, String partyName, Location teleport) {
         this.dropParty = dropParty;
         this.partyName = partyName;
+        this.teleport = teleport;
+        FileConfiguration config = dropParty.getConfig();
+        maxLength = config.getLong("defaultsettings.maxlength", 6000);
+        itemDelay = config.getLong("defaultsettings.itemdelay", 5);
+        maxStackSize = config.getInt("defaultsettings.maxstacksize", 8);
+        fireworkAmount = config.getInt("defaultsettings.fireworkamount", 8);
+        fireworkDelay = config.getLong("defaultsettings.fireworkdelay", 2);
     }
 
     public void start() {
+        if (!isRunning) {
+            isRunning = true;
+            taskId = dropParty.getServer().getScheduler().scheduleSyncRepeatingTask(dropParty, new Runnable() {
+                @Override
+                public void run() {
+
+                }
+            }, 0, itemDelay);
+        }
     }
 
     public void stop() {
+        if (isRunning) {
+            isRunning = false;
+            dropParty.getServer().getScheduler().cancelTask(taskId);
+        }
+    }
+
+    public void teleport(Player player) {
+        player.teleport(teleport);
+        dropParty.getMessage().sendMessage(player, "party.teleport", partyName);
+    }
+
+    public boolean isRunning() {
+        return isRunning;
     }
 
     public void addChest(DPChest chest) {
@@ -58,6 +93,8 @@ public class Party {
         fireworkPoints.add(fireworkPoint);
     }
 
+
+
     public Set<DPChest> getChests() {
         return chests;
     }
@@ -70,6 +107,10 @@ public class Party {
         return fireworkPoints;
     }
 
+    public Location getTeleport() {
+        return teleport;
+    }
+
     public String getName() {
         return partyName;
     }
@@ -78,7 +119,7 @@ public class Party {
         return maxLength;
     }
 
-    public int getItemDelay() {
+    public long getItemDelay() {
         return itemDelay;
     }
 
@@ -99,7 +140,7 @@ public class Party {
         // TODO: Set max length in config.
     }
 
-    public void setItemDelay(int itemDelay) {
+    public void setItemDelay(long itemDelay) {
         this.itemDelay = itemDelay;
         // TODO: Set item delay in config.
     }

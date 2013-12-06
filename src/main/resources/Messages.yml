@@ -17,10 +17,8 @@ Messages:
     teleport: "Teleported to drop party &5%s&7."
 
   mode:
-    selectionon: "Turned on &5%s&7 selection mode for drop party &5%s&7."
-    selectionoff: "Turned off &5%s&7 selection mode for drop party &5%s&7."
-    removalon: "Turned on &5%s&7 removal mode for drop party &5%s&7."
-    removaloff: "Turned off &5%s&7 removal mode for drop party &5%s&7."
+    on: "Turned on &5%s&7 mode for drop party &5%s&7."
+    off: "Turned off &5%s&7 mode for drop party &5%s&7."
 
   set:
     chest: "Set chest for drop party &5%s&7."
@@ -57,6 +55,7 @@ Messages:
       doesntexist: "&4Drop party &5%s&4 doesn't exist."
       outofitems: "&4Drop party &5%s&4 has run out of items."
       alreadyrunning: "&4Drop party &5%s&4 is already running."
+      notrunning: "&4Drop party &5%s&4 is not running."
       nonefound: "&4No drop parties found."
     chest:
       set: "&4Failed to set chest for drop party &5%s&4."
@@ -77,3 +76,4 @@ Messages:
       alreadyexists: "&4A firework point already exists at this location."
       iddoesntexist: "&4No firework point of the id &5%s&4 of the drop party &5%s&4 found."
       nonefound: "&4No firework point of the drop party &5%s&4 found."
+    numberformat: "&4Number must be a positive integer."

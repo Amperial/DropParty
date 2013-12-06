@@ -1,1 +1,7 @@
 debug: true
+defaultsettings:
+  maxlength: 6000
+  itemdelay: 5
+  maxstacksize: 8
+  fireworkamount: 8
+  fireworkdelay: 2

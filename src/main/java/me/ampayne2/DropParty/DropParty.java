@@ -22,6 +22,7 @@ import me.ampayne2.dropparty.command.CommandController;
 import me.ampayne2.dropparty.config.ConfigManager;
 import me.ampayne2.dropparty.message.Message;
 import me.ampayne2.dropparty.message.RecipientHandler;
+import me.ampayne2.dropparty.modes.PlayerModeController;
 import me.ampayne2.dropparty.parties.PartyManager;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -33,8 +34,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class DropParty extends JavaPlugin {
     private ConfigManager configManager;
     private Message message;
-    private CommandController commandController;
     private PartyManager partyManager;
+    private PlayerModeController playerModeController;
+    private CommandController commandController;
     private DPMetrics dpMetrics;
 
     @Override
@@ -52,6 +54,7 @@ public class DropParty extends JavaPlugin {
                         ((Server) recipient).broadcastMessage(message);
                     }});
         partyManager = new PartyManager(this);
+        playerModeController = new PlayerModeController(this);
         commandController = new CommandController(this);
         getCommand("dropparty").setExecutor(commandController);
         dpMetrics = new DPMetrics(this);
@@ -61,6 +64,9 @@ public class DropParty extends JavaPlugin {
     public void onDisable() {
         dpMetrics.destroyGraphs();
         dpMetrics = null;
+        commandController = null;
+        playerModeController.clearModes();
+        playerModeController = null;
         partyManager.stopParties();
         partyManager = null;
         message = null;
@@ -92,6 +98,15 @@ public class DropParty extends JavaPlugin {
      */
     public PartyManager getPartyManager() {
         return partyManager;
+    }
+
+    /**
+     * Gets the drop party player mode controller.
+     *
+     * @return The PlayerModeController instance.
+     */
+    public PlayerModeController getPlayerModeController() {
+        return playerModeController;
     }
 
     /**

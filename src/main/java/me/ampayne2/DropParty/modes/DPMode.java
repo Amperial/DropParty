@@ -16,23 +16,31 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.dropparty.command.commands.list;
+package me.ampayne2.dropparty.modes;
 
-import me.ampayne2.dropparty.DropParty;
-import me.ampayne2.dropparty.command.DPCommand;
-import org.bukkit.command.CommandSender;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
+/**
+ * Types of player selection and removal modes.
+ */
+public enum DPMode {
+    SETTING_CHESTS("chest selection"),
+    SETTING_ITEM_POINTS("item point selection"),
+    SETTING_FIREWORK_POINTS("firework point selection"),
+    REMOVING_CHESTS("chest removal"),
+    REMOVING_ITEM_POINTS("item point removal"),
+    REMOVING_FIREWORK_POINTS(" firework point removal");
 
-public class ListTeleports extends DPCommand {
-    private final DropParty dropParty;
+    private final String name;
 
-    public ListTeleports(DropParty dropParty) {
-        super(dropParty, "teleports", new Permission("dropparty.list.teleports", PermissionDefault.TRUE), 1, false);
-        this.dropParty = dropParty;
+    private DPMode(String name) {
+        this.name = name;
     }
 
-    @Override
-    public void execute(String command, CommandSender sender, String[] args) {
+    /**
+     * Gets the name that represents the mode.
+     *
+     * @return The name of the mode.
+     */
+    public String getName() {
+        return name;
     }
 }
