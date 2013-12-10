@@ -21,7 +21,7 @@ package me.ampayne2.dropparty.modes;
 /**
  * Types of player selection and removal modes.
  */
-public enum DPMode {
+public enum PlayerMode {
     SETTING_CHESTS("chest selection"),
     SETTING_ITEM_POINTS("item point selection"),
     SETTING_FIREWORK_POINTS("firework point selection"),
@@ -31,7 +31,7 @@ public enum DPMode {
 
     private final String name;
 
-    private DPMode(String name) {
+    private PlayerMode(String name) {
         this.name = name;
     }
 

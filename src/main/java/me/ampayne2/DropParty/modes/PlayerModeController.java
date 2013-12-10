@@ -31,7 +31,7 @@ import java.util.Map;
 
 public class PlayerModeController implements Listener {
     private final DropParty dropParty;
-    private Map<String, DPMode> playerModes = new HashMap<>();
+    private Map<String, PlayerMode> playerModes = new HashMap<>();
     private Map<String, Party> playerModeParties = new HashMap<>();
 
     public PlayerModeController(DropParty dropParty) {
@@ -39,7 +39,7 @@ public class PlayerModeController implements Listener {
         dropParty.getServer().getPluginManager().registerEvents(this, dropParty);
     }
 
-    public DPMode getPlayerMode(String playerName) {
+    public PlayerMode getPlayerMode(String playerName) {
         return playerModes.get(playerName);
     }
 
@@ -47,19 +47,19 @@ public class PlayerModeController implements Listener {
         return playerModeParties.get(playerName);
     }
 
-    public void setPlayerMode(Player player, DPMode dpMode, Party party) {
+    public void setPlayerMode(Player player, PlayerMode playerMode, Party party) {
         String playerName = player.getName();
         if (playerModes.containsKey(playerName)) {
-            DPMode currentMode = playerModes.get(playerName);
+            PlayerMode currentMode = playerModes.get(playerName);
             Party currentParty = playerModeParties.get(playerName);
             dropParty.getMessage().sendMessage(player, "mode.off", currentMode.getName(), currentParty.getName());
-            if (currentMode.equals(dpMode) && currentParty.equals(party)) {
+            if (currentMode.equals(playerMode) && currentParty.equals(party)) {
                 return;
             }
         }
-        playerModes.put(playerName, dpMode);
+        playerModes.put(playerName, playerMode);
         playerModeParties.put(playerName, party);
-        dropParty.getMessage().sendMessage(player, "mode.on", dpMode.getName(), party.getName());
+        dropParty.getMessage().sendMessage(player, "mode.on", playerMode.getName(), party.getName());
     }
 
     public void clearModes() {

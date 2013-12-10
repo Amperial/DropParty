@@ -19,18 +19,17 @@
 package me.ampayne2.dropparty.config;
 
 import me.ampayne2.dropparty.DropParty;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Manages all of the extra configs.
  */
 public class ConfigManager {
-    private final ConfigAccessor messageConfig;
-    private final ConfigAccessor partyConfig;
-    private final ConfigAccessor chestConfig;
-    private final ConfigAccessor itempointConfig;
-    private final ConfigAccessor fireworkpointConfig;
+    private final Map<ConfigType, ConfigAccessor> configs = new HashMap<>();
 
     /**
      * Creates a new config manager.
@@ -40,60 +39,36 @@ public class ConfigManager {
     public ConfigManager(DropParty dropParty) {
         File dataFolder = dropParty.getDataFolder();
 
-        messageConfig = new ConfigAccessor(dropParty, "Messages.yml", dataFolder);
-        messageConfig.saveDefaultConfig();
-        partyConfig = new ConfigAccessor(dropParty, "Parties.yml", dataFolder);
-        partyConfig.saveDefaultConfig();
-        chestConfig = new ConfigAccessor(dropParty, "Chests.yml", dataFolder);
-        chestConfig.saveDefaultConfig();
-        itempointConfig = new ConfigAccessor(dropParty, "ItemPoints.yml", dataFolder);
-        itempointConfig.saveDefaultConfig();
-        fireworkpointConfig = new ConfigAccessor(dropParty, "FireworkPoints.yml", dataFolder);
-        fireworkpointConfig.saveDefaultConfig();
+        addConfigAccessor(new ConfigAccessor(dropParty, ConfigType.MESSAGE, dataFolder).saveDefaultConfig());
+        addConfigAccessor(new ConfigAccessor(dropParty, ConfigType.PARTY, dataFolder).saveDefaultConfig());
     }
 
     /**
-     * Gets the Message config.
+     * Adds a ConfigAccessor to the config manager.
      *
-     * @return The Message config.
+     * @param configAccessor The ConfigAccessor.
      */
-    public ConfigAccessor getMessageConfig() {
-        return messageConfig;
+    public void addConfigAccessor(ConfigAccessor configAccessor) {
+        configs.put(configAccessor.getConfigType(), configAccessor);
     }
 
     /**
-     * Gets the Party config.
+     * Gets a certain ConfigAccessor.
      *
-     * @return The Party config.
+     * @param configType The type of the config.
+     * @return The config accessor.
      */
-    public ConfigAccessor getPartyConfig() {
-        return partyConfig;
+    public ConfigAccessor getConfigAccessor(ConfigType configType) {
+        return configs.get(configType);
     }
 
     /**
-     * Gets the Chest config.
+     * Gets a certain FileConfiguration.
      *
-     * @return The Chest config.
+     * @param configType The type of the config.
+     * @return The config.
      */
-    public ConfigAccessor getChestConfig() {
-        return chestConfig;
-    }
-
-    /**
-     * Gets the ItemPoint config.
-     *
-     * @return The ItemPoint config.
-     */
-    public ConfigAccessor getItempointConfig() {
-        return itempointConfig;
-    }
-
-    /**
-     * Gets the FireworkPoint config.
-     *
-     * @return The FireworkPoint config.
-     */
-    public ConfigAccessor getFireworkpointConfig() {
-        return fireworkpointConfig;
+    public FileConfiguration getConfig(ConfigType configType) {
+        return configs.get(configType).getConfig();
     }
 }

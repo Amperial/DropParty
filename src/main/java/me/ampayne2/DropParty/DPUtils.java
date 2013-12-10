@@ -33,7 +33,7 @@ public final class DPUtils {
                 .append(location.getY()).append(",")
                 .append(location.getZ()).append(",")
                 .append(location.getYaw()).append(",")
-                .append(location.getPitch()).append(",").toString();
+                .append(location.getPitch()).toString();
     }
 
     public static Location stringToLocation(String string) {
@@ -54,5 +54,9 @@ public final class DPUtils {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public static int getPlayersOnline() {
+        return Bukkit.getOnlinePlayers().length;
     }
 }

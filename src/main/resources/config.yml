@@ -5,3 +5,5 @@ defaultsettings:
   maxstacksize: 8
   fireworkamount: 8
   fireworkdelay: 2
+  startperiodically: false
+  startperiod: 144000

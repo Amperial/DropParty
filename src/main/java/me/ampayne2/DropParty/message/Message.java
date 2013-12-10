@@ -19,6 +19,7 @@
 package me.ampayne2.dropparty.message;
 
 import me.ampayne2.dropparty.DropParty;
+import me.ampayne2.dropparty.config.ConfigType;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -50,7 +51,7 @@ public class Message {
         this.dropParty = dropParty;
         debug = dropParty.getConfig().getBoolean("debug", false);
         log = dropParty.getLogger();
-        FileConfiguration messageConfig = dropParty.getConfigManager().getMessageConfig().getConfig();
+        FileConfiguration messageConfig = dropParty.getConfigManager().getConfig(ConfigType.MESSAGE);
         for (String key : messageConfig.getConfigurationSection("Messages").getKeys(true)) {
             messages.put(key, ChatColor.translateAlternateColorCodes('&', messageConfig.getString("Messages." + key)));
         }

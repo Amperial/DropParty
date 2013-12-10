@@ -32,35 +32,36 @@ import java.util.logging.Level;
  */
 public class ConfigAccessor {
     private final DropParty dropParty;
-    private final String fileName;
+    private final ConfigType configType;
     private final File configFile;
     private FileConfiguration fileConfiguration;
 
     /**
-     * Creates a new Config Accessor.
+     * Creates a new ConfigAccessor.
      *
-     * @param dropParty The DropParty instance.
-     * @param fileName  The name of the configuration file.
-     * @param parent    The parent file.
+     * @param dropParty  The DropParty instance.
+     * @param configType The ConfigType of the configuration file.
+     * @param parent     The parent file.
      */
-    public ConfigAccessor(DropParty dropParty, String fileName, File parent) {
+    public ConfigAccessor(DropParty dropParty, ConfigType configType, File parent) {
         this.dropParty = dropParty;
-        this.fileName = fileName;
-        this.configFile = new File(parent, fileName);
+        this.configType = configType;
+        this.configFile = new File(parent, configType.getPath());
     }
 
     /**
      * Reloads the configuration file from disk.
      */
-    public void reloadConfig() {
+    public ConfigAccessor reloadConfig() {
         fileConfiguration = YamlConfiguration.loadConfiguration(configFile);
 
         // Look for defaults in the jar
-        InputStream defConfigStream = dropParty.getResource(fileName);
+        InputStream defConfigStream = dropParty.getResource(configType.getPath());
         if (defConfigStream != null) {
             YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
             fileConfiguration.setDefaults(defConfig);
         }
+        return this;
     }
 
     /**
@@ -78,7 +79,7 @@ public class ConfigAccessor {
     /**
      * Saves the config to disk.
      */
-    public void saveConfig() {
+    public ConfigAccessor saveConfig() {
         if (fileConfiguration != null) {
             try {
                 getConfig().save(configFile);
@@ -87,14 +88,25 @@ public class ConfigAccessor {
                 dropParty.getMessage().debug(e);
             }
         }
+        return this;
     }
 
     /**
      * Generates the default config if it hasn't already been generated.
      */
-    public void saveDefaultConfig() {
+    public ConfigAccessor saveDefaultConfig() {
         if (!configFile.exists()) {
-            dropParty.saveResource(fileName, false);
+            dropParty.saveResource(configType.getPath(), false);
         }
+        return this;
+    }
+
+    /**
+     * Gets the ConfigType.
+     *
+     * @return The ConfigAccessor's ConfigType.
+     */
+    public ConfigType getConfigType() {
+        return configType;
     }
 }

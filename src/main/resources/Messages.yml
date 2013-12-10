@@ -2,12 +2,15 @@ Messages:
   prefix: "&6[&5Drop Party&6] &7"
 
   commands:
-    notaplayer: "&4Must be a player to use this command."
+    notaplayer: "&4You must be a player to use this command."
     invalidsubcommand: "&4%s is not a subcommand of %s."
     validsubcommands: "Valid subcommands are: %s"
 
   commandusages:
     acommand: "&4Usages: /dp command [party name]"
+
+  permissions:
+    nopermission: "&4You do not have permission to use this command."
 
   party:
     create: "Created drop party &5%s&7."
@@ -64,6 +67,7 @@ Messages:
       doesntexist: "&4No drop party chests exist at this location."
       iddoesntexist: "&4No chest of the id &5%s&4 of the drop party &5%s&4 found."
       nonefound: "&4No chests of the drop party &5%s&4 found."
+      notachestparty: "Drop party &5%s&4 is not a chest party."
     itempoint:
       set: "&4Failed to set item point for drop party &5%s&4."
       remove: "&4Failed to remove item point for drop party &5%s&4."

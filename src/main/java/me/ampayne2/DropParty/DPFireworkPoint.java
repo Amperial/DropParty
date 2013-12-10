@@ -16,17 +16,17 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.dropparty.parties;
+package me.ampayne2.dropparty;
 
-import me.ampayne2.dropparty.DropParty;
+import me.ampayne2.dropparty.parties.Party;
 import org.bukkit.Location;
 
-public class DPItemPoint {
+public class DPFireworkPoint {
     private final DropParty dropParty;
     private final Party party;
     private final Location location;
 
-    public DPItemPoint(DropParty dropParty, Party party, Location location) {
+    public DPFireworkPoint(DropParty dropParty, Party party, Location location) {
         this.dropParty = dropParty;
         this.party = party;
         this.location = location;
@@ -38,5 +38,27 @@ public class DPItemPoint {
 
     public Location getLocation() {
         return location;
+    }
+
+    public String toConfig() {
+        return new StringBuilder()
+                .append(party.getName()).append(":")
+                .append(DPUtils.locationToString(location))
+                .toString();
+    }
+
+    public static DPFireworkPoint fromConfig(DropParty dropParty, String string) {
+        try {
+            String[] parts = string.split(":", 2);
+            if (parts.length == 2) {
+                String partyName = parts[0];
+                if (dropParty.getPartyManager().hasParty(partyName)) {
+                    return new DPFireworkPoint(dropParty, dropParty.getPartyManager().getParty(partyName), DPUtils.stringToLocation(parts[1]));
+                }
+            }
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

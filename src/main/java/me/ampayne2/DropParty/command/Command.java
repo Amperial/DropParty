@@ -37,7 +37,7 @@ public class Command {
     private final int minArgsLength;
     private final int maxArgsLength;
     private final boolean playerOnly;
-    private final Map<String, Command> children = new HashMap<String, Command>();
+    private final Map<String, Command> children = new HashMap<>();
 
     /**
      * Creates a new command that must have an amount of args within a range.
@@ -51,7 +51,7 @@ public class Command {
      */
     public Command(DropParty dropParty, String name, Permission permission, int minArgsLength, int maxArgsLength, boolean playerOnly) {
         this.dropParty = dropParty;
-        this.name = name;
+        this.name = name.toLowerCase();
         this.permission = permission;
         this.minArgsLength = minArgsLength;
         this.maxArgsLength = maxArgsLength;
@@ -136,7 +136,7 @@ public class Command {
      * @return The command the child command was added to.
      */
     public Command addChildCommand(Command command) {
-        children.put(command.getName(), command);
+        children.put(command.getName().toLowerCase(), command);
         command.getPermission().addParent(permission, true);
         return this;
     }
@@ -148,7 +148,7 @@ public class Command {
      * @return True if the command has the child command, else false.
      */
     public boolean hasChildCommand(String name) {
-        return children.containsKey(name);
+        return children.containsKey(name.toLowerCase());
     }
 
     /**
@@ -177,7 +177,7 @@ public class Command {
      */
     public void execute(String command, CommandSender sender, String[] args) {
         if (hasChildCommand(command)) {
-            Command entry = children.get(command);
+            Command entry = children.get(command.toLowerCase());
             if (entry instanceof DPCommand) {
                 if ((entry.getMinArgsLength() <= args.length || entry.getMinArgsLength() == -1) && (entry.getMaxArgsLength() >= args.length || entry.getMaxArgsLength() == -1)) {
                     if (sender.hasPermission(entry.getPermission())) {

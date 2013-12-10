@@ -23,7 +23,6 @@ import me.ampayne2.dropparty.config.ConfigManager;
 import me.ampayne2.dropparty.message.Message;
 import me.ampayne2.dropparty.message.RecipientHandler;
 import me.ampayne2.dropparty.modes.PlayerModeController;
-import me.ampayne2.dropparty.parties.PartyManager;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;

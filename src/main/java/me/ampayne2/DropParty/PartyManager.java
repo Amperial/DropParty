@@ -16,9 +16,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.dropparty.parties;
+package me.ampayne2.dropparty;
 
-import me.ampayne2.dropparty.DropParty;
+import me.ampayne2.dropparty.config.ConfigType;
+import me.ampayne2.dropparty.parties.Party;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,26 +31,37 @@ public class PartyManager {
 
     public PartyManager(DropParty dropParty) {
         this.dropParty = dropParty;
-    }
 
-    public void addParty(Party party) {
-        parties.put(party.getName(), party);
-    }
-
-    public void removeParty(Party party) {
-        party.stop();
-        parties.remove(party.getName());
-    }
-
-    public void removeParty(String partyName) {
-        Party party = parties.get(partyName);
-        if (party != null) {
-            removeParty(party);
+        FileConfiguration partyConfig = dropParty.getConfigManager().getConfig(ConfigType.PARTY);
+        if (partyConfig.getConfigurationSection("Parties") != null) {
+            for (String partyName : partyConfig.getConfigurationSection("Parties").getKeys(false)) {
+                if (hasParty(partyName)) {
+                    continue;
+                }
+            }
         }
     }
 
     public boolean hasParty(String partyName) {
         return parties.containsKey(partyName);
+    }
+
+    public void addParty(Party party) {
+        parties.put(party.getName(), party);
+        FileConfiguration partyConfig = dropParty.getConfigManager().getConfig(ConfigType.PARTY);
+        String path = "Parties." + party.getName();
+        partyConfig.createSection(path);
+        party.save(partyConfig.getConfigurationSection(path));
+        dropParty.getConfigManager().getConfigAccessor(ConfigType.PARTY).saveConfig();
+    }
+
+    public void removeParty(String partyName) {
+        Party party = parties.get(partyName);
+        if (party != null) {
+            party.stop();
+            parties.remove(partyName);
+            dropParty.getConfigManager().getConfig(ConfigType.PARTY).set("Parties." + partyName, null);
+        }
     }
 
     public Party getParty(String partyName) {
