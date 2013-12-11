@@ -46,7 +46,7 @@ public class ConfigAccessor {
     public ConfigAccessor(DropParty dropParty, ConfigType configType, File parent) {
         this.dropParty = dropParty;
         this.configType = configType;
-        this.configFile = new File(parent, configType.getPath());
+        this.configFile = new File(parent, configType.getFileName());
     }
 
     /**
@@ -56,7 +56,7 @@ public class ConfigAccessor {
         fileConfiguration = YamlConfiguration.loadConfiguration(configFile);
 
         // Look for defaults in the jar
-        InputStream defConfigStream = dropParty.getResource(configType.getPath());
+        InputStream defConfigStream = dropParty.getResource(configType.getFileName());
         if (defConfigStream != null) {
             YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
             fileConfiguration.setDefaults(defConfig);
@@ -96,7 +96,7 @@ public class ConfigAccessor {
      */
     public ConfigAccessor saveDefaultConfig() {
         if (!configFile.exists()) {
-            dropParty.saveResource(configType.getPath(), false);
+            dropParty.saveResource(configType.getFileName(), false);
         }
         return this;
     }

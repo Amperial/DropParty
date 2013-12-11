@@ -21,41 +21,73 @@ package me.ampayne2.dropparty;
 import me.ampayne2.dropparty.parties.Party;
 import org.bukkit.Location;
 
+/**
+ * A drop party item point.
+ */
 public class DPItemPoint {
     private final DropParty dropParty;
     private final Party party;
     private final Location location;
 
+    /**
+     * Creates a new item point.
+     *
+     * @param dropParty The DropParty instance.
+     * @param party     The party of the item point.
+     * @param location  The location of the item point.
+     */
     public DPItemPoint(DropParty dropParty, Party party, Location location) {
         this.dropParty = dropParty;
         this.party = party;
         this.location = location;
     }
 
+    /**
+     * Gets the item point's party.
+     *
+     * @return The item point's party.
+     */
     public Party getParty() {
         return party;
     }
 
+    /**
+     * Gets the item point's location.
+     *
+     * @return The item point's location.
+     */
     public Location getLocation() {
         return location;
     }
 
+    /**
+     * Converts the item point into a string for storage in a config.
+     *
+     * @return The string representation of the item point.
+     */
     public String toConfig() {
-        return new StringBuilder()
-                .append(party.getName()).append(":")
-                .append(DPUtils.locationToString(location))
-                .toString();
+        return new StringBuilder().append(party.getName()).append(";").append(DPUtils.locationToString(location)).toString();
     }
 
-    public static DPItemPoint fromConfig(DropParty dropParty, String string) {
+    /**
+     * Converts a string represnetation of a item point into a item point.
+     *
+     * @param dropParty The DropParty instance.
+     * @param party     The party of the item point.
+     * @param string    The string representation of the item point.
+     * @return The item point.
+     */
+    public static DPItemPoint fromConfig(DropParty dropParty, Party party, String string) {
         try {
-            String[] parts = string.split(":", 2);
+            String[] parts = string.split(";");
             if (parts.length == 2) {
                 String partyName = parts[0];
-                if (dropParty.getPartyManager().hasParty(partyName)) {
-                    return new DPItemPoint(dropParty, dropParty.getPartyManager().getParty(partyName), DPUtils.stringToLocation(parts[1]));
+                if (partyName.equals(party.getName())) {
+                    System.out.println("itempoint loaded");
+                    return new DPItemPoint(dropParty, party, DPUtils.stringToLocation(parts[1]));
                 }
             }
+            System.out.println("itempoint not loaded");
             return null;
         } catch (Exception e) {
             return null;

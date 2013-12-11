@@ -25,6 +25,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+/**
+ * Gives the sender some information about drop party.
+ */
 public class About extends DPCommand {
     private final DropParty dropParty;
 

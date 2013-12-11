@@ -39,6 +39,7 @@ public class ConfigManager {
     public ConfigManager(DropParty dropParty) {
         File dataFolder = dropParty.getDataFolder();
 
+        dropParty.saveDefaultConfig();
         addConfigAccessor(new ConfigAccessor(dropParty, ConfigType.MESSAGE, dataFolder).saveDefaultConfig());
         addConfigAccessor(new ConfigAccessor(dropParty, ConfigType.PARTY, dataFolder).saveDefaultConfig());
     }

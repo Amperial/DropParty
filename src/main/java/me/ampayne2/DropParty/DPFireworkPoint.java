@@ -21,39 +21,69 @@ package me.ampayne2.dropparty;
 import me.ampayne2.dropparty.parties.Party;
 import org.bukkit.Location;
 
+/**
+ * A drop party firework point.
+ */
 public class DPFireworkPoint {
     private final DropParty dropParty;
     private final Party party;
     private final Location location;
 
+    /**
+     * Creates a new firework point.
+     *
+     * @param dropParty The DropParty instance.
+     * @param party     The party of the firework point.
+     * @param location  The location of the firework point.
+     */
     public DPFireworkPoint(DropParty dropParty, Party party, Location location) {
         this.dropParty = dropParty;
         this.party = party;
         this.location = location;
     }
 
+    /**
+     * Gets the firework point's party.
+     *
+     * @return The firework point's party.
+     */
     public Party getParty() {
         return party;
     }
 
+    /**
+     * Gets the firework point's location.
+     *
+     * @return The firework point's location.
+     */
     public Location getLocation() {
         return location;
     }
 
+    /**
+     * Converts the firework point into a string for storage in a config.
+     *
+     * @return The string representation of the firework point.
+     */
     public String toConfig() {
-        return new StringBuilder()
-                .append(party.getName()).append(":")
-                .append(DPUtils.locationToString(location))
-                .toString();
+        return new StringBuilder().append(party.getName()).append(";").append(DPUtils.locationToString(location)).toString();
     }
 
-    public static DPFireworkPoint fromConfig(DropParty dropParty, String string) {
+    /**
+     * Converts a string represnetation of a firework point into a firework point.
+     *
+     * @param dropParty The DropParty instance.
+     * @param party     The party of the firework point.
+     * @param string    The string representation of the firework point.
+     * @return The firework point.
+     */
+    public static DPFireworkPoint fromConfig(DropParty dropParty, Party party, String string) {
         try {
-            String[] parts = string.split(":", 2);
+            String[] parts = string.split(";");
             if (parts.length == 2) {
                 String partyName = parts[0];
-                if (dropParty.getPartyManager().hasParty(partyName)) {
-                    return new DPFireworkPoint(dropParty, dropParty.getPartyManager().getParty(partyName), DPUtils.stringToLocation(parts[1]));
+                if (partyName.equals(party.getName())) {
+                    return new DPFireworkPoint(dropParty, party, DPUtils.stringToLocation(parts[1]));
                 }
             }
             return null;

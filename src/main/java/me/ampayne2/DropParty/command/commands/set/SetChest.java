@@ -20,7 +20,11 @@ package me.ampayne2.dropparty.command.commands.set;
 
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.command.DPCommand;
+import me.ampayne2.dropparty.modes.PlayerMode;
+import me.ampayne2.dropparty.parties.ChestParty;
+import me.ampayne2.dropparty.parties.Party;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
@@ -34,5 +38,12 @@ public class SetChest extends DPCommand {
 
     @Override
     public void execute(String command, CommandSender sender, String[] args) {
+        String partyName = args[0];
+        if (dropParty.getPartyManager().hasParty(partyName)) {
+            Party party = dropParty.getPartyManager().getParty(partyName);
+            if (party instanceof ChestParty) {
+                dropParty.getPlayerModeController().setPlayerMode((Player) sender, PlayerMode.SETTING_CHESTS, party);
+            }
+        }
     }
 }

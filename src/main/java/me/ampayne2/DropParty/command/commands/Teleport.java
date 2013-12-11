@@ -25,6 +25,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+/**
+ * Teleports the sender to a drop party.
+ */
 public class Teleport extends DPCommand {
     private final DropParty dropParty;
 

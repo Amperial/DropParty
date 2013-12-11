@@ -26,6 +26,9 @@ import org.bukkit.inventory.DoubleChestInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * A drop party chest.
+ */
 public class DPChest {
     private final DropParty dropParty;
     private final Party party;
@@ -33,6 +36,13 @@ public class DPChest {
     private final Inventory inventory;
     private final boolean isDoubleChest;
 
+    /**
+     * Creates a new DPChest.
+     *
+     * @param dropParty The DropParty instance.
+     * @param party     The party of the DPChest.
+     * @param chest     The chest.
+     */
     public DPChest(DropParty dropParty, Party party, Chest chest) {
         this.dropParty = dropParty;
         this.party = party;
@@ -41,56 +51,90 @@ public class DPChest {
         this.isDoubleChest = chest.getBlockInventory() instanceof DoubleChestInventory;
     }
 
+    /**
+     * Gets the DPChest's party.
+     *
+     * @return The DPChest's party.
+     */
     public Party getParty() {
         return party;
     }
 
+    /**
+     * Gets the DPChest's chest.
+     *
+     * @return The DPChest's chest.
+     */
     public Chest getChest() {
         return chest;
     }
 
+    /**
+     * Checks if the chest is a double chest.
+     *
+     * @return True if the chest is a double chest, else false.
+     */
     public boolean isDoubleChest() {
         return isDoubleChest;
     }
 
+    /**
+     * Gets the next item stack in the chest.
+     *
+     * @return The next item stack.
+     */
     public ItemStack getNextItemStack() {
         for (int i = 0; i < (isDoubleChest ? 54 : 27); i++) {
             ItemStack itemStack = inventory.getItem(i);
             if (itemStack != null) {
                 if (itemStack.getAmount() <= party.getMaxStackSize()) {
                     inventory.setItem(i, null);
+                    System.out.println(itemStack);
                     return itemStack;
                 } else {
                     itemStack.setAmount(itemStack.getAmount() - party.getMaxStackSize());
                     ItemStack newItemStack = itemStack.clone();
                     newItemStack.setAmount(party.getMaxStackSize());
+                    System.out.println(newItemStack);
                     return newItemStack;
                 }
             }
         }
+        System.out.println("null itemstack");
         return null;
     }
 
+    /**
+     * Converts the chest into a string for storage in a config.
+     *
+     * @return The string representation of the chest.
+     */
     public String toConfig() {
-        return new StringBuilder()
-                .append(party.getName()).append(":")
-                .append(DPUtils.locationToString(chest.getLocation()))
-                .toString();
+        return new StringBuilder().append(party.getName()).append(";").append(DPUtils.locationToString(chest.getLocation())).toString();
     }
 
-    public static DPChest fromConfig(DropParty dropParty, String string) {
+    /**
+     * Converts a string representation of a chest into a chest.
+     *
+     * @param dropParty The DropParty instance.
+     * @param party     The party of the chest.
+     * @param string    The string representation of the chest.
+     * @return The chest.
+     */
+    public static DPChest fromConfig(DropParty dropParty, Party party, String string) {
         try {
-            String[] parts = string.split(":", 2);
+            String[] parts = string.split(";");
             if (parts.length == 2) {
                 String partyName = parts[0];
-                if (dropParty.getPartyManager().hasParty(partyName)) {
+                if (partyName.equals(party.getName())) {
                     Block block = DPUtils.stringToLocation(parts[1]).getBlock();
                     if (block.getType() == Material.CHEST) {
-                        Party party = dropParty.getPartyManager().getParty(partyName);
+                        System.out.println("chest loaded");
                         return new DPChest(dropParty, party, (Chest) block.getState());
                     }
                 }
             }
+            System.out.println("chest not loaded");
             return null;
         } catch (Exception e) {
             return null;

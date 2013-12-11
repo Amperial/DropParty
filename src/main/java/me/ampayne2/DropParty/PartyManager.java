@@ -19,16 +19,27 @@
 package me.ampayne2.dropparty;
 
 import me.ampayne2.dropparty.config.ConfigType;
+import me.ampayne2.dropparty.parties.ChestParty;
+import me.ampayne2.dropparty.parties.CustomParty;
 import me.ampayne2.dropparty.parties.Party;
+import me.ampayne2.dropparty.parties.PartyType;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Manages all of the drop parties.
+ */
 public class PartyManager {
     private final DropParty dropParty;
     private Map<String, Party> parties = new HashMap<>();
 
+    /**
+     * Creates a new party manager.
+     *
+     * @param dropParty The DropParty instance.
+     */
     public PartyManager(DropParty dropParty) {
         this.dropParty = dropParty;
 
@@ -38,14 +49,35 @@ public class PartyManager {
                 if (hasParty(partyName)) {
                     continue;
                 }
+                String path = "Parties." + partyName;
+                PartyType partyType = PartyType.valueOf(partyConfig.getString(path + ".type"));
+                switch (partyType) {
+                    case CHEST_PARTY:
+                        parties.put(partyName, new ChestParty(dropParty, partyConfig.getConfigurationSection(path)));
+                        break;
+                    case CUSTOM_PARTY:
+                        parties.put(partyName, new CustomParty(dropParty, partyConfig.getConfigurationSection(path)));
+                        break;
+                }
             }
         }
     }
 
+    /**
+     * Checks if the manager has a party.
+     *
+     * @param partyName The name of the party.
+     * @return True if the manager has a party, else false.
+     */
     public boolean hasParty(String partyName) {
         return parties.containsKey(partyName);
     }
 
+    /**
+     * Adds a party to the manager.
+     *
+     * @param party The party.
+     */
     public void addParty(Party party) {
         parties.put(party.getName(), party);
         FileConfiguration partyConfig = dropParty.getConfigManager().getConfig(ConfigType.PARTY);
@@ -55,23 +87,43 @@ public class PartyManager {
         dropParty.getConfigManager().getConfigAccessor(ConfigType.PARTY).saveConfig();
     }
 
+    /**
+     * Removes a party from the manager.
+     *
+     * @param partyName The name of the party.
+     */
     public void removeParty(String partyName) {
         Party party = parties.get(partyName);
         if (party != null) {
             party.stop();
             parties.remove(partyName);
             dropParty.getConfigManager().getConfig(ConfigType.PARTY).set("Parties." + partyName, null);
+            dropParty.getConfigManager().getConfigAccessor(ConfigType.PARTY).saveConfig();
         }
     }
 
+    /**
+     * Gets a party.
+     *
+     * @param partyName The name of the party.
+     * @return The party.
+     */
     public Party getParty(String partyName) {
         return parties.get(partyName);
     }
 
+    /**
+     * Gets the parties in the manager.
+     *
+     * @return All of the manager's parties.
+     */
     public Map<String, Party> getParties() {
         return parties;
     }
 
+    /**
+     * Stops all of the parties in the manager.
+     */
     public void stopParties() {
         for (Party party : parties.values()) {
             party.stop();

@@ -29,24 +29,61 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Controls player's drop party selection and removal modes.
+ */
 public class PlayerModeController implements Listener {
     private final DropParty dropParty;
     private Map<String, PlayerMode> playerModes = new HashMap<>();
     private Map<String, Party> playerModeParties = new HashMap<>();
 
+    /**
+     * Creates a new player mode controller.
+     *
+     * @param dropParty The DropParty instance.
+     */
     public PlayerModeController(DropParty dropParty) {
         this.dropParty = dropParty;
         dropParty.getServer().getPluginManager().registerEvents(this, dropParty);
     }
 
+    /**
+     * Checks if a player has a mode.
+     *
+     * @param playerName The name of the player.
+     * @return True if the player has a mode, else false.
+     */
+    public boolean hasMode(String playerName) {
+        return playerModes.containsKey(playerName);
+    }
+
+    /**
+     * Gets the player's mode.
+     *
+     * @param playerName The name of the player.
+     * @return The player's mode.
+     */
     public PlayerMode getPlayerMode(String playerName) {
         return playerModes.get(playerName);
     }
 
+    /**
+     * Gets the player's mode party.
+     *
+     * @param playerName The name of the player.
+     * @return The player's mode party.
+     */
     public Party getPlayerModeParty(String playerName) {
         return playerModeParties.get(playerName);
     }
 
+    /**
+     * Sets the player's mode.
+     *
+     * @param player     The player.
+     * @param playerMode The mode to set the player to.
+     * @param party      The party of the player's mode.
+     */
     public void setPlayerMode(Player player, PlayerMode playerMode, Party party) {
         String playerName = player.getName();
         if (playerModes.containsKey(playerName)) {
@@ -62,11 +99,19 @@ public class PlayerModeController implements Listener {
         dropParty.getMessage().sendMessage(player, "mode.on", playerMode.getName(), party.getName());
     }
 
+    /**
+     * Clears all player's modes.
+     */
     public void clearModes() {
         playerModes.clear();
         playerModeParties.clear();
     }
 
+    /**
+     * Clears a player's mode on quit.
+     *
+     * @param event The PlayerQuitEvent.
+     */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerQuit(PlayerQuitEvent event) {
         String playerName = event.getPlayer().getName();

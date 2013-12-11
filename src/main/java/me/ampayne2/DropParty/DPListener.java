@@ -18,33 +18,114 @@
  */
 package me.ampayne2.dropparty;
 
+import me.ampayne2.dropparty.modes.PlayerMode;
+import me.ampayne2.dropparty.modes.PlayerModeController;
+import me.ampayne2.dropparty.parties.ChestParty;
+import me.ampayne2.dropparty.parties.Party;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 
+/**
+ * The drop party listener.
+ */
 public class DPListener implements Listener {
     private final DropParty dropParty;
 
+    /**
+     * Creates a new drop party listener.
+     *
+     * @param dropParty The DropParty instance.
+     */
     public DPListener(DropParty dropParty) {
         this.dropParty = dropParty;
         dropParty.getServer().getPluginManager().registerEvents(this, dropParty);
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onPlayerInteract(PlayerInteractEvent event) {
-
-    }
-
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockPlace(BlockPlaceEvent event) {
-
+        Player player = event.getPlayer();
+        String playerName = player.getName();
+        PlayerModeController modeController = dropParty.getPlayerModeController();
+        if (modeController.hasMode(playerName)) {
+            Block block = event.getBlock();
+            Material material = block.getType();
+            PlayerMode playerMode = modeController.getPlayerMode(playerName);
+            Party party = modeController.getPlayerModeParty(playerName);
+            if (material == Material.GLASS) {
+                Location location = block.getLocation();
+                if (playerMode == PlayerMode.SETTING_ITEM_POINTS) {
+                    if (party.hasItemPoint(location)) {
+                        dropParty.getMessage().sendMessage(player, "error.itempoint.alreadyexists");
+                    } else {
+                        party.addItemPoint(new DPItemPoint(dropParty, party, block.getLocation()));
+                        dropParty.getMessage().sendMessage(player, "set.itempoint", party.getName());
+                    }
+                } else if (playerMode == PlayerMode.REMOVING_ITEM_POINTS) {
+                    if (party.hasItemPoint(location)) {
+                        party.removeItemPoint(location);
+                        dropParty.getMessage().sendMessage(player, "remove.itempoint", party.getName());
+                    } else {
+                        dropParty.getMessage().sendMessage(player, "error.itempoint.doesntexist", party.getName());
+                    }
+                }
+            } else if (material == Material.GLOWSTONE) {
+                Location location = block.getLocation();
+                if (playerMode == PlayerMode.SETTING_FIREWORK_POINTS) {
+                    if (party.hasFireworkPoint(location)) {
+                        dropParty.getMessage().sendMessage(player, "error.fireworkpoint.alreadyexists");
+                    } else {
+                        party.addFireworkPoint(new DPFireworkPoint(dropParty, party, block.getLocation()));
+                        dropParty.getMessage().sendMessage(player, "set.fireworkpoint", party.getName());
+                    }
+                } else if (playerMode == PlayerMode.REMOVING_FIREWORK_POINTS) {
+                    if (party.hasFireworkPoint(location)) {
+                        party.removeFireworkPoint(location);
+                        dropParty.getMessage().sendMessage(player, "remove.fireworkpoint", party.getName());
+                    } else {
+                        dropParty.getMessage().sendMessage(player, "error.fireworkpoint.doesntexist");
+                    }
+                }
+            } else {
+                return;
+            }
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
-
+        Player player = event.getPlayer();
+        String playerName = player.getName();
+        PlayerModeController modeController = dropParty.getPlayerModeController();
+        if (event.getBlock().getType() == Material.CHEST && modeController.hasMode(playerName)) {
+            if (modeController.getPlayerMode(playerName) == PlayerMode.SETTING_CHESTS) {
+                ChestParty party = (ChestParty) dropParty.getPlayerModeController().getPlayerModeParty(playerName);
+                Chest chest = (Chest) event.getBlock().getState();
+                if (party.hasChest(chest)) {
+                    dropParty.getMessage().sendMessage(player, "error.chest.alreadyexists");
+                } else {
+                    party.addChest(new DPChest(dropParty, party, (Chest) event.getBlock().getState()));
+                    dropParty.getMessage().sendMessage(player, "set.chest", party.getName());
+                }
+                event.setCancelled(true);
+            } else if (modeController.getPlayerMode(playerName) == PlayerMode.REMOVING_CHESTS) {
+                ChestParty party = (ChestParty) dropParty.getPlayerModeController().getPlayerModeParty(playerName);
+                Chest chest = (Chest) event.getBlock().getState();
+                if (party.hasChest(chest)) {
+                    party.removeChest((Chest) event.getBlock().getState());
+                    dropParty.getMessage().sendMessage(player, "remove.chest", party.getName());
+                } else {
+                    dropParty.getMessage().sendMessage(player, "error.chest.doesntexist");
+                }
+            }
+        }
     }
 }

@@ -40,7 +40,7 @@ public class Command {
     private final Map<String, Command> children = new HashMap<>();
 
     /**
-     * Creates a new command that must have an amount of args within a range.
+     * Creates a new Command that must have an amount of args within a range.
      *
      * @param dropParty     The DropParty instance.
      * @param name          The name of the command.
@@ -60,7 +60,7 @@ public class Command {
     }
 
     /**
-     * Creates a new command that must have an exact amount of args.
+     * Creates a new Command that must have an exact amount of args.
      *
      * @param dropParty       The DropParty instance.
      * @param name            The name of the command.
@@ -73,7 +73,7 @@ public class Command {
     }
 
     /**
-     * Creates a new command that can have any amount of args.
+     * Creates a new Command that can have any amount of args.
      *
      * @param dropParty  The DropParty instance.
      * @param name       The name of the command.

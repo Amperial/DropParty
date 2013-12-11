@@ -57,6 +57,7 @@ public class DropParty extends JavaPlugin {
         commandController = new CommandController(this);
         getCommand("dropparty").setExecutor(commandController);
         dpMetrics = new DPMetrics(this);
+        getServer().getPluginManager().registerEvents(new DPListener(this), this);
     }
 
     @Override

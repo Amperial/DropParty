@@ -21,6 +21,7 @@ package me.ampayne2.dropparty.command.commands.set;
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.command.DPCommand;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
@@ -34,5 +35,9 @@ public class SetTeleport extends DPCommand {
 
     @Override
     public void execute(String command, CommandSender sender, String[] args) {
+        String partyName = args[0];
+        if (dropParty.getPartyManager().hasParty(partyName)) {
+            dropParty.getPartyManager().getParty(partyName).setTeleport(((Player) sender).getLocation());
+        }
     }
 }

@@ -22,23 +22,36 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+/**
+ * Drop party utilities.
+ */
 public final class DPUtils {
     private DPUtils() {
     }
 
+    /**
+     * Converts a location into a string for easy storage in a config.
+     *
+     * @param location The location.
+     * @return The string representation of the location.
+     */
     public static String locationToString(Location location) {
         return new StringBuilder()
                 .append(location.getWorld().getName()).append(",")
-                .append(location.getX()).append(",")
-                .append(location.getY()).append(",")
-                .append(location.getZ()).append(",")
-                .append(location.getYaw()).append(",")
+                .append(location.getX()).append(",").append(location.getY()).append(",")
+                .append(location.getZ()).append(",").append(location.getYaw()).append(",")
                 .append(location.getPitch()).toString();
     }
 
+    /**
+     * Converts a string representation of a location into a location.
+     *
+     * @param string The string representation of the location.
+     * @return The location.
+     */
     public static Location stringToLocation(String string) {
         try {
-            String[] parts = string.split(",", 6);
+            String[] parts = string.split(",");
             if (parts.length == 6) {
                 World world = Bukkit.getWorld(parts[0]);
                 double x = Double.parseDouble(parts[1]);
@@ -56,6 +69,11 @@ public final class DPUtils {
         }
     }
 
+    /**
+     * Gets the amount of players online.
+     *
+     * @return The amount of players online.
+     */
     public static int getPlayersOnline() {
         return Bukkit.getOnlinePlayers().length;
     }

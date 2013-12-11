@@ -25,6 +25,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+/**
+ * Stops a drop party.
+ */
 public class Stop extends DPCommand {
     private final DropParty dropParty;
 

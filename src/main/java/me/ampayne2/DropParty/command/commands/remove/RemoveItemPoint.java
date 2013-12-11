@@ -20,7 +20,10 @@ package me.ampayne2.dropparty.command.commands.remove;
 
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.command.DPCommand;
+import me.ampayne2.dropparty.modes.PlayerMode;
+import me.ampayne2.dropparty.parties.Party;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
@@ -28,11 +31,31 @@ public class RemoveItemPoint extends DPCommand {
     private final DropParty dropParty;
 
     public RemoveItemPoint(DropParty dropParty) {
-        super(dropParty, "itempoint", new Permission("dropparty.remove.itempoint", PermissionDefault.OP), 2, true);
+        super(dropParty, "itempoint", new Permission("dropparty.remove.itempoint", PermissionDefault.OP), 1, 2, true);
         this.dropParty = dropParty;
     }
 
     @Override
     public void execute(String command, CommandSender sender, String[] args) {
+        String partyName = args[0];
+        if (dropParty.getPartyManager().hasParty(partyName)) {
+            Party party = dropParty.getPartyManager().getParty(partyName);
+            if (args.length == 1) {
+                dropParty.getPlayerModeController().setPlayerMode((Player) sender, PlayerMode.REMOVING_ITEM_POINTS, party);
+            } else {
+                try {
+                    int id = Integer.parseInt(args[1]);
+                    if (party.getItemPoints().size() > id) {
+                        // TODO: Remove itempoint of id
+                    } else {
+                        dropParty.getMessage().sendMessage(sender, "error.itempoint.iddoesntexist", args[1], partyName);
+                    }
+                } catch (NumberFormatException e) {
+                    dropParty.getMessage().sendMessage(sender, "error.numberformat");
+                }
+            }
+        } else {
+            dropParty.getMessage().sendMessage(sender, "error.party.doesntexist", partyName);
+        }
     }
 }

@@ -3,6 +3,7 @@ version: 3
 description: The Drop Party plugin for Bukkit.
 author: ampayne2
 main: me.ampayne2.dropparty.DropParty
+load: POSTWORLD
 commands:
   dropparty:
     aliases: dp

@@ -26,14 +26,41 @@ import org.bukkit.permissions.Permission;
  * The base layout for a drop party command.
  */
 public abstract class DPCommand extends Command {
+    /**
+     * Creates a new DPCommand that must have an amount of args within a range.
+     *
+     * @param dropParty     The DropParty instance.
+     * @param name          The name of the command.
+     * @param permission    The permission of the command.
+     * @param minArgsLength The minimum required args length of the command.
+     * @param maxArgsLength The maximum required args length of the command.
+     * @param playerOnly    If the command can only be run by a player.
+     */
     public DPCommand(DropParty dropParty, String name, Permission permission, int minArgsLength, int maxArgsLength, boolean playerOnly) {
         super(dropParty, name, permission, minArgsLength, maxArgsLength, playerOnly);
     }
 
+    /**
+     * Creates a new DPCommand that must have an exact amount of args.
+     *
+     * @param dropParty       The DropParty instance.
+     * @param name            The name of the command.
+     * @param permission      The permission of the command.
+     * @param exactArgsLength The exact required args length of the command.
+     * @param playerOnly      If the command can only be run by a player.
+     */
     public DPCommand(DropParty dropParty, String name, Permission permission, int exactArgsLength, boolean playerOnly) {
         this(dropParty, name, permission, exactArgsLength, exactArgsLength, playerOnly);
     }
 
+    /**
+     * Creates a new DPCommand that can have any amount of args.
+     *
+     * @param dropParty  The DropParty instance.
+     * @param name       The name of the command.
+     * @param permission The permission of the command.
+     * @param playerOnly If the command can only be run by a player.
+     */
     public DPCommand(DropParty dropParty, String name, Permission permission, boolean playerOnly) {
         this(dropParty, name, permission, -1, -1, playerOnly);
     }
