@@ -32,7 +32,7 @@ public class About extends DPCommand {
     private final DropParty dropParty;
 
     public About(DropParty dropParty) {
-        super(dropParty, "", new Permission("dropparty.about", PermissionDefault.TRUE), false);
+        super(dropParty, "about", "/dp about", new Permission("dropparty.about", PermissionDefault.TRUE), false);
         this.dropParty = dropParty;
     }
 

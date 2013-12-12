@@ -7,3 +7,5 @@ defaultsettings:
   fireworkdelay: 2
   startperiodically: false
   startperiod: 144000
+  votetostart: false
+  requiredvotes: 50

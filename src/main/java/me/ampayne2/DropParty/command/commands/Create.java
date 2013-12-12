@@ -28,6 +28,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Creates a drop party.
  */
@@ -35,7 +38,7 @@ public class Create extends DPCommand {
     private final DropParty dropParty;
 
     public Create(DropParty dropParty) {
-        super(dropParty, "create", new Permission("dropparty.create", PermissionDefault.OP), 2, true);
+        super(dropParty, "create", "/dp create <party> <type>", new Permission("dropparty.create", PermissionDefault.OP), 2, true);
         this.dropParty = dropParty;
     }
 
@@ -45,7 +48,7 @@ public class Create extends DPCommand {
         if (dropParty.getPartyManager().hasParty(partyName)) {
             dropParty.getMessage().sendMessage(sender, "error.party.alreadyexists", partyName);
         } else {
-            PartyType partyType = PartyType.valueOf(args[1]);
+            PartyType partyType = PartyType.fromName(args[1]);
             switch (partyType) {
                 case CHEST_PARTY:
                     dropParty.getPartyManager().addParty(new ChestParty(dropParty, partyName, ((Player) sender).getLocation()));
@@ -55,6 +58,15 @@ public class Create extends DPCommand {
                     break;
             }
             dropParty.getMessage().sendMessage(sender, "party.create", partyName);
+        }
+    }
+
+    @Override
+    public List<String> getTabCompleteList(String[] args) {
+        if (args.length == 1) {
+            return PartyType.getPartyTypes();
+        } else {
+            return new ArrayList<>();
         }
     }
 }

@@ -55,10 +55,10 @@ public class DPListener implements Listener {
         String playerName = player.getName();
         PlayerModeController modeController = dropParty.getPlayerModeController();
         if (modeController.hasMode(playerName)) {
-            Block block = event.getBlock();
-            Material material = block.getType();
             PlayerMode playerMode = modeController.getPlayerMode(playerName);
             Party party = modeController.getPlayerModeParty(playerName);
+            Block block = event.getBlock();
+            Material material = block.getType();
             if (material == Material.GLASS) {
                 Location location = block.getLocation();
                 if (playerMode == PlayerMode.SETTING_ITEM_POINTS) {
@@ -125,6 +125,7 @@ public class DPListener implements Listener {
                 } else {
                     dropParty.getMessage().sendMessage(player, "error.chest.doesntexist");
                 }
+                event.setCancelled(true);
             }
         }
     }

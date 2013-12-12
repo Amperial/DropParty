@@ -89,18 +89,15 @@ public class DPChest {
             if (itemStack != null) {
                 if (itemStack.getAmount() <= party.getMaxStackSize()) {
                     inventory.setItem(i, null);
-                    System.out.println(itemStack);
                     return itemStack;
                 } else {
                     itemStack.setAmount(itemStack.getAmount() - party.getMaxStackSize());
                     ItemStack newItemStack = itemStack.clone();
                     newItemStack.setAmount(party.getMaxStackSize());
-                    System.out.println(newItemStack);
                     return newItemStack;
                 }
             }
         }
-        System.out.println("null itemstack");
         return null;
     }
 
@@ -129,12 +126,10 @@ public class DPChest {
                 if (partyName.equals(party.getName())) {
                     Block block = DPUtils.stringToLocation(parts[1]).getBlock();
                     if (block.getType() == Material.CHEST) {
-                        System.out.println("chest loaded");
                         return new DPChest(dropParty, party, (Chest) block.getState());
                     }
                 }
             }
-            System.out.println("chest not loaded");
             return null;
         } catch (Exception e) {
             return null;

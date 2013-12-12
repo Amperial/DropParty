@@ -28,11 +28,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Removes a chest of a certain id or sets the sender to chest removal mode.
+ */
 public class RemoveChest extends DPCommand {
     private final DropParty dropParty;
 
     public RemoveChest(DropParty dropParty) {
-        super(dropParty, "chest", new Permission("dropparty.remove.chest", PermissionDefault.OP), 1, 2, true);
+        super(dropParty, "chest", "/dp remove chest <party> [id]", new Permission("dropparty.remove.chest", PermissionDefault.OP), 1, 2, true);
         this.dropParty = dropParty;
     }
 
@@ -60,5 +66,18 @@ public class RemoveChest extends DPCommand {
         } else {
             dropParty.getMessage().sendMessage(sender, "error.party.doesntexist", partyName);
         }
+    }
+
+    @Override
+    public List<String> getTabCompleteList(String[] args) {
+        List<String> list = new ArrayList<>();
+        if (args.length == 0) {
+            for (Party party : dropParty.getPartyManager().getParties().values()) {
+                if (party instanceof ChestParty) {
+                    list.add(party.getName());
+                }
+            }
+        }
+        return list;
     }
 }

@@ -26,11 +26,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import java.util.List;
+
+/**
+ * Sets the player to item point selection mode.
+ */
 public class SetItemPoint extends DPCommand {
     private final DropParty dropParty;
 
     public SetItemPoint(DropParty dropParty) {
-        super(dropParty, "itempoint", new Permission("dropparty.set.itempoint", PermissionDefault.OP), 1, true);
+        super(dropParty, "itempoint", "/dp set itempoint <party>", new Permission("dropparty.set.itempoint", PermissionDefault.OP), 1, true);
         this.dropParty = dropParty;
     }
 
@@ -40,5 +45,10 @@ public class SetItemPoint extends DPCommand {
         if (dropParty.getPartyManager().hasParty(partyName)) {
             dropParty.getPlayerModeController().setPlayerMode((Player) sender, PlayerMode.SETTING_ITEM_POINTS, dropParty.getPartyManager().getParty(partyName));
         }
+    }
+
+    @Override
+    public List<String> getTabCompleteList(String[] args) {
+        return dropParty.getPartyManager().getPartyList();
     }
 }

@@ -25,6 +25,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import java.util.List;
+
 /**
  * Starts a drop party.
  */
@@ -32,7 +34,7 @@ public class Start extends DPCommand {
     private final DropParty dropParty;
 
     public Start(DropParty dropParty) {
-        super(dropParty, "start", new Permission("dropparty.start", PermissionDefault.OP), 1, true);
+        super(dropParty, "start", "/dp start <party>", new Permission("dropparty.start", PermissionDefault.OP), 1, true);
         this.dropParty = dropParty;
     }
 
@@ -44,11 +46,16 @@ public class Start extends DPCommand {
             if (party.isRunning()) {
                 dropParty.getMessage().sendMessage(sender, "error.party.alreadyrunning", partyName);
             } else {
-                dropParty.getPartyManager().getParty(partyName).start();
+                party.start();
                 dropParty.getMessage().sendMessage(sender, "party.start", partyName);
             }
         } else {
             dropParty.getMessage().sendMessage(sender, "error.party.doesntexist", partyName);
         }
+    }
+
+    @Override
+    public List<String> getTabCompleteList(String[] args) {
+        return dropParty.getPartyManager().getPartyList();
     }
 }

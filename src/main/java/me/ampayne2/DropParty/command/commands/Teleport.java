@@ -25,6 +25,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import java.util.List;
+
 /**
  * Teleports the sender to a drop party.
  */
@@ -32,7 +34,7 @@ public class Teleport extends DPCommand {
     private final DropParty dropParty;
 
     public Teleport(DropParty dropParty) {
-        super(dropParty, "teleport", new Permission("dropparty.teleport", PermissionDefault.TRUE), 1, true);
+        super(dropParty, "teleport", "/dp teleport <party>", new Permission("dropparty.teleport", PermissionDefault.TRUE), 1, true);
         this.dropParty = dropParty;
     }
 
@@ -44,5 +46,10 @@ public class Teleport extends DPCommand {
         } else {
             dropParty.getMessage().sendMessage(sender, "error.party.doesntexist", partyName);
         }
+    }
+
+    @Override
+    public List<String> getTabCompleteList(String[] args) {
+        return dropParty.getPartyManager().getPartyList();
     }
 }

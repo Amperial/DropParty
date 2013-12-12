@@ -20,19 +20,38 @@ package me.ampayne2.dropparty.command.commands.list;
 
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.command.DPCommand;
+import me.ampayne2.dropparty.parties.ChestParty;
+import me.ampayne2.dropparty.parties.Party;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Lists the chests of a drop party.
+ */
 public class ListChests extends DPCommand {
     private final DropParty dropParty;
 
     public ListChests(DropParty dropParty) {
-        super(dropParty, "chests", new Permission("dropparty.list.chests", PermissionDefault.TRUE), 1, false);
+        super(dropParty, "chests", "/dp list chests <party>", new Permission("dropparty.list.chests", PermissionDefault.TRUE), 1, false);
         this.dropParty = dropParty;
     }
 
     @Override
     public void execute(String command, CommandSender sender, String[] args) {
+    }
+
+    @Override
+    public List<String> getTabCompleteList(String[] args) {
+        List<String> list = new ArrayList<>();
+        for (Party party : dropParty.getPartyManager().getParties().values()) {
+            if (party instanceof ChestParty) {
+                list.add(party.getName());
+            }
+        }
+        return list;
     }
 }

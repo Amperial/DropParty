@@ -1,14 +1,6 @@
 Messages:
   prefix: "&6[&5Drop Party&6] &7"
 
-  commands:
-    notaplayer: "&4You must be a player to use this command."
-    invalidsubcommand: "&4%s is not a subcommand of %s."
-    validsubcommands: "Valid subcommands are: %s"
-
-  commandusages:
-    acommand: "&4Usages: /dp command [party name]"
-
   permissions:
     nopermission: "&4You do not have permission to use this command."
 
@@ -18,6 +10,8 @@ Messages:
     start: "Started drop party &5%s&7."
     stop: "Stopped drop party &5%s&7."
     teleport: "Teleported to drop party &5%s&7."
+    vote: "Voted for drop party &5%s&7."
+    resetvotes: "Reset votes for drop party &5%s&7."
 
   mode:
     on: "Turned on &5%s&7 mode for drop party &5%s&7."
@@ -48,6 +42,10 @@ Messages:
     stop: "Drop party &5%s&7 has ended!"
 
   error:
+    command:
+      notaplayer: "&4You must be a player to use this command."
+      invalidsubcommand: "&4%s is not a subcommand of %s."
+      validsubcommands: "Valid subcommands are: %s"
     party:
       create: "&4Failed to create drop party &5%s&4."
       delete: "&4Failed to delete drop party &5%s&4."
@@ -60,6 +58,9 @@ Messages:
       alreadyrunning: "&4Drop party &5%s&4 is already running."
       notrunning: "&4Drop party &5%s&4 is not running."
       nonefound: "&4No drop parties found."
+      cannotvote: "&4Drop party &5%s&7 can not be started by voting."
+      alreadyvoted: "&4Already voted for drop party &5%s&7."
+      notapartysetting: "&4Not a valid party setting."
     chest:
       set: "&4Failed to set chest for drop party &5%s&4."
       remove: "&4Failed to remove chest from drop party &5%s&4."
@@ -80,4 +81,5 @@ Messages:
       alreadyexists: "&4A firework point already exists at this location."
       iddoesntexist: "&4No firework point of the id &5%s&4 of the drop party &5%s&4 found."
       nonefound: "&4No firework point of the drop party &5%s&4 found."
-    numberformat: "&4Number must be a positive integer."
+    numberformat: "&4Value must be a positive number."
+    booleanformat: "&4Value must be true or false."

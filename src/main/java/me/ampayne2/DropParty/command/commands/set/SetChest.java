@@ -28,11 +28,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Sets the sender to chest selection mode.
+ */
 public class SetChest extends DPCommand {
     private final DropParty dropParty;
 
     public SetChest(DropParty dropParty) {
-        super(dropParty, "chest", new Permission("dropparty.set.chest", PermissionDefault.OP), 1, true);
+        super(dropParty, "chest", "/dp set chest <party>", new Permission("dropparty.set.chest", PermissionDefault.OP), 1, true);
         this.dropParty = dropParty;
     }
 
@@ -45,5 +51,16 @@ public class SetChest extends DPCommand {
                 dropParty.getPlayerModeController().setPlayerMode((Player) sender, PlayerMode.SETTING_CHESTS, party);
             }
         }
+    }
+
+    @Override
+    public List<String> getTabCompleteList(String[] args) {
+        List<String> list = new ArrayList<>();
+        for (Party party : dropParty.getPartyManager().getParties().values()) {
+            if (party instanceof ChestParty) {
+                list.add(party.getName());
+            }
+        }
+        return list;
     }
 }

@@ -27,11 +27,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Removes an item point of a certain id or sets the sender to item point removal mode.
+ */
 public class RemoveItemPoint extends DPCommand {
     private final DropParty dropParty;
 
     public RemoveItemPoint(DropParty dropParty) {
-        super(dropParty, "itempoint", new Permission("dropparty.remove.itempoint", PermissionDefault.OP), 1, 2, true);
+        super(dropParty, "itempoint", "/dp remove itempoint <party> [id]", new Permission("dropparty.remove.itempoint", PermissionDefault.OP), 1, 2, true);
         this.dropParty = dropParty;
     }
 
@@ -57,5 +63,10 @@ public class RemoveItemPoint extends DPCommand {
         } else {
             dropParty.getMessage().sendMessage(sender, "error.party.doesntexist", partyName);
         }
+    }
+
+    @Override
+    public List<String> getTabCompleteList(String[] args) {
+        return args.length == 0 ? dropParty.getPartyManager().getPartyList() : new ArrayList<String>();
     }
 }

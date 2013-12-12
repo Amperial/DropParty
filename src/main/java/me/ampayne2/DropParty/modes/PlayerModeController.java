@@ -91,6 +91,8 @@ public class PlayerModeController implements Listener {
             Party currentParty = playerModeParties.get(playerName);
             dropParty.getMessage().sendMessage(player, "mode.off", currentMode.getName(), currentParty.getName());
             if (currentMode.equals(playerMode) && currentParty.equals(party)) {
+                playerModes.remove(playerName);
+                playerModeParties.remove(playerName);
                 return;
             }
         }

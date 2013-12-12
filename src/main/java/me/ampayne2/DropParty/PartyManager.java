@@ -25,7 +25,9 @@ import me.ampayne2.dropparty.parties.Party;
 import me.ampayne2.dropparty.parties.PartyType;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -119,6 +121,15 @@ public class PartyManager {
      */
     public Map<String, Party> getParties() {
         return parties;
+    }
+
+    /**
+     * Gets a string list of the parties in the manager.
+     *
+     * @return A string list of all of the manager's parties.
+     */
+    public List<String> getPartyList() {
+        return new ArrayList<>(parties.keySet());
     }
 
     /**

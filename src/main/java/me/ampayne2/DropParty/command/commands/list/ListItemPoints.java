@@ -24,15 +24,25 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import java.util.List;
+
+/**
+ * Lists the item points of a drop party.
+ */
 public class ListItemPoints extends DPCommand {
     private final DropParty dropParty;
 
     public ListItemPoints(DropParty dropParty) {
-        super(dropParty, "itempoints", new Permission("dropparty.list.itempoints", PermissionDefault.TRUE), 1, false);
+        super(dropParty, "itempoints", "/dp list itempoints <party>", new Permission("dropparty.list.itempoints", PermissionDefault.TRUE), 1, false);
         this.dropParty = dropParty;
     }
 
     @Override
     public void execute(String command, CommandSender sender, String[] args) {
+    }
+
+    @Override
+    public List<String> getTabCompleteList(String[] args) {
+        return dropParty.getPartyManager().getPartyList();
     }
 }

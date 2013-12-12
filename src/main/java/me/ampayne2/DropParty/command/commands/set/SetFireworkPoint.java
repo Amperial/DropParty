@@ -26,11 +26,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import java.util.List;
+
+/**
+ * Sets the sender to firework point selection mode.
+ */
 public class SetFireworkPoint extends DPCommand {
     private final DropParty dropParty;
 
     public SetFireworkPoint(DropParty dropParty) {
-        super(dropParty, "fireworkpoint", new Permission("dropparty.set.fireworkpoint", PermissionDefault.OP), 1, true);
+        super(dropParty, "fireworkpoint", "/dp set fireworkpoint <party>", new Permission("dropparty.set.fireworkpoint", PermissionDefault.OP), 1, true);
         this.dropParty = dropParty;
     }
 
@@ -40,5 +45,10 @@ public class SetFireworkPoint extends DPCommand {
         if (dropParty.getPartyManager().hasParty(partyName)) {
             dropParty.getPlayerModeController().setPlayerMode((Player) sender, PlayerMode.SETTING_FIREWORK_POINTS, dropParty.getPartyManager().getParty(partyName));
         }
+    }
+
+    @Override
+    public List<String> getTabCompleteList(String[] args) {
+        return dropParty.getPartyManager().getPartyList();
     }
 }

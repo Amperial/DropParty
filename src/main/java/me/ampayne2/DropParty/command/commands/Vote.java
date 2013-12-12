@@ -16,28 +16,25 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.dropparty.command.commands.remove;
+package me.ampayne2.dropparty.command.commands;
 
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.command.DPCommand;
-import me.ampayne2.dropparty.modes.PlayerMode;
 import me.ampayne2.dropparty.parties.Party;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Removes a firework point of a certain id or sets the sender to firework point removal mode.
+ * Votes for a drop party.
  */
-public class RemoveFireworkPoint extends DPCommand {
+public class Vote extends DPCommand {
     private final DropParty dropParty;
 
-    public RemoveFireworkPoint(DropParty dropParty) {
-        super(dropParty, "fireworkpoint", "/dp remove fireworkpoint <party> [id]", new Permission("dropparty.remove.fireworkpoint", PermissionDefault.OP), 1, 2, true);
+    public Vote(DropParty dropParty) {
+        super(dropParty, "vote", "/dp vote <party>", new Permission("dropparty.vote", PermissionDefault.TRUE), 1, true);
         this.dropParty = dropParty;
     }
 
@@ -46,19 +43,18 @@ public class RemoveFireworkPoint extends DPCommand {
         String partyName = args[0];
         if (dropParty.getPartyManager().hasParty(partyName)) {
             Party party = dropParty.getPartyManager().getParty(partyName);
-            if (args.length == 1) {
-                dropParty.getPlayerModeController().setPlayerMode((Player) sender, PlayerMode.REMOVING_FIREWORK_POINTS, party);
-            } else {
-                try {
-                    int id = Integer.parseInt(args[1]);
-                    if (party.getFireworkPoints().size() > id) {
-                        // TODO: Remove fireworkpoint of id
-                    } else {
-                        dropParty.getMessage().sendMessage(sender, "error.fireworkpoint.iddoesntexist", args[1], partyName);
-                    }
-                } catch (NumberFormatException e) {
-                    dropParty.getMessage().sendMessage(sender, "error.numberformat");
+            if (party.canVoteToStart()) {
+                String playerName = sender.getName();
+                if (party.isRunning()) {
+                    dropParty.getMessage().sendMessage(sender, "error.party.alreadyrunning", partyName);
+                } else if (party.hasVoted(playerName)) {
+                    dropParty.getMessage().sendMessage(sender, "error.party.alreadyvoted", partyName);
+                } else {
+                    party.addVote(playerName);
+                    dropParty.getMessage().sendMessage(sender, "party.vote", partyName);
                 }
+            } else {
+                dropParty.getMessage().sendMessage(sender, "error.party.cannotvote", partyName);
             }
         } else {
             dropParty.getMessage().sendMessage(sender, "error.party.doesntexist", partyName);
@@ -67,6 +63,6 @@ public class RemoveFireworkPoint extends DPCommand {
 
     @Override
     public List<String> getTabCompleteList(String[] args) {
-        return args.length == 0 ? dropParty.getPartyManager().getPartyList() : new ArrayList<String>();
+        return dropParty.getPartyManager().getPartyList();
     }
 }

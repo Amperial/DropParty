@@ -20,19 +20,91 @@ package me.ampayne2.dropparty.command.commands.set;
 
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.command.DPCommand;
+import me.ampayne2.dropparty.parties.Party;
+import me.ampayne2.dropparty.parties.PartySetting;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Sets a party setting of a drop party.
+ */
 public class SetPartySetting extends DPCommand {
     private final DropParty dropParty;
 
     public SetPartySetting(DropParty dropParty) {
-        super(dropParty, "partysetting", new Permission("dropparty.set.partysetting", PermissionDefault.OP), 2, false);
+        super(dropParty, "partysetting", "/dp set partysetting <party> <setting> <value>", new Permission("dropparty.set.partysetting", PermissionDefault.OP), 3, false);
         this.dropParty = dropParty;
     }
 
     @Override
     public void execute(String command, CommandSender sender, String[] args) {
+        try {
+            String partyName = args[0];
+            PartySetting partySetting = PartySetting.fromName(args[1]);
+
+            if (dropParty.getPartyManager().hasParty(partyName)) {
+                Party party = dropParty.getPartyManager().getParty(partyName);
+                String value = args[2];
+                switch (partySetting) {
+                    case MAX_LENGTH:
+                        party.setMaxLength(Long.parseLong(value));
+                        break;
+                    case ITEM_DELAY:
+                        party.setItemDelay(Long.parseLong(value));
+                        break;
+                    case MAX_STACK_SIZE:
+                        party.setMaxStackSize(Integer.parseInt(value));
+                        break;
+                    case FIREWORK_AMOUNT:
+                        party.setFireworkAmount(Integer.parseInt(value));
+                        break;
+                    case FIREWORK_DELAY:
+                        party.setFireworkDelay(Long.parseLong(value));
+                        break;
+                    case START_PERIODICALLY:
+                        if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
+                            party.setStartPeriodically(Boolean.parseBoolean(value));
+                        } else {
+                            dropParty.getMessage().sendMessage(sender, "error.booleanformat");
+                        }
+                        break;
+                    case START_PERIOD:
+                        party.setStartPeriod(Long.parseLong(value));
+                        break;
+                    case VOTE_TO_START:
+                        if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
+                            party.setVoteToStart(Boolean.parseBoolean(value));
+                        } else {
+                            dropParty.getMessage().sendMessage(sender, "error.booleanformat");
+                        }
+                        break;
+                    case REQUIRED_VOTES:
+                        party.setRequiredVotes(Integer.parseInt(value));
+                }
+            } else {
+                dropParty.getMessage().sendMessage(sender, "error.party.doesntexist", partyName);
+            }
+        } catch (Exception e) {
+            if (e instanceof NumberFormatException) {
+                dropParty.getMessage().sendMessage(sender, "error.numberformat");
+            } else if (e instanceof IllegalArgumentException) {
+                dropParty.getMessage().sendMessage(sender, "error.party.notapartysetting");
+            }
+        }
+    }
+
+    @Override
+    public List<String> getTabCompleteList(String[] args) {
+        if (args.length == 0) {
+            return dropParty.getPartyManager().getPartyList();
+        } else if (args.length == 1) {
+            return PartySetting.getSettingTypes();
+        } else {
+            return new ArrayList<>();
+        }
     }
 }

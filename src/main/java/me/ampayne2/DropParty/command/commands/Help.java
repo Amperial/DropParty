@@ -16,23 +16,39 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.dropparty.command.commands.set;
+package me.ampayne2.dropparty.command.commands;
 
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.command.DPCommand;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
-public class SetFireworkSetting extends DPCommand {
+/**
+ * Gives the sender a list of commands.
+ */
+public class Help extends DPCommand {
     private final DropParty dropParty;
 
-    public SetFireworkSetting(DropParty dropParty) {
-        super(dropParty, "fireworksetting", new Permission("dropparty.set.fireworksetting", PermissionDefault.OP), 2, false);
+    public Help(DropParty dropParty) {
+        super(dropParty, "", "/dp", new Permission("dropparty.help", PermissionDefault.TRUE), 0, 1, false);
         this.dropParty = dropParty;
     }
 
     @Override
     public void execute(String command, CommandSender sender, String[] args) {
+        int pageNumber = 1;
+        if (args.length == 1) {
+            try {
+                int argNumber = Integer.parseInt(args[0]);
+                if (argNumber > 0) {
+                    pageNumber = argNumber;
+                }
+            } catch (NumberFormatException e) {
+                dropParty.getMessage().sendMessage(sender, "error.numberformat");
+            }
+        }
+        sender.sendMessage(ChatColor.GOLD + "<-------<| " + ChatColor.DARK_PURPLE + "Commands: Page " + pageNumber + ChatColor.GOLD + "|>------->");
     }
 }

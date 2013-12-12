@@ -19,13 +19,12 @@
 package me.ampayne2.dropparty.command;
 
 import me.ampayne2.dropparty.DropParty;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The base layout for a command.
@@ -56,7 +55,11 @@ public class Command {
         this.minArgsLength = minArgsLength;
         this.maxArgsLength = maxArgsLength;
         this.playerOnly = playerOnly;
-        dropParty.getServer().getPluginManager().addPermission(permission);
+        try {
+            dropParty.getServer().getPluginManager().addPermission(permission);
+        } catch (IllegalArgumentException e) {
+            dropParty.getMessage().debug(e);
+        }
     }
 
     /**
@@ -152,6 +155,16 @@ public class Command {
     }
 
     /**
+     * Gets a child command of the command.
+     *
+     * @param name The name of the child command.
+     * @return The child command.
+     */
+    public Command getChildCommand(String name) {
+        return children.get(name.toLowerCase());
+    }
+
+    /**
      * Gets the command's children.
      *
      * @return The command's children.
@@ -170,47 +183,51 @@ public class Command {
     }
 
     /**
+     * Gets the tab completion list of the command.
+     *
+     * @param args The args already entered.
+     * @return The tab completion list of the command.
+     */
+    public List<String> getTabCompleteList(String[] args) {
+        return new ArrayList<>(children.keySet());
+    }
+
+    /**
      * The command executor
      *
      * @param sender The sender of the command
      * @param args   The arguments sent with the command
      */
     public void execute(String command, CommandSender sender, String[] args) {
-        if (hasChildCommand(command)) {
-            Command entry = children.get(command.toLowerCase());
-            if (entry instanceof DPCommand) {
-                if ((entry.getMinArgsLength() <= args.length || entry.getMinArgsLength() == -1) && (entry.getMaxArgsLength() >= args.length || entry.getMaxArgsLength() == -1)) {
-                    if (sender.hasPermission(entry.getPermission())) {
-                        if (sender instanceof Player || !entry.isPlayerOnly()) {
-                            entry.execute(command, sender, args);
-                        } else {
-                            dropParty.getMessage().sendMessage(sender, "commands.notaplayer");
-                        }
+        Command entry = children.get(command.toLowerCase());
+        if (entry instanceof DPCommand) {
+            if ((entry.getMinArgsLength() <= args.length || entry.getMinArgsLength() == -1) && (entry.getMaxArgsLength() >= args.length || entry.getMaxArgsLength() == -1)) {
+                if (sender.hasPermission(entry.getPermission())) {
+                    if (sender instanceof Player || !entry.isPlayerOnly()) {
+                        entry.execute(command, sender, args);
                     } else {
-                        dropParty.getMessage().sendMessage(sender, "permissions.nopermission", command);
+                        dropParty.getMessage().sendMessage(sender, "error.command.notaplayer");
                     }
                 } else {
-                    dropParty.getMessage().sendMessage(sender, "commandusages." + command);
+                    dropParty.getMessage().sendMessage(sender, "permissions.nopermission", command);
                 }
             } else {
-                String subSubCommand = "";
-                if (args.length != 0) {
-                    subSubCommand = args[0];
-                }
-
-                if (entry.hasChildCommand(subSubCommand)) {
-                    String[] newArgs;
-                    if (args.length == 0) {
-                        newArgs = args;
-                    } else {
-                        newArgs = new String[args.length - 1];
-                        System.arraycopy(args, 1, newArgs, 0, args.length - 1);
-                    }
-                    entry.execute(subSubCommand, sender, newArgs);
+                dropParty.getMessage().sendRawMessage(sender, ChatColor.DARK_RED + "Usage: " + ((DPCommand) entry).getCommandUsage());
+            }
+        } else {
+            String subCommand = args.length == 0 ? "" : args[0];
+            if (entry.hasChildCommand(subCommand)) {
+                String[] newArgs;
+                if (args.length == 0) {
+                    newArgs = args;
                 } else {
-                    dropParty.getMessage().sendMessage(sender, "commands.invalidsubcommand", "\"" + subSubCommand + "\"", "\"" + command + "\"");
-                    dropParty.getMessage().sendMessage(sender, "commands.validsubcommands", entry.getChildCommandList());
+                    newArgs = new String[args.length - 1];
+                    System.arraycopy(args, 1, newArgs, 0, args.length - 1);
                 }
+                entry.execute(subCommand, sender, newArgs);
+            } else {
+                dropParty.getMessage().sendMessage(sender, "error.command.invalidsubcommand", "\"" + subCommand + "\"", "\"" + command + "\"");
+                dropParty.getMessage().sendMessage(sender, "error.command.validsubcommands", entry.getChildCommandList());
             }
         }
     }

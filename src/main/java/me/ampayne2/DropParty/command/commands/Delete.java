@@ -24,6 +24,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import java.util.List;
+
 /**
  * Deletes a drop party.
  */
@@ -31,7 +33,7 @@ public class Delete extends DPCommand {
     private final DropParty dropParty;
 
     public Delete(DropParty dropParty) {
-        super(dropParty, "delete", new Permission("dropparty.delete", PermissionDefault.OP), 1, true);
+        super(dropParty, "delete", "/dp delete <party>", new Permission("dropparty.delete", PermissionDefault.OP), 1, true);
         this.dropParty = dropParty;
     }
 
@@ -39,10 +41,15 @@ public class Delete extends DPCommand {
     public void execute(String command, CommandSender sender, String[] args) {
         String partyName = args[0];
         if (dropParty.getPartyManager().hasParty(partyName)) {
-            dropParty.getPartyManager().removeParty(args[0]);
+            dropParty.getPartyManager().removeParty(partyName);
             dropParty.getMessage().sendMessage(sender, "party.delete", partyName);
         } else {
             dropParty.getMessage().sendMessage(sender, "error.party.doesntexist", partyName);
         }
+    }
+
+    @Override
+    public List<String> getTabCompleteList(String[] args) {
+        return dropParty.getPartyManager().getPartyList();
     }
 }

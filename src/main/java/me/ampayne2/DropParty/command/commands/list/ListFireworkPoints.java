@@ -24,15 +24,25 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import java.util.List;
+
+/**
+ * Lists the firework points of a drop party.
+ */
 public class ListFireworkPoints extends DPCommand {
     private final DropParty dropParty;
 
     public ListFireworkPoints(DropParty dropParty) {
-        super(dropParty, "fireworkpoints", new Permission("dropparty.list.fireworkpoints", PermissionDefault.TRUE), 1, false);
+        super(dropParty, "fireworkpoints", "/dp list fireworkpoints <party>", new Permission("dropparty.list.fireworkpoints", PermissionDefault.TRUE), 1, false);
         this.dropParty = dropParty;
     }
 
     @Override
     public void execute(String command, CommandSender sender, String[] args) {
+    }
+
+    @Override
+    public List<String> getTabCompleteList(String[] args) {
+        return dropParty.getPartyManager().getPartyList();
     }
 }

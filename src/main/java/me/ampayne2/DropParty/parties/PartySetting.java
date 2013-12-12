@@ -21,63 +21,56 @@ package me.ampayne2.dropparty.parties;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Types of drop parties.
- */
-public enum PartyType {
-    CHEST_PARTY("Chest", ChestParty.class),
-    CUSTOM_PARTY("Custom", CustomParty.class);
+public enum PartySetting {
+    MAX_LENGTH("maxlength"),
+    ITEM_DELAY("itemdelay"),
+    MAX_STACK_SIZE("maxstacksize"),
+    FIREWORK_AMOUNT("fireworkamount"),
+    FIREWORK_DELAY("fireworkdelay"),
+    START_PERIODICALLY("startperiodically"),
+    START_PERIOD("startperiod"),
+    VOTE_TO_START("votetostart"),
+    REQUIRED_VOTES("requiredvotes");
 
     private final String name;
-    private final Class<? extends Party> clazz;
 
-    private PartyType(String name, Class<? extends Party> clazz) {
+    private PartySetting(String name) {
         this.name = name;
-        this.clazz = clazz;
     }
 
     /**
-     * Gets the name that represents the party type.
+     * Gets the name that represents the party setting.
      *
-     * @return The party type's name.
+     * @return The party setting's name.
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Gets the class of the party type.
-     *
-     * @return The party type's class.
-     */
-    public Class<? extends Party> getPartyClass() {
-        return clazz;
-    }
-
-    /**
-     * Gets a party type from its name.
+     * Gets a party setting from its name.
      *
      * @param name The name.
-     * @return The party type.
+     * @return The party setting.
      */
-    public static PartyType fromName(String name) {
-        for (PartyType partyType : PartyType.values()) {
-            if (partyType.getName().equalsIgnoreCase(name)) {
-                return partyType;
+    public static PartySetting fromName(String name) {
+        for (PartySetting partySetting : PartySetting.values()) {
+            if (partySetting.getName().equalsIgnoreCase(name)) {
+                return partySetting;
             }
         }
         return null;
     }
 
     /**
-     * Gets the list of party types.
+     * Gets the list of party settings.
      *
-     * @return The list of party types.
+     * @return The list of party settings.
      */
-    public static List<String> getPartyTypes() {
+    public static List<String> getSettingTypes() {
         List<String> list = new ArrayList<>();
-        for (PartyType partyType : PartyType.values()) {
-            list.add(partyType.getName());
+        for (PartySetting partySetting : PartySetting.values()) {
+            list.add(partySetting.getName());
         }
         return list;
     }

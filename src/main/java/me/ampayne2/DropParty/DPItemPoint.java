@@ -83,11 +83,9 @@ public class DPItemPoint {
             if (parts.length == 2) {
                 String partyName = parts[0];
                 if (partyName.equals(party.getName())) {
-                    System.out.println("itempoint loaded");
                     return new DPItemPoint(dropParty, party, DPUtils.stringToLocation(parts[1]));
                 }
             }
-            System.out.println("itempoint not loaded");
             return null;
         } catch (Exception e) {
             return null;

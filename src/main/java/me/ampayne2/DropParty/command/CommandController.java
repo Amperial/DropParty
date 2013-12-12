@@ -25,15 +25,19 @@ import me.ampayne2.dropparty.command.commands.remove.RemoveChest;
 import me.ampayne2.dropparty.command.commands.remove.RemoveFireworkPoint;
 import me.ampayne2.dropparty.command.commands.remove.RemoveItemPoint;
 import me.ampayne2.dropparty.command.commands.set.*;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
+import org.bukkit.event.Listener;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The drop party command executor.
  */
-public class CommandController implements CommandExecutor {
+public class CommandController implements TabExecutor, Listener {
     private final DropParty dropParty;
     private final Command mainCommand;
 
@@ -44,32 +48,85 @@ public class CommandController implements CommandExecutor {
      */
     public CommandController(DropParty dropParty) {
         this.dropParty = dropParty;
-        mainCommand = new Command(dropParty, "dropparty", new Permission("dropparty.all", PermissionDefault.OP), false).addChildCommand(new Command(dropParty, "set", new Permission("dropparty.set.all", PermissionDefault.OP), false).addChildCommand(new SetChest(dropParty)).addChildCommand(new SetFireworkPoint(dropParty)).addChildCommand(new SetFireworkSetting(dropParty)).addChildCommand(new SetItemPoint(dropParty)).addChildCommand(new SetPartySetting(dropParty)).addChildCommand(new SetTeleport(dropParty))).addChildCommand(new Command(dropParty, "remove", new Permission("dropparty.remove.all", PermissionDefault.OP), false).addChildCommand(new RemoveChest(dropParty)).addChildCommand(new RemoveFireworkPoint(dropParty)).addChildCommand(new RemoveItemPoint(dropParty))).addChildCommand(new Command(dropParty, "list", new Permission("dropparty.list.all", PermissionDefault.TRUE), false).addChildCommand(new ListChests(dropParty)).addChildCommand(new ListFireworkPoints(dropParty)).addChildCommand(new ListItemPoints(dropParty)).addChildCommand(new ListParties(dropParty)).addChildCommand(new ListSettings(dropParty))).addChildCommand(new About(dropParty)).addChildCommand(new Create(dropParty)).addChildCommand(new Delete(dropParty)).addChildCommand(new Start(dropParty)).addChildCommand(new Stop(dropParty)).addChildCommand(new Teleport(dropParty));
+        dropParty.getServer().getPluginManager().registerEvents(this, dropParty);
+
+        mainCommand = new Command(dropParty, "dropparty", new Permission("dropparty.all", PermissionDefault.OP), false)
+                .addChildCommand(new Command(dropParty, "set", new Permission("dropparty.set.all", PermissionDefault.OP), false)
+                        .addChildCommand(new SetChest(dropParty))
+                        .addChildCommand(new SetFireworkPoint(dropParty))
+                        .addChildCommand(new SetItemPoint(dropParty))
+                        .addChildCommand(new SetPartySetting(dropParty))
+                        .addChildCommand(new SetTeleport(dropParty)))
+                .addChildCommand(new Command(dropParty, "remove", new Permission("dropparty.remove.all", PermissionDefault.OP), false)
+                        .addChildCommand(new RemoveChest(dropParty))
+                        .addChildCommand(new RemoveFireworkPoint(dropParty))
+                        .addChildCommand(new RemoveItemPoint(dropParty)))
+                .addChildCommand(new Command(dropParty, "list", new Permission("dropparty.list.all", PermissionDefault.TRUE), false)
+                        .addChildCommand(new ListChests(dropParty)
+                        ).addChildCommand(new ListFireworkPoints(dropParty))
+                        .addChildCommand(new ListItemPoints(dropParty))
+                        .addChildCommand(new ListParties(dropParty))
+                        .addChildCommand(new ListSettings(dropParty)))
+                .addChildCommand(new Help(dropParty))
+                .addChildCommand(new About(dropParty))
+                .addChildCommand(new Create(dropParty))
+                .addChildCommand(new Delete(dropParty))
+                .addChildCommand(new Start(dropParty))
+                .addChildCommand(new Stop(dropParty))
+                .addChildCommand(new Teleport(dropParty))
+                .addChildCommand(new Vote(dropParty))
+                .addChildCommand(new ResetVotes(dropParty));
     }
 
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
-        String subCommand = "";
-        if (args.length > 0) {
-            subCommand = args[0];
-        }
         if (!cmd.getName().equalsIgnoreCase("dropparty")) {
             return false;
-        } else if (subCommand.equals("") && mainCommand.hasChildCommand(subCommand)) {
-            mainCommand.execute(subCommand, sender, args);
-        } else if (mainCommand.hasChildCommand(subCommand)) {
-            String[] newArgs;
-            if (args.length == 1) {
-                newArgs = new String[0];
+        }
+        String subCommand = args.length > 0 ? args[0] : "";
+        if (mainCommand.hasChildCommand(subCommand)) {
+            if (subCommand.equals("")) {
+                mainCommand.execute(subCommand, sender, args);
             } else {
-                newArgs = new String[args.length - 1];
-                System.arraycopy(args, 1, newArgs, 0, args.length - 1);
+                String[] newArgs;
+                if (args.length == 1) {
+                    newArgs = new String[0];
+                } else {
+                    newArgs = new String[args.length - 1];
+                    System.arraycopy(args, 1, newArgs, 0, args.length - 1);
+                }
+                mainCommand.execute(subCommand, sender, newArgs);
             }
-            mainCommand.execute(subCommand, sender, newArgs);
         } else {
-            dropParty.getMessage().sendMessage(sender, "commands.invalidsubcommand", "\"" + subCommand + "\"", "\"dropparty\"");
-            dropParty.getMessage().sendMessage(sender, "commands.validsubcommands", mainCommand.getChildCommandList());
+            dropParty.getMessage().sendMessage(sender, "error.command.invalidsubcommand", "\"" + subCommand + "\"", "\"dropparty\"");
+            dropParty.getMessage().sendMessage(sender, "error.command.validsubcommands", mainCommand.getChildCommandList());
         }
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
+        if (cmd.getName().equalsIgnoreCase("dropparty")) {
+            Command command = mainCommand;
+            if (args.length > 0) {
+                int commandAmount = 1;
+                for (String arg : args) {
+                    if (command.hasChildCommand(arg)) {
+                        command = command.getChildCommand(arg);
+                        commandAmount++;
+                    }
+                }
+                String[] newArgs;
+                if (args.length == 1) {
+                    newArgs = new String[0];
+                } else {
+                    newArgs = new String[args.length - commandAmount];
+                    System.arraycopy(args, commandAmount, newArgs, 0, args.length - commandAmount);
+                }
+                return command.getTabCompleteList(newArgs);
+            }
+            return command.getTabCompleteList(args);
+        }
+        return new ArrayList<>();
     }
 }
