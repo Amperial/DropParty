@@ -34,8 +34,8 @@ import java.util.Map;
  */
 public class PlayerModeController implements Listener {
     private final DropParty dropParty;
-    private Map<String, PlayerMode> playerModes = new HashMap<>();
-    private Map<String, Party> playerModeParties = new HashMap<>();
+    private final Map<String, PlayerMode> playerModes = new HashMap<>();
+    private final Map<String, Party> playerModeParties = new HashMap<>();
 
     /**
      * Creates a new player mode controller.

@@ -21,24 +21,23 @@ package me.ampayne2.dropparty.command.commands.set;
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.command.DPCommand;
 import me.ampayne2.dropparty.modes.PlayerMode;
-import me.ampayne2.dropparty.parties.ChestParty;
 import me.ampayne2.dropparty.parties.Party;
+import me.ampayne2.dropparty.parties.PartyType;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Sets the sender to chest selection mode.
+ * A command that sets the sender to chest selection mode.
  */
 public class SetChest extends DPCommand {
     private final DropParty dropParty;
 
     public SetChest(DropParty dropParty) {
-        super(dropParty, "chest", "/dp set chest <party>", new Permission("dropparty.set.chest", PermissionDefault.OP), 1, true);
+        super(dropParty, "chest", "Sets you to chest selection mode.", "/dp set chest <party>", new Permission("dropparty.set.chest", PermissionDefault.OP), 1, true);
         this.dropParty = dropParty;
     }
 
@@ -47,20 +46,18 @@ public class SetChest extends DPCommand {
         String partyName = args[0];
         if (dropParty.getPartyManager().hasParty(partyName)) {
             Party party = dropParty.getPartyManager().getParty(partyName);
-            if (party instanceof ChestParty) {
+            if (party.isType(PartyType.CHEST_PARTY)) {
                 dropParty.getPlayerModeController().setPlayerMode((Player) sender, PlayerMode.SETTING_CHESTS, party);
+            } else {
+                dropParty.getMessage().sendMessage(sender, "error.chest.notachestparty", partyName);
             }
+        } else {
+            dropParty.getMessage().sendMessage(sender, "error.party.doesntexist", partyName);
         }
     }
 
     @Override
     public List<String> getTabCompleteList(String[] args) {
-        List<String> list = new ArrayList<>();
-        for (Party party : dropParty.getPartyManager().getParties().values()) {
-            if (party instanceof ChestParty) {
-                list.add(party.getName());
-            }
-        }
-        return list;
+        return dropParty.getPartyManager().getPartyList(PartyType.CHEST_PARTY);
     }
 }

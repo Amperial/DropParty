@@ -26,21 +26,25 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
 /**
- * Gives the sender some information about drop party.
+ * A command that lists some information about drop party.
  */
 public class About extends DPCommand {
     private final DropParty dropParty;
+    private final static String HEADER = ChatColor.GOLD + "<-------<| " + ChatColor.DARK_PURPLE + "About Drop Party " + ChatColor.GOLD + "|>------->";
+    private final static String URL = ChatColor.GRAY + "dev.bukkit.org/server-mods/dropparty/";
+    private final static String AUTHOR = ChatColor.GRAY + "Author: ampayne2";
+    private final static String VERSION = ChatColor.GRAY + "Version: ";
 
     public About(DropParty dropParty) {
-        super(dropParty, "about", "/dp about", new Permission("dropparty.about", PermissionDefault.TRUE), false);
+        super(dropParty, "", "Lists some information about drop party.", "/dp", new Permission("dropparty.about", PermissionDefault.TRUE), false);
         this.dropParty = dropParty;
     }
 
     @Override
     public void execute(String command, CommandSender sender, String[] args) {
-        sender.sendMessage(ChatColor.GOLD + "<-------<| " + ChatColor.DARK_PURPLE + "About Drop Party " + ChatColor.GOLD + "|>------->");
-        sender.sendMessage(ChatColor.GRAY + "dev.bukkit.org/server-mods/dropparty/");
-        sender.sendMessage(ChatColor.GRAY + "Author: ampayne2");
-        sender.sendMessage(ChatColor.GRAY + "Version: " + dropParty.getDescription().getVersion());
+        sender.sendMessage(HEADER);
+        sender.sendMessage(URL);
+        sender.sendMessage(AUTHOR);
+        sender.sendMessage(VERSION + dropParty.getDescription().getVersion());
     }
 }

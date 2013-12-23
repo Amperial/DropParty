@@ -32,13 +32,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Creates a drop party.
+ * A command that creates a drop party.
  */
 public class Create extends DPCommand {
     private final DropParty dropParty;
 
     public Create(DropParty dropParty) {
-        super(dropParty, "create", "/dp create <party> <type>", new Permission("dropparty.create", PermissionDefault.OP), 2, true);
+        super(dropParty, "create", "Creates a drop party.", "/dp create <party> <type>", new Permission("dropparty.create", PermissionDefault.OP), 2, true);
         this.dropParty = dropParty;
     }
 
@@ -64,7 +64,7 @@ public class Create extends DPCommand {
     @Override
     public List<String> getTabCompleteList(String[] args) {
         if (args.length == 1) {
-            return PartyType.getPartyTypes();
+            return PartyType.getPartyTypeNames();
         } else {
             return new ArrayList<>();
         }

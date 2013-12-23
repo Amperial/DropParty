@@ -28,13 +28,13 @@ import org.bukkit.permissions.PermissionDefault;
 import java.util.List;
 
 /**
- * Resets the votes of a drop party.
+ * A command that resets the votes of a drop party.
  */
 public class ResetVotes extends DPCommand {
     private final DropParty dropParty;
 
     public ResetVotes(DropParty dropParty) {
-        super(dropParty, "resetvotes", "/dp resetvotes <party>", new Permission("dropparty.resetvotes", PermissionDefault.OP), 1, true);
+        super(dropParty, "resetvotes", "Resets the votes of a drop party.", "/dp resetvotes <party>", new Permission("dropparty.resetvotes", PermissionDefault.OP), 1, true);
         this.dropParty = dropParty;
     }
 

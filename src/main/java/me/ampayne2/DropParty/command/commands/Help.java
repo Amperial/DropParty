@@ -26,13 +26,13 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
 /**
- * Gives the sender a list of commands.
+ * A command that lists all of the drop party commands.
  */
 public class Help extends DPCommand {
     private final DropParty dropParty;
 
     public Help(DropParty dropParty) {
-        super(dropParty, "", "/dp", new Permission("dropparty.help", PermissionDefault.TRUE), 0, 1, false);
+        super(dropParty, "help", "Lists all of the drop party commands.", "/dp", new Permission("dropparty.help", PermissionDefault.TRUE), 0, 1, false);
         this.dropParty = dropParty;
     }
 

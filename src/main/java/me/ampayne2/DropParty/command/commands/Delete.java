@@ -27,13 +27,13 @@ import org.bukkit.permissions.PermissionDefault;
 import java.util.List;
 
 /**
- * Deletes a drop party.
+ * A command that deletes a drop party.
  */
 public class Delete extends DPCommand {
     private final DropParty dropParty;
 
     public Delete(DropParty dropParty) {
-        super(dropParty, "delete", "/dp delete <party>", new Permission("dropparty.delete", PermissionDefault.OP), 1, true);
+        super(dropParty, "delete", "Deletes a drop party.", "/dp delete <party>", new Permission("dropparty.delete", PermissionDefault.OP), 1, true);
         this.dropParty = dropParty;
     }
 

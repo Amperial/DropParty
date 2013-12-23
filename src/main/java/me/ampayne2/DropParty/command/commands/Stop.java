@@ -28,13 +28,13 @@ import org.bukkit.permissions.PermissionDefault;
 import java.util.List;
 
 /**
- * Stops a drop party.
+ * A command that stops a drop party.
  */
 public class Stop extends DPCommand {
     private final DropParty dropParty;
 
     public Stop(DropParty dropParty) {
-        super(dropParty, "stop", "/dp stop <party>", new Permission("dropparty.stop", PermissionDefault.OP), 1, true);
+        super(dropParty, "stop", "Stops a drop party.", "/dp stop <party>", new Permission("dropparty.stop", PermissionDefault.OP), 1, true);
         this.dropParty = dropParty;
     }
 

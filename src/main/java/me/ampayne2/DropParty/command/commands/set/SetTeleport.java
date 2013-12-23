@@ -28,13 +28,13 @@ import org.bukkit.permissions.PermissionDefault;
 import java.util.List;
 
 /**
- * Sets the teleport of a drop party.
+ * A command that sets the teleport of a drop party.
  */
 public class SetTeleport extends DPCommand {
     private final DropParty dropParty;
 
     public SetTeleport(DropParty dropParty) {
-        super(dropParty, "teleport", "/dp set teleport <party>", new Permission("dropparty.set.teleport", PermissionDefault.OP), 1, true);
+        super(dropParty, "teleport", "Sets the teleport of a drop party.", "/dp set teleport <party>", new Permission("dropparty.set.teleport", PermissionDefault.OP), 1, true);
         this.dropParty = dropParty;
     }
 
@@ -43,6 +43,8 @@ public class SetTeleport extends DPCommand {
         String partyName = args[0];
         if (dropParty.getPartyManager().hasParty(partyName)) {
             dropParty.getPartyManager().getParty(partyName).setTeleport(((Player) sender).getLocation());
+        } else {
+            dropParty.getMessage().sendMessage(sender, "error.party.doesntexist", partyName);
         }
     }
 

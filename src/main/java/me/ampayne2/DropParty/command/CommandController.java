@@ -27,7 +27,6 @@ import me.ampayne2.dropparty.command.commands.remove.RemoveItemPoint;
 import me.ampayne2.dropparty.command.commands.set.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
-import org.bukkit.event.Listener;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
@@ -37,7 +36,7 @@ import java.util.List;
 /**
  * The drop party command executor.
  */
-public class CommandController implements TabExecutor, Listener {
+public class CommandController implements TabExecutor {
     private final DropParty dropParty;
     private final Command mainCommand;
 
@@ -48,7 +47,6 @@ public class CommandController implements TabExecutor, Listener {
      */
     public CommandController(DropParty dropParty) {
         this.dropParty = dropParty;
-        dropParty.getServer().getPluginManager().registerEvents(this, dropParty);
 
         mainCommand = new Command(dropParty, "dropparty", new Permission("dropparty.all", PermissionDefault.OP), false)
                 .addChildCommand(new Command(dropParty, "set", new Permission("dropparty.set.all", PermissionDefault.OP), false)
@@ -62,13 +60,13 @@ public class CommandController implements TabExecutor, Listener {
                         .addChildCommand(new RemoveFireworkPoint(dropParty))
                         .addChildCommand(new RemoveItemPoint(dropParty)))
                 .addChildCommand(new Command(dropParty, "list", new Permission("dropparty.list.all", PermissionDefault.TRUE), false)
-                        .addChildCommand(new ListChests(dropParty)
-                        ).addChildCommand(new ListFireworkPoints(dropParty))
+                        .addChildCommand(new ListChests(dropParty))
+                        .addChildCommand(new ListFireworkPoints(dropParty))
                         .addChildCommand(new ListItemPoints(dropParty))
                         .addChildCommand(new ListParties(dropParty))
                         .addChildCommand(new ListSettings(dropParty)))
-                .addChildCommand(new Help(dropParty))
                 .addChildCommand(new About(dropParty))
+                .addChildCommand(new Help(dropParty))
                 .addChildCommand(new Create(dropParty))
                 .addChildCommand(new Delete(dropParty))
                 .addChildCommand(new Start(dropParty))
@@ -80,28 +78,29 @@ public class CommandController implements TabExecutor, Listener {
 
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
-        if (!cmd.getName().equalsIgnoreCase("dropparty")) {
+        if (cmd.getName().equalsIgnoreCase("dropparty")) {
+            String subCommand = args.length > 0 ? args[0] : "";
+            if (mainCommand.hasChildCommand(subCommand)) {
+                if (subCommand.equals("")) {
+                    mainCommand.execute(subCommand, sender, args);
+                } else {
+                    String[] newArgs;
+                    if (args.length == 1) {
+                        newArgs = new String[0];
+                    } else {
+                        newArgs = new String[args.length - 1];
+                        System.arraycopy(args, 1, newArgs, 0, args.length - 1);
+                    }
+                    mainCommand.execute(subCommand, sender, newArgs);
+                }
+            } else {
+                dropParty.getMessage().sendMessage(sender, "error.command.invalidsubcommand", "\"" + subCommand + "\"", "\"dropparty\"");
+                dropParty.getMessage().sendMessage(sender, "error.command.validsubcommands", mainCommand.getChildCommandList());
+            }
+            return true;
+        } else {
             return false;
         }
-        String subCommand = args.length > 0 ? args[0] : "";
-        if (mainCommand.hasChildCommand(subCommand)) {
-            if (subCommand.equals("")) {
-                mainCommand.execute(subCommand, sender, args);
-            } else {
-                String[] newArgs;
-                if (args.length == 1) {
-                    newArgs = new String[0];
-                } else {
-                    newArgs = new String[args.length - 1];
-                    System.arraycopy(args, 1, newArgs, 0, args.length - 1);
-                }
-                mainCommand.execute(subCommand, sender, newArgs);
-            }
-        } else {
-            dropParty.getMessage().sendMessage(sender, "error.command.invalidsubcommand", "\"" + subCommand + "\"", "\"dropparty\"");
-            dropParty.getMessage().sendMessage(sender, "error.command.validsubcommands", mainCommand.getChildCommandList());
-        }
-        return true;
     }
 
     @Override

@@ -124,12 +124,44 @@ public class PartyManager {
     }
 
     /**
+     * Gets the parties in the manager of a certain type.
+     *
+     * @param partyType The type of party.
+     * @return All of the manager's parties of the type.
+     */
+    public Map<String, Party> getParties(PartyType partyType) {
+        Map<String, Party> partiesOfType = new HashMap<>();
+        for (Party party : parties.values()) {
+            if (party.getType() == partyType) {
+                partiesOfType.put(party.getName(), party);
+            }
+        }
+        return partiesOfType;
+    }
+
+    /**
      * Gets a string list of the parties in the manager.
      *
      * @return A string list of all of the manager's parties.
      */
     public List<String> getPartyList() {
         return new ArrayList<>(parties.keySet());
+    }
+
+    /**
+     * Gets a string list of the parties in the manager of a certain type.
+     *
+     * @param partyType The type of party.
+     * @return A string list of all of the manager's parties of the type.
+     */
+    public List<String> getPartyList(PartyType partyType) {
+        List<String> partiesOfType = new ArrayList<>();
+        for (Party party : parties.values()) {
+            if (party.getType() == partyType) {
+                partiesOfType.add(party.getName());
+            }
+        }
+        return partiesOfType;
     }
 
     /**

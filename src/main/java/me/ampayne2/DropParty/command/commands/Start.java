@@ -28,13 +28,13 @@ import org.bukkit.permissions.PermissionDefault;
 import java.util.List;
 
 /**
- * Starts a drop party.
+ * A command that starts a drop party.
  */
 public class Start extends DPCommand {
     private final DropParty dropParty;
 
     public Start(DropParty dropParty) {
-        super(dropParty, "start", "/dp start <party>", new Permission("dropparty.start", PermissionDefault.OP), 1, true);
+        super(dropParty, "start", "Starts a drop party.", "/dp start <party>", new Permission("dropparty.start", PermissionDefault.OP), 1, true);
         this.dropParty = dropParty;
     }
 

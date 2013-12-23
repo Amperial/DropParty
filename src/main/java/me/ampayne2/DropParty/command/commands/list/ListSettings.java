@@ -27,13 +27,13 @@ import org.bukkit.permissions.PermissionDefault;
 import java.util.List;
 
 /**
- * Lists the party settings of a drop party.
+ * A command that lists the party settings of a drop party.
  */
 public class ListSettings extends DPCommand {
     private final DropParty dropParty;
 
     public ListSettings(DropParty dropParty) {
-        super(dropParty, "settings", "/dp list settings <party>", new Permission("dropparty.list.settings", PermissionDefault.TRUE), 1, false);
+        super(dropParty, "settings", "Lists the settings of a drop party.", "/dp list settings <party>", new Permission("dropparty.list.settings", PermissionDefault.TRUE), 1, false);
         this.dropParty = dropParty;
     }
 

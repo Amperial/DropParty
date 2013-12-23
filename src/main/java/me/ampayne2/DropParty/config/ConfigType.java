@@ -19,7 +19,7 @@
 package me.ampayne2.dropparty.config;
 
 /**
- * Types of custom drop party configs.
+ * An enumeration of the drop party custom config types.
  */
 public enum ConfigType {
     MESSAGE("Messages.yml"),

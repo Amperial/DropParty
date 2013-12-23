@@ -25,13 +25,13 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
 /**
- * Lists the drop parties in the party manager.
+ * A command that lists the drop parties in the party manager.
  */
 public class ListParties extends DPCommand {
     private final DropParty dropParty;
 
     public ListParties(DropParty dropParty) {
-        super(dropParty, "parties", "/dp list parties", new Permission("dropparty.list.parties", PermissionDefault.TRUE), 0, false);
+        super(dropParty, "parties", "Lists all of the drop parties.", "/dp list parties", new Permission("dropparty.list.parties", PermissionDefault.TRUE), 0, false);
         this.dropParty = dropParty;
     }
 

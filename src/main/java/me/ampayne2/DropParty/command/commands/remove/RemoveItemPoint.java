@@ -31,13 +31,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Removes an item point of a certain id or sets the sender to item point removal mode.
+ * A command that removes an item point of a certain id or sets the sender to item point removal mode.
  */
 public class RemoveItemPoint extends DPCommand {
     private final DropParty dropParty;
 
     public RemoveItemPoint(DropParty dropParty) {
-        super(dropParty, "itempoint", "/dp remove itempoint <party> [id]", new Permission("dropparty.remove.itempoint", PermissionDefault.OP), 1, 2, true);
+        super(dropParty, "itempoint", "Removes an item point or sets you to item point removal mode.", "/dp remove itempoint <party> [id]", new Permission("dropparty.remove.itempoint", PermissionDefault.OP), 1, 2, true);
         this.dropParty = dropParty;
     }
 

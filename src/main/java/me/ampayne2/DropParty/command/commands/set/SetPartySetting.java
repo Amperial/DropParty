@@ -30,13 +30,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Sets a party setting of a drop party.
+ * A command that sets a party setting of a drop party.
  */
 public class SetPartySetting extends DPCommand {
     private final DropParty dropParty;
 
     public SetPartySetting(DropParty dropParty) {
-        super(dropParty, "partysetting", "/dp set partysetting <party> <setting> <value>", new Permission("dropparty.set.partysetting", PermissionDefault.OP), 3, false);
+        super(dropParty, "partysetting", "Sets a party setting of a drop party.", "/dp set partysetting <party> <setting> <value>", new Permission("dropparty.set.partysetting", PermissionDefault.OP), 3, false);
         this.dropParty = dropParty;
     }
 
@@ -102,7 +102,7 @@ public class SetPartySetting extends DPCommand {
         if (args.length == 0) {
             return dropParty.getPartyManager().getPartyList();
         } else if (args.length == 1) {
-            return PartySetting.getSettingTypes();
+            return PartySetting.getPartySettingNames();
         } else {
             return new ArrayList<>();
         }

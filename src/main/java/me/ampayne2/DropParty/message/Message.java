@@ -32,15 +32,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Manages message sending, logging, and debugging.
+ * Manages drop party message sending, logging, and debugging.
  */
 public class Message {
-    private final DropParty dropParty;
     private final boolean debug;
     private final Logger log;
-    private String messagePrefix = ChatColor.GOLD + "[" + ChatColor.DARK_PURPLE + "Drop Party" + ChatColor.GOLD + "] " + ChatColor.GRAY;
-    private Map<String, String> messages = new HashMap<>();
-    private Map<Class<?>, RecipientHandler> recipientHandlers = new HashMap<>();
+    private final String messagePrefix;
+    private final Map<String, String> messages = new HashMap<>();
+    private final Map<Class<?>, RecipientHandler> recipientHandlers = new HashMap<>();
 
     /**
      * Creates a new message manager.
@@ -48,7 +47,6 @@ public class Message {
      * @param dropParty The DropParty instance.
      */
     public Message(DropParty dropParty) {
-        this.dropParty = dropParty;
         debug = dropParty.getConfig().getBoolean("debug", false);
         log = dropParty.getLogger();
         FileConfiguration messageConfig = dropParty.getConfigManager().getConfig(ConfigType.MESSAGE);
@@ -57,6 +55,8 @@ public class Message {
         }
         if (messages.containsKey("prefix")) {
             messagePrefix = ChatColor.translateAlternateColorCodes('&', messages.get("prefix"));
+        } else {
+            messagePrefix = ChatColor.GOLD + "[" + ChatColor.DARK_PURPLE + "Drop Party" + ChatColor.GOLD + "] " + ChatColor.GRAY;
         }
     }
 
@@ -88,11 +88,7 @@ public class Message {
      * @return The message.
      */
     public String getMessage(String path) {
-        String message = messages.get(path);
-        if (message == null) {
-            message = ChatColor.DARK_RED + "No configured message for " + path;
-        }
-        return message;
+        return messages.containsKey(path) ? messages.get(path) : ChatColor.DARK_RED + "No configured message for " + path;
     }
 
     /**

@@ -21,6 +21,9 @@ package me.ampayne2.dropparty.parties;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * An enumeration of the settings of a drop party.
+ */
 public enum PartySetting {
     MAX_LENGTH("maxlength"),
     ITEM_DELAY("itemdelay"),
@@ -33,6 +36,7 @@ public enum PartySetting {
     REQUIRED_VOTES("requiredvotes");
 
     private final String name;
+    private final static List<String> partySettingNames;
 
     private PartySetting(String name) {
         this.name = name;
@@ -63,15 +67,18 @@ public enum PartySetting {
     }
 
     /**
-     * Gets the list of party settings.
+     * Gets the list of party setting names.
      *
-     * @return The list of party settings.
+     * @return The list of party setting names.
      */
-    public static List<String> getSettingTypes() {
-        List<String> list = new ArrayList<>();
+    public static List<String> getPartySettingNames() {
+        return partySettingNames;
+    }
+
+    static {
+        partySettingNames = new ArrayList<>();
         for (PartySetting partySetting : PartySetting.values()) {
-            list.add(partySetting.getName());
+            partySettingNames.add(partySetting.getName());
         }
-        return list;
     }
 }

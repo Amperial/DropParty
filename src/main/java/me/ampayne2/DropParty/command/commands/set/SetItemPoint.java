@@ -29,13 +29,13 @@ import org.bukkit.permissions.PermissionDefault;
 import java.util.List;
 
 /**
- * Sets the player to item point selection mode.
+ * A command that sets the player to item point selection mode.
  */
 public class SetItemPoint extends DPCommand {
     private final DropParty dropParty;
 
     public SetItemPoint(DropParty dropParty) {
-        super(dropParty, "itempoint", "/dp set itempoint <party>", new Permission("dropparty.set.itempoint", PermissionDefault.OP), 1, true);
+        super(dropParty, "itempoint", "Sets you to item point selection mode.", "/dp set itempoint <party>", new Permission("dropparty.set.itempoint", PermissionDefault.OP), 1, true);
         this.dropParty = dropParty;
     }
 
@@ -44,6 +44,8 @@ public class SetItemPoint extends DPCommand {
         String partyName = args[0];
         if (dropParty.getPartyManager().hasParty(partyName)) {
             dropParty.getPlayerModeController().setPlayerMode((Player) sender, PlayerMode.SETTING_ITEM_POINTS, dropParty.getPartyManager().getParty(partyName));
+        } else {
+            dropParty.getMessage().sendMessage(sender, "error.party.doesntexist", partyName);
         }
     }
 

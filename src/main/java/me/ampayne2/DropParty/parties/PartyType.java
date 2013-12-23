@@ -22,14 +22,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Types of drop parties.
+ * An enumeration of the types of drop parties.
  */
 public enum PartyType {
-    CHEST_PARTY("Chest", ChestParty.class),
-    CUSTOM_PARTY("Custom", CustomParty.class);
+    CHEST_PARTY("chest", ChestParty.class),
+    CUSTOM_PARTY("custom", CustomParty.class);
 
     private final String name;
     private final Class<? extends Party> clazz;
+    private final static List<String> partyTypeNames;
 
     private PartyType(String name, Class<? extends Party> clazz) {
         this.name = name;
@@ -74,11 +75,14 @@ public enum PartyType {
      *
      * @return The list of party types.
      */
-    public static List<String> getPartyTypes() {
-        List<String> list = new ArrayList<>();
+    public static List<String> getPartyTypeNames() {
+        return partyTypeNames;
+    }
+
+    static {
+        partyTypeNames = new ArrayList<>();
         for (PartyType partyType : PartyType.values()) {
-            list.add(partyType.getName());
+            partyTypeNames.add(partyType.getName());
         }
-        return list;
     }
 }

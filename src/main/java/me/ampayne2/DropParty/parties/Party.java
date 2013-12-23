@@ -104,13 +104,11 @@ public abstract class Party {
         requiredVotes = section.getInt(PartySetting.REQUIRED_VOTES.getName());
         teleport = DPUtils.stringToLocation(section.getString("teleport"));
 
-        List<String> dpItemPoints = section.getStringList("itempoints");
-        for (String itemPoint : dpItemPoints) {
+        for (String itemPoint : section.getStringList("itempoints")) {
             itemPoints.add(DPItemPoint.fromConfig(dropParty, this, itemPoint));
         }
 
-        List<String> dpFireworkPoints = section.getStringList("fireworkpoints");
-        for (String fireworkPoint : dpFireworkPoints) {
+        for (String fireworkPoint : section.getStringList("fireworkpoints")) {
             fireworkPoints.add(DPFireworkPoint.fromConfig(dropParty, this, fireworkPoint));
         }
     }
@@ -160,6 +158,16 @@ public abstract class Party {
      */
     public PartyType getType() {
         return type;
+    }
+
+    /**
+     * Checks if the party is of a certain type.
+     *
+     * @param partyType The party type.
+     * @return True if the party is of the party type, else false.
+    */
+    public boolean isType(PartyType partyType) {
+        return type == partyType;
     }
 
     /**

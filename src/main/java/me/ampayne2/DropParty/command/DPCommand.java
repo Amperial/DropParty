@@ -27,6 +27,7 @@ import org.bukkit.permissions.Permission;
  */
 public abstract class DPCommand extends Command {
     private final String commandUsage;
+    private final String description;
 
     /**
      * Creates a new DPCommand that must have an amount of args within a range.
@@ -38,9 +39,10 @@ public abstract class DPCommand extends Command {
      * @param maxArgsLength The maximum required args length of the command.
      * @param playerOnly    If the command can only be run by a player.
      */
-    public DPCommand(DropParty dropParty, String name, String commandUsage, Permission permission, int minArgsLength, int maxArgsLength, boolean playerOnly) {
+    public DPCommand(DropParty dropParty, String name, String description, String commandUsage, Permission permission, int minArgsLength, int maxArgsLength, boolean playerOnly) {
         super(dropParty, name, permission, minArgsLength, maxArgsLength, playerOnly);
         this.commandUsage = commandUsage;
+        this.description = description;
     }
 
     /**
@@ -52,9 +54,10 @@ public abstract class DPCommand extends Command {
      * @param exactArgsLength The exact required args length of the command.
      * @param playerOnly      If the command can only be run by a player.
      */
-    public DPCommand(DropParty dropParty, String name, String commandUsage, Permission permission, int exactArgsLength, boolean playerOnly) {
+    public DPCommand(DropParty dropParty, String name, String description, String commandUsage, Permission permission, int exactArgsLength, boolean playerOnly) {
         super(dropParty, name, permission, exactArgsLength, playerOnly);
         this.commandUsage = commandUsage;
+        this.description = description;
     }
 
     /**
@@ -65,9 +68,10 @@ public abstract class DPCommand extends Command {
      * @param permission The permission of the command.
      * @param playerOnly If the command can only be run by a player.
      */
-    public DPCommand(DropParty dropParty, String name, String commandUsage, Permission permission, boolean playerOnly) {
+    public DPCommand(DropParty dropParty, String name, String description, String commandUsage, Permission permission, boolean playerOnly) {
         super(dropParty, name, permission, playerOnly);
         this.commandUsage = commandUsage;
+        this.description = description;
     }
 
     /**
@@ -77,6 +81,15 @@ public abstract class DPCommand extends Command {
      */
     public String getCommandUsage() {
         return commandUsage;
+    }
+
+    /**
+     * Gets the DPCommand's description.
+     *
+     * @return The description.
+     */
+    public String getDescription() {
+        return description;
     }
 
     @Override

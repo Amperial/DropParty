@@ -27,13 +27,13 @@ import org.bukkit.permissions.PermissionDefault;
 import java.util.List;
 
 /**
- * Lists the item points of a drop party.
+ * A command that lists the item points of a drop party.
  */
 public class ListItemPoints extends DPCommand {
     private final DropParty dropParty;
 
     public ListItemPoints(DropParty dropParty) {
-        super(dropParty, "itempoints", "/dp list itempoints <party>", new Permission("dropparty.list.itempoints", PermissionDefault.TRUE), 1, false);
+        super(dropParty, "itempoints", "Lists the item points of a drop party.", "/dp list itempoints <party>", new Permission("dropparty.list.itempoints", PermissionDefault.TRUE), 1, false);
         this.dropParty = dropParty;
     }
 

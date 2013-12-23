@@ -28,13 +28,13 @@ import org.bukkit.permissions.PermissionDefault;
 import java.util.List;
 
 /**
- * Votes for a drop party.
+ * A command that votes for a drop party to start.
  */
 public class Vote extends DPCommand {
     private final DropParty dropParty;
 
     public Vote(DropParty dropParty) {
-        super(dropParty, "vote", "/dp vote <party>", new Permission("dropparty.vote", PermissionDefault.TRUE), 1, true);
+        super(dropParty, "vote", "Votes for a drop party to start.", "/dp vote <party>", new Permission("dropparty.vote", PermissionDefault.TRUE), 1, true);
         this.dropParty = dropParty;
     }
 

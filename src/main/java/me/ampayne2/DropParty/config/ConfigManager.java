@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Manages all of the extra configs.
+ * Contains all of the custom drop party configs.
  */
 public class ConfigManager {
     private final Map<ConfigType, ConfigAccessor> configs = new HashMap<>();

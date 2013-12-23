@@ -19,7 +19,7 @@
 package me.ampayne2.dropparty.message;
 
 /**
- * Handles a type of recipient.
+ * Handles sending a message to a recipient.
  */
 public abstract class RecipientHandler {
 

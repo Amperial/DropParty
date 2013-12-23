@@ -31,13 +31,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Removes a firework point of a certain id or sets the sender to firework point removal mode.
+ * A command that removes a firework point of a certain id or sets the sender to firework point removal mode.
  */
 public class RemoveFireworkPoint extends DPCommand {
     private final DropParty dropParty;
 
     public RemoveFireworkPoint(DropParty dropParty) {
-        super(dropParty, "fireworkpoint", "/dp remove fireworkpoint <party> [id]", new Permission("dropparty.remove.fireworkpoint", PermissionDefault.OP), 1, 2, true);
+        super(dropParty, "fireworkpoint", "Removes a firework point or sets you to firework point removal mode.", "/dp remove fireworkpoint <party> [id]", new Permission("dropparty.remove.fireworkpoint", PermissionDefault.OP), 1, 2, true);
         this.dropParty = dropParty;
     }
 

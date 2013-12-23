@@ -55,7 +55,6 @@ public class ConfigAccessor {
     public ConfigAccessor reloadConfig() {
         fileConfiguration = YamlConfiguration.loadConfiguration(configFile);
 
-        // Look for defaults in the jar
         InputStream defConfigStream = dropParty.getResource(configType.getFileName());
         if (defConfigStream != null) {
             YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);

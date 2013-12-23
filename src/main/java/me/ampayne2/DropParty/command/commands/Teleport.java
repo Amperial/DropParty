@@ -28,13 +28,13 @@ import org.bukkit.permissions.PermissionDefault;
 import java.util.List;
 
 /**
- * Teleports the sender to a drop party.
+ * A command that teleports the sender to a drop party.
  */
 public class Teleport extends DPCommand {
     private final DropParty dropParty;
 
     public Teleport(DropParty dropParty) {
-        super(dropParty, "teleport", "/dp teleport <party>", new Permission("dropparty.teleport", PermissionDefault.TRUE), 1, true);
+        super(dropParty, "teleport", "Teleports you to a drop party.", "/dp teleport <party>", new Permission("dropparty.teleport", PermissionDefault.TRUE), 1, true);
         this.dropParty = dropParty;
     }
 
