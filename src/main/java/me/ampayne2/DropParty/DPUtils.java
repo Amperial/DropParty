@@ -77,4 +77,8 @@ public final class DPUtils {
     public static int getPlayersOnline() {
         return Bukkit.getOnlinePlayers().length;
     }
+
+    public static int clamp(int value, int min, int max) {
+        return Math.max(min, Math.min(max, value));
+    }
 }

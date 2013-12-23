@@ -47,8 +47,12 @@ public class Help extends DPCommand {
                 }
             } catch (NumberFormatException e) {
                 dropParty.getMessage().sendMessage(sender, "error.numberformat");
+                return;
             }
         }
-        sender.sendMessage(ChatColor.GOLD + "<-------<| " + ChatColor.DARK_PURPLE + "Commands: Page " + pageNumber + ChatColor.GOLD + "|>------->");
+        sender.sendMessage(ChatColor.GOLD + "<-------<| " + ChatColor.DARK_PURPLE + "Commands: Page " + pageNumber + " " + ChatColor.GOLD + "|>------->");
+        for (String string : dropParty.getCommandController().getHelpPage(pageNumber)) {
+            sender.sendMessage(string);
+        }
     }
 }

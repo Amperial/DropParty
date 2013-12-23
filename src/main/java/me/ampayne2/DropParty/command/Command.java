@@ -167,10 +167,24 @@ public class Command {
     /**
      * Gets the command's children.
      *
+     * @param deep If the method should return all children, or only the command's immediate children.
      * @return The command's children.
      */
-    public Map<String, Command> getChildren() {
-        return children;
+    public Map<String, Command> getChildren(boolean deep) {
+        if (deep) {
+            Map<String, Command> deepChildren = new HashMap<>();
+            for (Command child : children.values()) {
+                if (child instanceof DPCommand) {
+                    deepChildren.put(name + " " + child.getName(), child);
+                }
+                for (Map.Entry<String, Command> deepChild : child.getChildren(true).entrySet()) {
+                    deepChildren.put(name + " " + deepChild.getKey(), deepChild.getValue());
+                }
+            }
+            return deepChildren;
+        } else {
+            return children;
+        }
     }
 
     /**
