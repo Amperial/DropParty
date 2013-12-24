@@ -25,21 +25,23 @@ import java.util.List;
  * An enumeration of the settings of a drop party.
  */
 public enum PartySetting {
-    MAX_LENGTH("maxlength"),
-    ITEM_DELAY("itemdelay"),
-    MAX_STACK_SIZE("maxstacksize"),
-    FIREWORK_AMOUNT("fireworkamount"),
-    FIREWORK_DELAY("fireworkdelay"),
-    START_PERIODICALLY("startperiodically"),
-    START_PERIOD("startperiod"),
-    VOTE_TO_START("votetostart"),
-    REQUIRED_VOTES("requiredvotes");
+    MAX_LENGTH("maxlength", "max length"),
+    ITEM_DELAY("itemdelay", "item delay"),
+    MAX_STACK_SIZE("maxstacksize", "max stack size"),
+    FIREWORK_AMOUNT("fireworkamount", "firework amount"),
+    FIREWORK_DELAY("fireworkdelay", "firework delay"),
+    START_PERIODICALLY("startperiodically", "start periodically"),
+    START_PERIOD("startperiod", "start period"),
+    VOTE_TO_START("votetostart", "vote to start"),
+    REQUIRED_VOTES("requiredvotes", "required votes");
 
     private final String name;
+    private final String displayName;
     private final static List<String> partySettingNames;
 
-    private PartySetting(String name) {
+    private PartySetting(String name, String displayName) {
         this.name = name;
+        this.displayName = displayName;
     }
 
     /**
@@ -49,6 +51,15 @@ public enum PartySetting {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Gets the display name of the party setting.
+     *
+     * @return The party setting's display name.
+     */
+    public String getDisplayName() {
+        return displayName;
     }
 
     /**

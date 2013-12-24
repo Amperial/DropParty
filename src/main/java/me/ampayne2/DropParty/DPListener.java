@@ -74,9 +74,7 @@ public class DPListener implements Listener {
                         }
                         break;
                     case SETTING_ITEM_POINTS:
-                        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                            block = block.getRelative(event.getBlockFace());
-                        }
+                        block = block.getRelative(event.getBlockFace());
                         if (party.hasItemPoint(block.getLocation())) {
                             dropParty.getMessage().sendMessage(player, "error.itempoint.alreadyexists");
                         } else {
@@ -85,13 +83,11 @@ public class DPListener implements Listener {
                         }
                         break;
                     case SETTING_FIREWORK_POINTS:
-                        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                            block = block.getRelative(event.getBlockFace());
-                        }
-                        if (party.hasFireworkPoint(block.getLocation())) {
+                        block = block.getRelative(event.getBlockFace());
+                        if (party.hasFireworkPoint(block.getLocation().clone().add(0.5, 0, 0.5))) {
                             dropParty.getMessage().sendMessage(player, "error.fireworkpoint.alreadyexists");
                         } else {
-                            party.addFireworkPoint(new DPFireworkPoint(dropParty, party, block.getLocation()));
+                            party.addFireworkPoint(new DPFireworkPoint(dropParty, party, block.getLocation().clone().add(0.5, 0, 0.5)));
                             dropParty.getMessage().sendMessage(player, "set.fireworkpoint", party.getName());
                         }
                         break;
@@ -110,9 +106,7 @@ public class DPListener implements Listener {
                         }
                         break;
                     case REMOVING_ITEM_POINTS:
-                        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                            block = block.getRelative(event.getBlockFace());
-                        }
+                        block = block.getRelative(event.getBlockFace());
                         if (party.hasItemPoint(block.getLocation())) {
                             party.removeItemPoint(block.getLocation());
                             dropParty.getMessage().sendMessage(player, "remove.itempoint", party.getName());
@@ -121,11 +115,9 @@ public class DPListener implements Listener {
                         }
                         break;
                     case REMOVING_FIREWORK_POINTS:
-                        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                            block = block.getRelative(event.getBlockFace());
-                        }
-                        if (party.hasFireworkPoint(block.getLocation())) {
-                            party.removeFireworkPoint(block.getLocation());
+                        block = block.getRelative(event.getBlockFace());
+                        if (party.hasFireworkPoint(block.getLocation().clone().add(0.5, 0, 0.5))) {
+                            party.removeFireworkPoint(block.getLocation().clone().add(0.5, 0, 0.5));
                             dropParty.getMessage().sendMessage(player, "remove.fireworkpoint", party.getName());
                         } else {
                             dropParty.getMessage().sendMessage(player, "error.fireworkpoint.doesntexist");

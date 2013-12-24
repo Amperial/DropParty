@@ -51,40 +51,88 @@ public class SetPartySetting extends DPCommand {
                 String value = args[2];
                 switch (partySetting) {
                     case MAX_LENGTH:
-                        party.setMaxLength(Long.parseLong(value));
+                        long maxLength = Long.parseLong(value);
+                        if (maxLength <= 20) {
+                            dropParty.getMessage().sendMessage(sender, "error.numbertoolow", "20");
+                            return;
+                        } else {
+                            party.setMaxLength(maxLength);
+                        }
                         break;
                     case ITEM_DELAY:
-                        party.setItemDelay(Long.parseLong(value));
+                        long itemDelay = Long.parseLong(value);
+                        if (itemDelay < 1) {
+                            dropParty.getMessage().sendMessage(sender, "error.numbertoolow", "1");
+                            return;
+                        } else {
+                            party.setItemDelay(itemDelay);
+                        }
                         break;
                     case MAX_STACK_SIZE:
-                        party.setMaxStackSize(Integer.parseInt(value));
+                        int maxStackSize = Integer.parseInt(value);
+                        if (maxStackSize < 1) {
+                            dropParty.getMessage().sendMessage(sender, "error.numbertoolow", "1");
+                            return;
+                        } else if (maxStackSize > 64) {
+                            dropParty.getMessage().sendMessage(sender, "error.numbertoohigh", "64");
+                            return;
+                        } else {
+                            party.setMaxStackSize(Integer.parseInt(value));
+                        }
                         break;
                     case FIREWORK_AMOUNT:
-                        party.setFireworkAmount(Integer.parseInt(value));
+                        int fireworkAmount = Integer.parseInt(value);
+                        if (fireworkAmount < 0) {
+                            dropParty.getMessage().sendMessage(sender, "error.numbertoolow", "0");
+                            return;
+                        } else {
+                            party.setFireworkAmount(fireworkAmount);
+                        }
                         break;
                     case FIREWORK_DELAY:
-                        party.setFireworkDelay(Long.parseLong(value));
+                        long fireworkDelay = Long.parseLong(value);
+                        if (fireworkDelay < 1) {
+                            dropParty.getMessage().sendMessage(sender, "error.numbertoolow", "1");
+                            return;
+                        } else {
+                            party.setFireworkDelay(fireworkDelay);
+                        }
                         break;
                     case START_PERIODICALLY:
                         if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
                             party.setStartPeriodically(Boolean.parseBoolean(value));
                         } else {
                             dropParty.getMessage().sendMessage(sender, "error.booleanformat");
+                            return;
                         }
                         break;
                     case START_PERIOD:
-                        party.setStartPeriod(Long.parseLong(value));
+                        long startPeriod = Long.parseLong(value);
+                        if (startPeriod < 100) {
+                            dropParty.getMessage().sendMessage(sender, "error.numbertoolow", "100");
+                            return;
+                        } else {
+                            party.setStartPeriod(Long.parseLong(value));
+                        }
                         break;
                     case VOTE_TO_START:
                         if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
                             party.setVoteToStart(Boolean.parseBoolean(value));
                         } else {
                             dropParty.getMessage().sendMessage(sender, "error.booleanformat");
+                            return;
                         }
                         break;
                     case REQUIRED_VOTES:
-                        party.setRequiredVotes(Integer.parseInt(value));
+                        int requiredVotes = Integer.parseInt(value);
+                        if (requiredVotes < 1) {
+                            dropParty.getMessage().sendMessage(sender, "error.numbertoolow", "1");
+                            return;
+                        } else {
+                            party.setRequiredVotes(requiredVotes);
+                        }
                 }
+                dropParty.getMessage().sendMessage(sender, "set.partysetting", partySetting.getDisplayName(), partyName, value);
             } else {
                 dropParty.getMessage().sendMessage(sender, "error.party.doesntexist", partyName);
             }

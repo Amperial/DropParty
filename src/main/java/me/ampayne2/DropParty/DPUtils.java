@@ -19,13 +19,18 @@
 package me.ampayne2.dropparty;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.World;
+
+import java.util.Random;
 
 /**
  * Drop party utilities.
  */
 public final class DPUtils {
+    private static final Random RANDOM = new Random();
+
     private DPUtils() {
     }
 
@@ -90,5 +95,61 @@ public final class DPUtils {
      */
     public static int clamp(int value, int min, int max) {
         return Math.max(min, Math.min(max, value));
+    }
+
+    /**
+     * Gets a random enum value from an enum.
+     *
+     * @param clazz The enum's class.
+     * @return The random enum value.
+     */
+    public static <T extends Enum> T randomEnum(Class<T> clazz) {
+        return clazz.getEnumConstants()[RANDOM.nextInt(clazz.getEnumConstants().length)];
+    }
+
+    /**
+     * Gets a random color.
+     *
+     * @return The random color.
+     */
+    public static Color randomColor() {
+        switch (RANDOM.nextInt(17)) {
+            case 0:
+                return Color.AQUA;
+            case 1:
+                return Color.BLACK;
+            case 2:
+                return Color.BLUE;
+            case 3:
+                return Color.FUCHSIA;
+            case 4:
+                return Color.GRAY;
+            case 5:
+                return Color.GREEN;
+            case 6:
+                return Color.LIME;
+            case 7:
+                return Color.MAROON;
+            case 8:
+                return Color.NAVY;
+            case 9:
+                return Color.OLIVE;
+            case 10:
+                return Color.ORANGE;
+            case 11:
+                return Color.PURPLE;
+            case 12:
+                return Color.RED;
+            case 13:
+                return Color.SILVER;
+            case 14:
+                return Color.TEAL;
+            case 15:
+                return Color.WHITE;
+            case 16:
+                return Color.YELLOW;
+            default:
+                return Color.WHITE;
+        }
     }
 }

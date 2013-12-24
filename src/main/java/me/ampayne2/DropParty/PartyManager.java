@@ -97,7 +97,7 @@ public class PartyManager {
     public void removeParty(String partyName) {
         Party party = parties.get(partyName);
         if (party != null) {
-            party.stop();
+            party.stop(false);
             dropParty.getPlayerModeController().clearModes(party);
             parties.remove(partyName);
             dropParty.getConfigManager().getConfig(ConfigType.PARTY).set("Parties." + partyName, null);
@@ -170,7 +170,7 @@ public class PartyManager {
      */
     public void stopParties() {
         for (Party party : parties.values()) {
-            party.stop();
+            party.stop(false);
         }
     }
 }

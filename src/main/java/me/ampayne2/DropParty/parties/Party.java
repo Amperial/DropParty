@@ -47,6 +47,9 @@ public abstract class Party {
     protected long fireworkDelay;
     protected boolean isRunning = false;
     protected int taskId;
+    protected boolean isShootingFireworks = false;
+    protected int fireworkTaskId;
+    protected int fireworksShot;
     protected int periodicTaskId;
     protected boolean startPeriodically;
     protected long startPeriod;
@@ -56,6 +59,7 @@ public abstract class Party {
     protected Location teleport;
     protected List<DPItemPoint> itemPoints = new ArrayList<>();
     protected List<DPFireworkPoint> fireworkPoints = new ArrayList<>();
+    protected final static Random RANDOM = new Random();
 
     /**
      * Creates a Party from default settings.
@@ -114,35 +118,6 @@ public abstract class Party {
     }
 
     /**
-     * Starts the periodic start timer.
-     */
-    public void startPeriodicTimer() {
-        if (startPeriodically) {
-            periodicTaskId = dropParty.getServer().getScheduler().scheduleSyncRepeatingTask(dropParty, new Runnable() {
-                @Override
-                public void run() {
-                    start();
-                }
-            }, startPeriod, startPeriod);
-        }
-    }
-
-    /**
-     * Stops the periodic start timer.
-     */
-    public void stopPeriodicTimer() {
-        dropParty.getServer().getScheduler().cancelTask(periodicTaskId);
-    }
-
-    /**
-     * Resets the periodic start timer.
-     */
-    public void resetPeriodicTimer() {
-        stopPeriodicTimer();
-        startPeriodicTimer();
-    }
-
-    /**
      * Gets the name of the party.
      *
      * @return The name of the party.
@@ -196,12 +171,13 @@ public abstract class Party {
         if (!isRunning) {
             isRunning = true;
             votes.clear();
+            stopShootingFireworks();
             taskId = dropParty.getServer().getScheduler().scheduleSyncRepeatingTask(dropParty, new Runnable() {
                 @Override
                 public void run() {
                     currentLength += itemDelay;
                     if (currentLength > maxLength || !dropNext()) {
-                        stop();
+                        stop(true);
                         currentLength = 0;
                     }
                 }
@@ -212,12 +188,58 @@ public abstract class Party {
 
     /**
      * Stops the party.
+     *
+     * @param shootFireworks If the party should shoot fireworks.
      */
-    public void stop() {
+    public void stop(boolean shootFireworks) {
         if (isRunning) {
             isRunning = false;
             dropParty.getServer().getScheduler().cancelTask(taskId);
             dropParty.getMessage().sendMessage(dropParty.getServer(), "broadcast.stop", partyName);
+
+            if (shootFireworks) {
+                startShootingFireworks();
+            }
+        }
+    }
+
+    /**
+     * Checks if the party is shooting fireworks.
+     *
+     * @return True if the party is shooting fireworks, else false.
+     */
+    public boolean isShootingFireworks() {
+        return isShootingFireworks;
+    }
+
+    /**
+     * Starts shooting fireworks.
+     */
+    public void startShootingFireworks() {
+        if (!isShootingFireworks) {
+            isShootingFireworks = true;
+            fireworkTaskId = dropParty.getServer().getScheduler().scheduleSyncRepeatingTask(dropParty, new Runnable() {
+                @Override
+                public void run() {
+                    fireworksShot++;
+                    if (fireworksShot <= fireworkAmount) {
+                        fireworkPoints.get(RANDOM.nextInt(fireworkPoints.size())).spawnFirework();
+                    } else {
+                        stopShootingFireworks();
+                    }
+                }
+            }, 0, fireworkDelay);
+        }
+    }
+
+    /**
+     * Stops shooting fireworks.
+     */
+    public void stopShootingFireworks() {
+        if (isShootingFireworks) {
+            isShootingFireworks = false;
+            fireworksShot = 0;
+            dropParty.getServer().getScheduler().cancelTask(fireworkTaskId);
         }
     }
 
@@ -236,13 +258,41 @@ public abstract class Party {
      */
     public boolean dropItemStack(ItemStack itemStack) {
         if (itemStack != null && itemStack.getType() != Material.AIR && itemPoints.size() > 0) {
-            Random generator = new Random();
-            DPItemPoint itemPoint = itemPoints.get(generator.nextInt(itemPoints.size()));
+            DPItemPoint itemPoint = itemPoints.get(RANDOM.nextInt(itemPoints.size()));
             itemPoint.getLocation().getWorld().dropItemNaturally(itemPoint.getLocation(), itemStack);
             return true;
         } else {
             return false;
         }
+    }
+
+    /**
+     * Starts the periodic start timer.
+     */
+    public void startPeriodicTimer() {
+        if (startPeriodically) {
+            periodicTaskId = dropParty.getServer().getScheduler().scheduleSyncRepeatingTask(dropParty, new Runnable() {
+                @Override
+                public void run() {
+                    start();
+                }
+            }, startPeriod, startPeriod);
+        }
+    }
+
+    /**
+     * Stops the periodic start timer.
+     */
+    public void stopPeriodicTimer() {
+        dropParty.getServer().getScheduler().cancelTask(periodicTaskId);
+    }
+
+    /**
+     * Resets the periodic start timer.
+     */
+    public void resetPeriodicTimer() {
+        stopPeriodicTimer();
+        startPeriodicTimer();
     }
 
     /**

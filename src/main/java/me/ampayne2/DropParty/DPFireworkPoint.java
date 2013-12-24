@@ -19,7 +19,14 @@
 package me.ampayne2.dropparty;
 
 import me.ampayne2.dropparty.parties.Party;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
+import org.bukkit.inventory.meta.FireworkMeta;
+
+import java.util.Random;
 
 /**
  * A drop party firework point.
@@ -28,6 +35,7 @@ public class DPFireworkPoint {
     private final DropParty dropParty;
     private final Party party;
     private final Location location;
+    private static final Random RANDOM = new Random();
 
     /**
      * Creates a new firework point.
@@ -61,6 +69,19 @@ public class DPFireworkPoint {
     }
 
     /**
+     * Spawns a firework at the firework point.
+     */
+    public void spawnFirework() {
+        Firework firework = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK);
+
+        FireworkMeta fireworkMeta = firework.getFireworkMeta();
+        fireworkMeta.addEffect(randomFireworkEffect());
+        fireworkMeta.setPower(RANDOM.nextInt(2) + 1);
+
+        firework.setFireworkMeta(fireworkMeta);
+    }
+
+    /**
      * Converts the firework point into a string for storage in a config.
      *
      * @return The string representation of the firework point.
@@ -90,5 +111,18 @@ public class DPFireworkPoint {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    /**
+     * Gets a random firework effect.
+     *
+     * @return The random firework effect.
+     */
+    public static FireworkEffect randomFireworkEffect() {
+        FireworkEffect.Type type = DPUtils.randomEnum(FireworkEffect.Type.class);
+        Color c1 = DPUtils.randomColor();
+        Color c2 = DPUtils.randomColor();
+
+        return FireworkEffect.builder().flicker(RANDOM.nextBoolean()).withColor(c1).withFade(c2).with(type).trail(RANDOM.nextBoolean()).build();
     }
 }
