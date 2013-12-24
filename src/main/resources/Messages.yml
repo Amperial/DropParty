@@ -44,8 +44,8 @@ Messages:
   error:
     command:
       notaplayer: "&4You must be a player to use this command."
-      invalidsubcommand: "&4%s is not a subcommand of %s."
-      validsubcommands: "Valid subcommands are: %s"
+      invalidsubcommand: "&4%s is not a sub command of %s."
+      usage: "&4Usage: %s"
     party:
       create: "&4Failed to create drop party &5%s&4."
       delete: "&4Failed to delete drop party &5%s&4."
@@ -81,5 +81,5 @@ Messages:
       alreadyexists: "&4A firework point already exists at this location."
       iddoesntexist: "&4No firework point of the id &5%s&4 of the drop party &5%s&4 found."
       nonefound: "&4No firework point of the drop party &5%s&4 found."
-    numberformat: "&4Value must be a positive number."
+    numberformat: "&4Value must be a positive integer."
     booleanformat: "&4Value must be true or false."

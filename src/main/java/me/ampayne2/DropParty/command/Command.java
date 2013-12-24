@@ -19,12 +19,14 @@
 package me.ampayne2.dropparty.command;
 
 import me.ampayne2.dropparty.DropParty;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The base layout for a command.
@@ -36,7 +38,7 @@ public class Command {
     private final int minArgsLength;
     private final int maxArgsLength;
     private final boolean playerOnly;
-    private final Map<String, Command> children = new HashMap<>();
+    private final Map<String, Command> children = new LinkedHashMap<>();
 
     /**
      * Creates a new Command that must have an amount of args within a range.
@@ -170,30 +172,21 @@ public class Command {
      * @param deep If the method should return all children, or only the command's immediate children.
      * @return The command's children.
      */
-    public Map<String, Command> getChildren(boolean deep) {
+    public List<Command> getChildren(boolean deep) {
         if (deep) {
-            Map<String, Command> deepChildren = new HashMap<>();
+            List<Command> deepChildren = new ArrayList<>();
             for (Command child : children.values()) {
                 if (child instanceof DPCommand) {
-                    deepChildren.put(name + " " + child.getName(), child);
+                    deepChildren.add(child);
                 }
-                for (Map.Entry<String, Command> deepChild : child.getChildren(true).entrySet()) {
-                    deepChildren.put(name + " " + deepChild.getKey(), deepChild.getValue());
+                for (Command deepChild : child.getChildren(true)) {
+                    deepChildren.add(deepChild);
                 }
             }
             return deepChildren;
         } else {
-            return children;
+            return new ArrayList<>(children.values());
         }
-    }
-
-    /**
-     * Gets a string list of the command's children.
-     *
-     * @return The command list.
-     */
-    public String getChildCommandList() {
-        return Arrays.toString(children.keySet().toArray());
     }
 
     /**
@@ -226,7 +219,7 @@ public class Command {
                     dropParty.getMessage().sendMessage(sender, "permissions.nopermission", command);
                 }
             } else {
-                dropParty.getMessage().sendRawMessage(sender, ChatColor.DARK_RED + "Usage: " + ((DPCommand) entry).getCommandUsage());
+                dropParty.getMessage().sendMessage(sender, "error.command.usage", ((DPCommand) entry).getCommandUsage());
             }
         } else {
             String subCommand = args.length == 0 ? "" : args[0];
@@ -241,7 +234,6 @@ public class Command {
                 entry.execute(subCommand, sender, newArgs);
             } else {
                 dropParty.getMessage().sendMessage(sender, "error.command.invalidsubcommand", "\"" + subCommand + "\"", "\"" + command + "\"");
-                dropParty.getMessage().sendMessage(sender, "error.command.validsubcommands", entry.getChildCommandList());
             }
         }
     }

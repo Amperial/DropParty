@@ -34,6 +34,7 @@ public class About extends DPCommand {
     private final static String URL = ChatColor.GRAY + "dev.bukkit.org/server-mods/dropparty/";
     private final static String AUTHOR = ChatColor.GRAY + "Author: ampayne2";
     private final static String VERSION = ChatColor.GRAY + "Version: ";
+    private final static String COMMANDS = ChatColor.GRAY + "Commands: /dp help [page]";
 
     public About(DropParty dropParty) {
         super(dropParty, "", "Lists some information about drop party.", "/dp", new Permission("dropparty.about", PermissionDefault.TRUE), false);
@@ -46,5 +47,6 @@ public class About extends DPCommand {
         sender.sendMessage(URL);
         sender.sendMessage(AUTHOR);
         sender.sendMessage(VERSION + dropParty.getDescription().getVersion());
+        sender.sendMessage(COMMANDS);
     }
 }
