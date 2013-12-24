@@ -19,10 +19,11 @@
 package me.ampayne2.dropparty;
 
 import me.ampayne2.dropparty.parties.Party;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
-import org.bukkit.inventory.DoubleChestInventory;
+import org.bukkit.block.DoubleChest;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -47,8 +48,8 @@ public class DPChest {
         this.dropParty = dropParty;
         this.party = party;
         this.chest = chest;
-        this.inventory = chest.getBlockInventory();
-        this.isDoubleChest = chest.getBlockInventory() instanceof DoubleChestInventory;
+        this.inventory = chest.getInventory();
+        this.isDoubleChest = inventory.getHolder() instanceof DoubleChest;
     }
 
     /**
@@ -84,7 +85,26 @@ public class DPChest {
      * @return The next item stack.
      */
     public ItemStack getNextItemStack() {
-        for (int i = 0; i < (isDoubleChest ? 54 : 27); i++) {
+        if (isDoubleChest) {
+            DoubleChest doubleChest = (DoubleChest) inventory.getHolder();
+            ItemStack itemStack = getNextItemStack(doubleChest.getLeftSide().getInventory());
+            if (itemStack == null) {
+                itemStack = getNextItemStack(doubleChest.getRightSide().getInventory());
+            }
+            return itemStack;
+        } else {
+            return getNextItemStack(inventory);
+        }
+    }
+
+    /**
+     * Gets the next item stack in the inventory.
+     *
+     * @param inventory The inventory.
+     * @return The next item stack.
+     */
+    public ItemStack getNextItemStack(Inventory inventory) {
+        for (int i = 0; i < inventory.getSize(); i++) {
             ItemStack itemStack = inventory.getItem(i);
             if (itemStack != null) {
                 if (itemStack.getAmount() <= party.getMaxStackSize()) {
@@ -124,7 +144,8 @@ public class DPChest {
             if (parts.length == 2) {
                 String partyName = parts[0];
                 if (partyName.equals(party.getName())) {
-                    Block block = DPUtils.stringToLocation(parts[1]).getBlock();
+                    Location location = DPUtils.stringToLocation(parts[1]);
+                    Block block = location.getWorld().getBlockAt(location);
                     if (block.getType() == Material.CHEST) {
                         return new DPChest(dropParty, party, (Chest) block.getState());
                     }

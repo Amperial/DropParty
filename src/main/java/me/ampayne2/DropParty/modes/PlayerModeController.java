@@ -27,6 +27,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -89,7 +90,7 @@ public class PlayerModeController implements Listener {
         if (playerModes.containsKey(playerName)) {
             PlayerMode currentMode = playerModes.get(playerName);
             Party currentParty = playerModeParties.get(playerName);
-            dropParty.getMessage().sendMessage(player, "mode.off", currentMode.getName(), currentParty.getName());
+            dropParty.getMessage().sendMessage(player, "mode.modeoff", currentMode.getName(), currentParty.getName());
             if (currentMode.equals(playerMode) && currentParty.equals(party)) {
                 playerModes.remove(playerName);
                 playerModeParties.remove(playerName);
@@ -98,7 +99,7 @@ public class PlayerModeController implements Listener {
         }
         playerModes.put(playerName, playerMode);
         playerModeParties.put(playerName, party);
-        dropParty.getMessage().sendMessage(player, "mode.on", playerMode.getName(), party.getName());
+        dropParty.getMessage().sendMessage(player, "mode.modeon", playerMode.getName(), party.getName());
     }
 
     /**
@@ -107,6 +108,20 @@ public class PlayerModeController implements Listener {
     public void clearModes() {
         playerModes.clear();
         playerModeParties.clear();
+    }
+
+    /**
+     * Clears all player's modes of a certain party.
+     *
+     * @param party The party to clear.
+     */
+    public void clearModes(Party party) {
+        for (String playerName : new HashSet<>(playerModeParties.keySet())) {
+            if (playerModeParties.get(playerName).equals(party)) {
+                playerModes.remove(playerName);
+                playerModeParties.remove(playerName);
+            }
+        }
     }
 
     /**

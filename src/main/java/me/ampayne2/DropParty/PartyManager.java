@@ -98,6 +98,7 @@ public class PartyManager {
         Party party = parties.get(partyName);
         if (party != null) {
             party.stop();
+            dropParty.getPlayerModeController().clearModes(party);
             parties.remove(partyName);
             dropParty.getConfigManager().getConfig(ConfigType.PARTY).set("Parties." + partyName, null);
             dropParty.getConfigManager().getConfigAccessor(ConfigType.PARTY).saveConfig();

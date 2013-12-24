@@ -38,8 +38,10 @@ public final class DPUtils {
     public static String locationToString(Location location) {
         return new StringBuilder()
                 .append(location.getWorld().getName()).append(",")
-                .append(location.getX()).append(",").append(location.getY()).append(",")
-                .append(location.getZ()).append(",").append(location.getYaw()).append(",")
+                .append(location.getX()).append(",")
+                .append(location.getY()).append(",")
+                .append(location.getZ()).append(",")
+                .append(location.getYaw()).append(",")
                 .append(location.getPitch()).toString();
     }
 
@@ -78,6 +80,14 @@ public final class DPUtils {
         return Bukkit.getOnlinePlayers().length;
     }
 
+    /**
+     * Clamps a value between a minimum and maximum value.
+     *
+     * @param value The value.
+     * @param min   The minimum value.
+     * @param max   The maximum value.
+     * @return The clamped value.
+     */
     public static int clamp(int value, int min, int max) {
         return Math.max(min, Math.min(max, value));
     }

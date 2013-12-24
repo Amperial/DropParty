@@ -23,6 +23,7 @@ import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.config.ConfigType;
 import org.bukkit.Location;
 import org.bukkit.block.Chest;
+import org.bukkit.block.DoubleChest;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -70,9 +71,18 @@ public class ChestParty extends Party {
      * @return True if the party has a chest, else false.
      */
     public boolean hasChest(Chest chest) {
-        for (DPChest dpChest : chests) {
-            if (dpChest.getChest().equals(chest)) {
-                return true;
+        if (chest.getInventory().getHolder() instanceof DoubleChest) {
+            DoubleChest doubleChest = (DoubleChest) chest.getInventory().getHolder();
+            for (DPChest dpChest : chests) {
+                if (dpChest.getChest().equals(doubleChest.getLeftSide()) || dpChest.getChest().equals(doubleChest.getRightSide())) {
+                    return true;
+                }
+            }
+        } else {
+            for (DPChest dpChest : chests) {
+                if (dpChest.getChest().equals(chest)) {
+                    return true;
+                }
             }
         }
         return false;

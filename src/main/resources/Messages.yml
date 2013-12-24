@@ -14,8 +14,8 @@ Messages:
     resetvotes: "Reset votes for drop party &5%s&7."
 
   mode:
-    on: "Turned on &5%s&7 mode for drop party &5%s&7."
-    off: "Turned off &5%s&7 mode for drop party &5%s&7."
+    modeon: "Turned on &5%s&7 mode for drop party &5%s&7."
+    modeoff: "Turned off &5%s&7 mode for drop party &5%s&7."
 
   set:
     chest: "Set chest for drop party &5%s&7."
@@ -68,7 +68,8 @@ Messages:
       doesntexist: "&4No drop party chests exist at this location."
       iddoesntexist: "&4No chest of the id &5%s&4 of the drop party &5%s&4 found."
       nonefound: "&4No chests of the drop party &5%s&4 found."
-      notachestparty: "Drop party &5%s&4 is not a chest party."
+      notachestparty: "&4Drop party &5%s&4 is not a chest party."
+      cantbreak: "&4You must remove this chest from all drop parties before breaking it."
     itempoint:
       set: "&4Failed to set item point for drop party &5%s&4."
       remove: "&4Failed to remove item point for drop party &5%s&4."

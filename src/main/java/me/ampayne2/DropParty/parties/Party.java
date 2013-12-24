@@ -165,7 +165,7 @@ public abstract class Party {
      *
      * @param partyType The party type.
      * @return True if the party is of the party type, else false.
-    */
+     */
     public boolean isType(PartyType partyType) {
         return type == partyType;
     }
