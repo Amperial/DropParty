@@ -40,8 +40,9 @@ public class ConfigManager {
         File dataFolder = dropParty.getDataFolder();
 
         dropParty.saveDefaultConfig();
-        addConfigAccessor(new ConfigAccessor(dropParty, ConfigType.MESSAGE, dataFolder).saveDefaultConfig());
-        addConfigAccessor(new ConfigAccessor(dropParty, ConfigType.PARTY, dataFolder).saveDefaultConfig());
+        for (ConfigType configType : ConfigType.class.getEnumConstants()) {
+            addConfigAccessor(new ConfigAccessor(dropParty, configType, dataFolder).saveDefaultConfig());
+        }
     }
 
     /**
