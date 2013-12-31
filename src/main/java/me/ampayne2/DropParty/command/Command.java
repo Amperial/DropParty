@@ -60,7 +60,7 @@ public class Command {
         try {
             dropParty.getServer().getPluginManager().addPermission(permission);
         } catch (IllegalArgumentException e) {
-            dropParty.getMessage().debug(e);
+            dropParty.getMessenger().debug(e);
         }
     }
 
@@ -213,13 +213,13 @@ public class Command {
                     if (sender instanceof Player || !entry.isPlayerOnly()) {
                         entry.execute(command, sender, args);
                     } else {
-                        dropParty.getMessage().sendMessage(sender, "error.command.notaplayer");
+                        dropParty.getMessenger().sendMessage(sender, "error.command.notaplayer");
                     }
                 } else {
-                    dropParty.getMessage().sendMessage(sender, "permissions.nopermission", command);
+                    dropParty.getMessenger().sendMessage(sender, "permissions.nopermission", command);
                 }
             } else {
-                dropParty.getMessage().sendMessage(sender, "error.command.usage", ((DPCommand) entry).getCommandUsage());
+                dropParty.getMessenger().sendMessage(sender, "error.command.usage", ((DPCommand) entry).getCommandUsage());
             }
         } else {
             String subCommand = args.length == 0 ? "" : args[0];
@@ -233,7 +233,7 @@ public class Command {
                 }
                 entry.execute(subCommand, sender, newArgs);
             } else {
-                dropParty.getMessage().sendMessage(sender, "error.command.invalidsubcommand", "\"" + subCommand + "\"", "\"" + command + "\"");
+                dropParty.getMessenger().sendMessage(sender, "error.command.invalidsubcommand", "\"" + subCommand + "\"", "\"" + command + "\"");
             }
         }
     }

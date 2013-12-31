@@ -45,7 +45,7 @@ public class SetItemPoint extends DPCommand {
         if (dropParty.getPartyManager().hasParty(partyName)) {
             dropParty.getPlayerModeController().setPlayerMode((Player) sender, PlayerMode.SETTING_ITEM_POINTS, dropParty.getPartyManager().getParty(partyName));
         } else {
-            dropParty.getMessage().sendMessage(sender, "error.party.doesntexist", partyName);
+            dropParty.getMessenger().sendMessage(sender, "error.party.doesntexist", partyName);
         }
     }
 

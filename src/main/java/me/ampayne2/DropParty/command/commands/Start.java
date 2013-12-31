@@ -44,13 +44,13 @@ public class Start extends DPCommand {
         if (dropParty.getPartyManager().hasParty(partyName)) {
             Party party = dropParty.getPartyManager().getParty(partyName);
             if (party.isRunning()) {
-                dropParty.getMessage().sendMessage(sender, "error.party.alreadyrunning", partyName);
+                dropParty.getMessenger().sendMessage(sender, "error.party.alreadyrunning", partyName);
             } else {
                 party.start();
-                dropParty.getMessage().sendMessage(sender, "party.start", partyName);
+                dropParty.getMessenger().sendMessage(sender, "party.start", partyName);
             }
         } else {
-            dropParty.getMessage().sendMessage(sender, "error.party.doesntexist", partyName);
+            dropParty.getMessenger().sendMessage(sender, "error.party.doesntexist", partyName);
         }
     }
 

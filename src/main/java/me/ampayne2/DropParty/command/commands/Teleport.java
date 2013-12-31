@@ -44,7 +44,7 @@ public class Teleport extends DPCommand {
         if (dropParty.getPartyManager().hasParty(partyName)) {
             dropParty.getPartyManager().getParty(partyName).teleport((Player) sender);
         } else {
-            dropParty.getMessage().sendMessage(sender, "error.party.doesntexist", partyName);
+            dropParty.getMessenger().sendMessage(sender, "error.party.doesntexist", partyName);
         }
     }
 

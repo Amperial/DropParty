@@ -46,7 +46,7 @@ public class Create extends DPCommand {
     public void execute(String command, CommandSender sender, String[] args) {
         String partyName = args[0];
         if (dropParty.getPartyManager().hasParty(partyName)) {
-            dropParty.getMessage().sendMessage(sender, "error.party.alreadyexists", partyName);
+            dropParty.getMessenger().sendMessage(sender, "error.party.alreadyexists", partyName);
         } else {
             PartyType partyType = PartyType.fromName(args[1]);
             switch (partyType) {
@@ -57,7 +57,7 @@ public class Create extends DPCommand {
                     dropParty.getPartyManager().addParty(new CustomParty(dropParty, partyName, ((Player) sender).getLocation()));
                     break;
             }
-            dropParty.getMessage().sendMessage(sender, "party.create", partyName);
+            dropParty.getMessenger().sendMessage(sender, "party.create", partyName);
         }
     }
 

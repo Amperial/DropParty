@@ -53,7 +53,7 @@ public class SetPartySetting extends DPCommand {
                     case MAX_LENGTH:
                         long maxLength = Long.parseLong(value);
                         if (maxLength <= 20) {
-                            dropParty.getMessage().sendMessage(sender, "error.numbertoolow", "20");
+                            dropParty.getMessenger().sendMessage(sender, "error.numbertoolow", "20");
                             return;
                         } else {
                             party.setMaxLength(maxLength);
@@ -62,7 +62,7 @@ public class SetPartySetting extends DPCommand {
                     case ITEM_DELAY:
                         long itemDelay = Long.parseLong(value);
                         if (itemDelay < 1) {
-                            dropParty.getMessage().sendMessage(sender, "error.numbertoolow", "1");
+                            dropParty.getMessenger().sendMessage(sender, "error.numbertoolow", "1");
                             return;
                         } else {
                             party.setItemDelay(itemDelay);
@@ -71,10 +71,10 @@ public class SetPartySetting extends DPCommand {
                     case MAX_STACK_SIZE:
                         int maxStackSize = Integer.parseInt(value);
                         if (maxStackSize < 1) {
-                            dropParty.getMessage().sendMessage(sender, "error.numbertoolow", "1");
+                            dropParty.getMessenger().sendMessage(sender, "error.numbertoolow", "1");
                             return;
                         } else if (maxStackSize > 64) {
-                            dropParty.getMessage().sendMessage(sender, "error.numbertoohigh", "64");
+                            dropParty.getMessenger().sendMessage(sender, "error.numbertoohigh", "64");
                             return;
                         } else {
                             party.setMaxStackSize(Integer.parseInt(value));
@@ -83,7 +83,7 @@ public class SetPartySetting extends DPCommand {
                     case FIREWORK_AMOUNT:
                         int fireworkAmount = Integer.parseInt(value);
                         if (fireworkAmount < 0) {
-                            dropParty.getMessage().sendMessage(sender, "error.numbertoolow", "0");
+                            dropParty.getMessenger().sendMessage(sender, "error.numbertoolow", "0");
                             return;
                         } else {
                             party.setFireworkAmount(fireworkAmount);
@@ -92,7 +92,7 @@ public class SetPartySetting extends DPCommand {
                     case FIREWORK_DELAY:
                         long fireworkDelay = Long.parseLong(value);
                         if (fireworkDelay < 1) {
-                            dropParty.getMessage().sendMessage(sender, "error.numbertoolow", "1");
+                            dropParty.getMessenger().sendMessage(sender, "error.numbertoolow", "1");
                             return;
                         } else {
                             party.setFireworkDelay(fireworkDelay);
@@ -102,14 +102,14 @@ public class SetPartySetting extends DPCommand {
                         if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
                             party.setStartPeriodically(Boolean.parseBoolean(value));
                         } else {
-                            dropParty.getMessage().sendMessage(sender, "error.booleanformat");
+                            dropParty.getMessenger().sendMessage(sender, "error.booleanformat");
                             return;
                         }
                         break;
                     case START_PERIOD:
                         long startPeriod = Long.parseLong(value);
                         if (startPeriod < 100) {
-                            dropParty.getMessage().sendMessage(sender, "error.numbertoolow", "100");
+                            dropParty.getMessenger().sendMessage(sender, "error.numbertoolow", "100");
                             return;
                         } else {
                             party.setStartPeriod(Long.parseLong(value));
@@ -119,28 +119,28 @@ public class SetPartySetting extends DPCommand {
                         if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
                             party.setVoteToStart(Boolean.parseBoolean(value));
                         } else {
-                            dropParty.getMessage().sendMessage(sender, "error.booleanformat");
+                            dropParty.getMessenger().sendMessage(sender, "error.booleanformat");
                             return;
                         }
                         break;
                     case REQUIRED_VOTES:
                         int requiredVotes = Integer.parseInt(value);
                         if (requiredVotes < 1) {
-                            dropParty.getMessage().sendMessage(sender, "error.numbertoolow", "1");
+                            dropParty.getMessenger().sendMessage(sender, "error.numbertoolow", "1");
                             return;
                         } else {
                             party.setRequiredVotes(requiredVotes);
                         }
                 }
-                dropParty.getMessage().sendMessage(sender, "set.partysetting", partySetting.getDisplayName(), partyName, value);
+                dropParty.getMessenger().sendMessage(sender, "set.partysetting", partySetting.getDisplayName(), partyName, value);
             } else {
-                dropParty.getMessage().sendMessage(sender, "error.party.doesntexist", partyName);
+                dropParty.getMessenger().sendMessage(sender, "error.party.doesntexist", partyName);
             }
         } catch (Exception e) {
             if (e instanceof NumberFormatException) {
-                dropParty.getMessage().sendMessage(sender, "error.numberformat");
+                dropParty.getMessenger().sendMessage(sender, "error.numberformat");
             } else if (e instanceof IllegalArgumentException) {
-                dropParty.getMessage().sendMessage(sender, "error.party.notapartysetting");
+                dropParty.getMessenger().sendMessage(sender, "error.party.notapartysetting");
             }
         }
     }

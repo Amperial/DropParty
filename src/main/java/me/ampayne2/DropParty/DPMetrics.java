@@ -40,7 +40,7 @@ public class DPMetrics {
             metrics = new Metrics(dropParty);
             metrics.start();
         } catch (IOException e) {
-            dropParty.getMessage().debug(e);
+            dropParty.getMessenger().debug(e);
         }
     }
 

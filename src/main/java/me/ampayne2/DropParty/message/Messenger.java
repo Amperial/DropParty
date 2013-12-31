@@ -34,7 +34,7 @@ import java.util.logging.Logger;
 /**
  * Manages drop party message sending, logging, and debugging.
  */
-public class Message {
+public class Messenger {
     private final boolean debug;
     private final Logger log;
     private final String messagePrefix;
@@ -46,7 +46,7 @@ public class Message {
      *
      * @param dropParty The DropParty instance.
      */
-    public Message(DropParty dropParty) {
+    public Messenger(DropParty dropParty) {
         debug = dropParty.getConfig().getBoolean("debug", false);
         log = dropParty.getLogger();
         FileConfiguration messageConfig = dropParty.getConfigManager().getConfig(ConfigType.MESSAGE);
@@ -65,9 +65,9 @@ public class Message {
      *
      * @param recipientClass   The recipient's class.
      * @param recipientHandler The RecipientHandler.
-     * @return The Message instance.
+     * @return The Messenger instance.
      */
-    public Message registerRecipient(Class recipientClass, RecipientHandler recipientHandler) {
+    public Messenger registerRecipient(Class recipientClass, RecipientHandler recipientHandler) {
         recipientHandlers.put(recipientClass, recipientHandler);
         return this;
     }

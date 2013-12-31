@@ -49,10 +49,10 @@ public class SetChest extends DPCommand {
             if (party.isType(PartyType.CHEST_PARTY)) {
                 dropParty.getPlayerModeController().setPlayerMode((Player) sender, PlayerMode.SETTING_CHESTS, party);
             } else {
-                dropParty.getMessage().sendMessage(sender, "error.chest.notachestparty", partyName);
+                dropParty.getMessenger().sendMessage(sender, "error.chest.notachestparty", partyName);
             }
         } else {
-            dropParty.getMessage().sendMessage(sender, "error.party.doesntexist", partyName);
+            dropParty.getMessenger().sendMessage(sender, "error.party.doesntexist", partyName);
         }
     }
 

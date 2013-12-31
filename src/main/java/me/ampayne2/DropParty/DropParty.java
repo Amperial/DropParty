@@ -20,7 +20,7 @@ package me.ampayne2.dropparty;
 
 import me.ampayne2.dropparty.command.CommandController;
 import me.ampayne2.dropparty.config.ConfigManager;
-import me.ampayne2.dropparty.message.Message;
+import me.ampayne2.dropparty.message.Messenger;
 import me.ampayne2.dropparty.message.RecipientHandler;
 import me.ampayne2.dropparty.modes.PlayerModeController;
 import org.bukkit.Server;
@@ -32,7 +32,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class DropParty extends JavaPlugin {
     private ConfigManager configManager;
-    private Message message;
+    private Messenger messenger;
     private PartyManager partyManager;
     private PlayerModeController playerModeController;
     private CommandController commandController;
@@ -41,7 +41,7 @@ public class DropParty extends JavaPlugin {
     @Override
     public void onEnable() {
         configManager = new ConfigManager(this);
-        message = new Message(this)
+        messenger = new Messenger(this)
                 .registerRecipient(CommandSender.class, new RecipientHandler() {
                     @Override
                     public void sendMessage(Object recipient, String message) {
@@ -55,7 +55,6 @@ public class DropParty extends JavaPlugin {
         partyManager = new PartyManager(this);
         playerModeController = new PlayerModeController(this);
         commandController = new CommandController(this);
-        getCommand("dropparty").setExecutor(commandController);
         dpMetrics = new DPMetrics(this);
         new DPListener(this);
     }
@@ -64,12 +63,13 @@ public class DropParty extends JavaPlugin {
     public void onDisable() {
         dpMetrics.destroyGraphs();
         dpMetrics = null;
+        getCommand(commandController.getMainCommand().getName()).setExecutor(null);
         commandController = null;
         playerModeController.clearModes();
         playerModeController = null;
         partyManager.stopParties();
         partyManager = null;
-        message = null;
+        messenger = null;
         configManager = null;
     }
 
@@ -85,10 +85,10 @@ public class DropParty extends JavaPlugin {
     /**
      * Gets the drop party message manager.
      *
-     * @return The Message instance.
+     * @return The Messenger instance.
      */
-    public Message getMessage() {
-        return message;
+    public Messenger getMessenger() {
+        return messenger;
     }
 
     /**

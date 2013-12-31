@@ -46,18 +46,18 @@ public class Vote extends DPCommand {
             if (party.canVoteToStart()) {
                 String playerName = sender.getName();
                 if (party.isRunning()) {
-                    dropParty.getMessage().sendMessage(sender, "error.party.alreadyrunning", partyName);
+                    dropParty.getMessenger().sendMessage(sender, "error.party.alreadyrunning", partyName);
                 } else if (party.hasVoted(playerName)) {
-                    dropParty.getMessage().sendMessage(sender, "error.party.alreadyvoted", partyName);
+                    dropParty.getMessenger().sendMessage(sender, "error.party.alreadyvoted", partyName);
                 } else {
                     party.addVote(playerName);
-                    dropParty.getMessage().sendMessage(sender, "party.vote", partyName);
+                    dropParty.getMessenger().sendMessage(sender, "party.vote", partyName);
                 }
             } else {
-                dropParty.getMessage().sendMessage(sender, "error.party.cannotvote", partyName);
+                dropParty.getMessenger().sendMessage(sender, "error.party.cannotvote", partyName);
             }
         } else {
-            dropParty.getMessage().sendMessage(sender, "error.party.doesntexist", partyName);
+            dropParty.getMessenger().sendMessage(sender, "error.party.doesntexist", partyName);
         }
     }
 

@@ -54,14 +54,14 @@ public class RemoveItemPoint extends DPCommand {
                     if (party.getItemPoints().size() > id) {
                         // TODO: Remove itempoint of id
                     } else {
-                        dropParty.getMessage().sendMessage(sender, "error.itempoint.iddoesntexist", args[1], partyName);
+                        dropParty.getMessenger().sendMessage(sender, "error.itempoint.iddoesntexist", args[1], partyName);
                     }
                 } catch (NumberFormatException e) {
-                    dropParty.getMessage().sendMessage(sender, "error.numberformat");
+                    dropParty.getMessenger().sendMessage(sender, "error.numberformat");
                 }
             }
         } else {
-            dropParty.getMessage().sendMessage(sender, "error.party.doesntexist", partyName);
+            dropParty.getMessenger().sendMessage(sender, "error.party.doesntexist", partyName);
         }
     }
 

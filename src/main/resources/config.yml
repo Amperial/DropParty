@@ -1,4 +1,4 @@
-debug: true
+debug: false
 defaultsettings:
   maxlength: 6000
   itemdelay: 5

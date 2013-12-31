@@ -90,7 +90,7 @@ public class PlayerModeController implements Listener {
         if (playerModes.containsKey(playerName)) {
             PlayerMode currentMode = playerModes.get(playerName);
             Party currentParty = playerModeParties.get(playerName);
-            dropParty.getMessage().sendMessage(player, "mode.modeoff", currentMode.getName(), currentParty.getName());
+            dropParty.getMessenger().sendMessage(player, "mode.modeoff", currentMode.getName(), currentParty.getName());
             if (currentMode.equals(playerMode) && currentParty.equals(party)) {
                 playerModes.remove(playerName);
                 playerModeParties.remove(playerName);
@@ -99,7 +99,7 @@ public class PlayerModeController implements Listener {
         }
         playerModes.put(playerName, playerMode);
         playerModeParties.put(playerName, party);
-        dropParty.getMessage().sendMessage(player, "mode.modeon", playerMode.getName(), party.getName());
+        dropParty.getMessenger().sendMessage(player, "mode.modeon", playerMode.getName(), party.getName());
     }
 
     /**

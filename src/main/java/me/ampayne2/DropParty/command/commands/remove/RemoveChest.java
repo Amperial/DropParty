@@ -57,17 +57,17 @@ public class RemoveChest extends DPCommand {
                         if (((ChestParty) party).getChests().size() > id) {
                             // TODO: Remove chest of id
                         } else {
-                            dropParty.getMessage().sendMessage(sender, "error.chest.iddoesntexist", args[1], partyName);
+                            dropParty.getMessenger().sendMessage(sender, "error.chest.iddoesntexist", args[1], partyName);
                         }
                     } catch (NumberFormatException e) {
-                        dropParty.getMessage().sendMessage(sender, "error.numberformat");
+                        dropParty.getMessenger().sendMessage(sender, "error.numberformat");
                     }
                 }
             } else {
-                dropParty.getMessage().sendMessage(sender, "error.chest.notachestparty", partyName);
+                dropParty.getMessenger().sendMessage(sender, "error.chest.notachestparty", partyName);
             }
         } else {
-            dropParty.getMessage().sendMessage(sender, "error.party.doesntexist", partyName);
+            dropParty.getMessenger().sendMessage(sender, "error.party.doesntexist", partyName);
         }
     }
 

@@ -83,8 +83,8 @@ public class ConfigAccessor {
             try {
                 getConfig().save(configFile);
             } catch (IOException e) {
-                dropParty.getMessage().log(Level.SEVERE, "Could not save config to " + configFile);
-                dropParty.getMessage().debug(e);
+                dropParty.getMessenger().log(Level.SEVERE, "Could not save config to " + configFile);
+                dropParty.getMessenger().debug(e);
             }
         }
         return this;

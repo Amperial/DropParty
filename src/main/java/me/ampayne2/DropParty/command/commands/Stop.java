@@ -45,15 +45,15 @@ public class Stop extends DPCommand {
             Party party = dropParty.getPartyManager().getParty(partyName);
             if (party.isRunning()) {
                 party.stop(false);
-                dropParty.getMessage().sendMessage(sender, "party.stop", partyName);
+                dropParty.getMessenger().sendMessage(sender, "party.stop", partyName);
             } else if (party.isShootingFireworks()) {
                 party.stopShootingFireworks();
-                dropParty.getMessage().sendMessage(sender, "party.stopfireworks", partyName);
+                dropParty.getMessenger().sendMessage(sender, "party.stopfireworks", partyName);
             } else {
-                dropParty.getMessage().sendMessage(sender, "error.party.notrunning", partyName);
+                dropParty.getMessenger().sendMessage(sender, "error.party.notrunning", partyName);
             }
         } else {
-            dropParty.getMessage().sendMessage(sender, "error.party.doesntexist", partyName);
+            dropParty.getMessenger().sendMessage(sender, "error.party.doesntexist", partyName);
         }
     }
 

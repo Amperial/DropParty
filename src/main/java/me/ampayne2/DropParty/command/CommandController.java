@@ -74,6 +74,8 @@ public class CommandController implements TabExecutor {
                         .addChildCommand(new ListItemPoints(dropParty))
                         .addChildCommand(new ListParties(dropParty))
                         .addChildCommand(new ListSettings(dropParty)));
+
+        dropParty.getCommand(mainCommand.getName()).setExecutor(this);
     }
 
     @Override
@@ -94,7 +96,7 @@ public class CommandController implements TabExecutor {
                     mainCommand.execute(subCommand, sender, newArgs);
                 }
             } else {
-                dropParty.getMessage().sendMessage(sender, "error.command.invalidsubcommand", "\"" + subCommand + "\"", "\"dropparty\"");
+                dropParty.getMessenger().sendMessage(sender, "error.command.invalidsubcommand", "\"" + subCommand + "\"", "\"dropparty\"");
             }
             return true;
         } else {

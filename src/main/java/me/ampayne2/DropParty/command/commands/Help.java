@@ -50,7 +50,7 @@ public class Help extends DPCommand {
             try {
                 pageNumber = DPUtils.clamp(Integer.parseInt(args[0]), 1, (commandAmount + 3) / 4);
             } catch (NumberFormatException e) {
-                dropParty.getMessage().sendMessage(sender, "error.numberformat");
+                dropParty.getMessenger().sendMessage(sender, "error.numberformat");
                 return;
             }
         }

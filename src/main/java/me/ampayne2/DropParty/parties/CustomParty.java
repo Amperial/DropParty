@@ -24,6 +24,8 @@ import org.bukkit.configuration.ConfigurationSection;
 
 /**
  * A party that spawns configurable items.
+ *
+ * TODO: Add functionality
  */
 public class CustomParty extends Party {
     /**
@@ -49,6 +51,6 @@ public class CustomParty extends Party {
 
     @Override
     public boolean dropNext() {
-        return true;
+        return false;
     }
 }

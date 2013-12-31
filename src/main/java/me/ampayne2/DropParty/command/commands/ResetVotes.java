@@ -45,12 +45,12 @@ public class ResetVotes extends DPCommand {
             Party party = dropParty.getPartyManager().getParty(partyName);
             if (party.canVoteToStart()) {
                 party.clearVotes();
-                dropParty.getMessage().sendMessage(sender, "party.resetvotes", partyName);
+                dropParty.getMessenger().sendMessage(sender, "party.resetvotes", partyName);
             } else {
-                dropParty.getMessage().sendMessage(sender, "error.party.cannotvote", partyName);
+                dropParty.getMessenger().sendMessage(sender, "error.party.cannotvote", partyName);
             }
         } else {
-            dropParty.getMessage().sendMessage(sender, "error.party.doesntexist", partyName);
+            dropParty.getMessenger().sendMessage(sender, "error.party.doesntexist", partyName);
         }
     }
 

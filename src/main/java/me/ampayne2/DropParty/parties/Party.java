@@ -55,7 +55,7 @@ public abstract class Party {
     protected long startPeriod;
     protected boolean voteToStart;
     protected int requiredVotes;
-    protected Set<String> votes = new HashSet<>();
+    protected Set<String> voters = new HashSet<>();
     protected Location teleport;
     protected List<DPItemPoint> itemPoints = new ArrayList<>();
     protected List<DPFireworkPoint> fireworkPoints = new ArrayList<>();
@@ -155,22 +155,12 @@ public abstract class Party {
     }
 
     /**
-     * Teleports a player to the party.
-     *
-     * @param player The player to teleport to the party.
-     */
-    public void teleport(Player player) {
-        player.teleport(teleport);
-        dropParty.getMessage().sendMessage(player, "party.teleport", partyName);
-    }
-
-    /**
      * Starts the party.
      */
     public void start() {
         if (!isRunning) {
             isRunning = true;
-            votes.clear();
+            voters.clear();
             stopShootingFireworks();
             taskId = dropParty.getServer().getScheduler().scheduleSyncRepeatingTask(dropParty, new Runnable() {
                 @Override
@@ -182,7 +172,7 @@ public abstract class Party {
                     }
                 }
             }, 0, itemDelay);
-            dropParty.getMessage().sendMessage(dropParty.getServer(), "broadcast.start", partyName, partyName);
+            dropParty.getMessenger().sendMessage(dropParty.getServer(), "broadcast.start", partyName, partyName);
         }
     }
 
@@ -195,12 +185,22 @@ public abstract class Party {
         if (isRunning) {
             isRunning = false;
             dropParty.getServer().getScheduler().cancelTask(taskId);
-            dropParty.getMessage().sendMessage(dropParty.getServer(), "broadcast.stop", partyName);
+            dropParty.getMessenger().sendMessage(dropParty.getServer(), "broadcast.stop", partyName);
 
             if (shootFireworks) {
                 startShootingFireworks();
             }
         }
+    }
+
+    /**
+     * Teleports a player to the party.
+     *
+     * @param player The player to teleport to the party.
+     */
+    public void teleport(Player player) {
+        player.teleport(teleport);
+        dropParty.getMessenger().sendMessage(player, "party.teleport", partyName);
     }
 
     /**
@@ -612,7 +612,7 @@ public abstract class Party {
             this.voteToStart = voteToStart;
             dropParty.getConfigManager().getConfig(ConfigType.PARTY).set("Parties." + partyName + "." + PartySetting.VOTE_TO_START.getName(), voteToStart);
             dropParty.getConfigManager().getConfigAccessor(ConfigType.PARTY).saveConfig();
-            votes.clear();
+            voters.clear();
         }
     }
 
@@ -635,7 +635,7 @@ public abstract class Party {
             this.requiredVotes = requiredVotes;
             dropParty.getConfigManager().getConfig(ConfigType.PARTY).set("Parties." + partyName + "." + PartySetting.REQUIRED_VOTES.getName(), requiredVotes);
             dropParty.getConfigManager().getConfigAccessor(ConfigType.PARTY).saveConfig();
-            votes.clear();
+            voters.clear();
         }
     }
 
@@ -646,7 +646,7 @@ public abstract class Party {
      * @return True if the player has voted, else false.
      */
     public boolean hasVoted(String playerName) {
-        return votes.contains(playerName);
+        return voters.contains(playerName);
     }
 
     /**
@@ -656,8 +656,8 @@ public abstract class Party {
      */
     public void addVote(String playerName) {
         if (voteToStart && !isRunning) {
-            votes.add(playerName);
-            if (votes.size() >= requiredVotes) {
+            voters.add(playerName);
+            if (voters.size() >= requiredVotes) {
                 start();
             }
         }
@@ -669,14 +669,14 @@ public abstract class Party {
      * @return How many players have voted for the party.
      */
     public int getVotes() {
-        return votes.size();
+        return voters.size();
     }
 
     /**
      * Clears the votes of the party.
      */
     public void clearVotes() {
-        votes.clear();
+        voters.clear();
     }
 
     /**

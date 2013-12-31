@@ -42,9 +42,9 @@ public class Delete extends DPCommand {
         String partyName = args[0];
         if (dropParty.getPartyManager().hasParty(partyName)) {
             dropParty.getPartyManager().removeParty(partyName);
-            dropParty.getMessage().sendMessage(sender, "party.delete", partyName);
+            dropParty.getMessenger().sendMessage(sender, "party.delete", partyName);
         } else {
-            dropParty.getMessage().sendMessage(sender, "error.party.doesntexist", partyName);
+            dropParty.getMessenger().sendMessage(sender, "error.party.doesntexist", partyName);
         }
     }
 
