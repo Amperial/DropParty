@@ -53,11 +53,7 @@ public class Messenger {
         for (String key : messageConfig.getConfigurationSection("Messages").getKeys(true)) {
             messages.put(key, ChatColor.translateAlternateColorCodes('&', messageConfig.getString("Messages." + key)));
         }
-        if (messages.containsKey("prefix")) {
-            messagePrefix = ChatColor.translateAlternateColorCodes('&', messages.get("prefix"));
-        } else {
-            messagePrefix = ChatColor.GOLD + "[" + ChatColor.DARK_PURPLE + "Drop Party" + ChatColor.GOLD + "] " + ChatColor.GRAY;
-        }
+        messagePrefix = messages.containsKey("prefix") ? messages.get("prefix") : ChatColor.GOLD + "[" + ChatColor.DARK_PURPLE + "Drop Party" + ChatColor.GOLD + "] " + ChatColor.GRAY;
     }
 
     /**
