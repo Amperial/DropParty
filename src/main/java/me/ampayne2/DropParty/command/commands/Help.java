@@ -18,23 +18,17 @@
  */
 package me.ampayne2.dropparty.command.commands;
 
-import me.ampayne2.dropparty.DPUtils;
 import me.ampayne2.dropparty.DropParty;
-import me.ampayne2.dropparty.command.Command;
 import me.ampayne2.dropparty.command.DPCommand;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
-
-import java.util.List;
 
 /**
  * A command that lists all of the drop party commands.
  */
 public class Help extends DPCommand {
     private final DropParty dropParty;
-    private final static int COMMANDS_PER_PAGE = 4;
 
     public Help(DropParty dropParty) {
         super(dropParty, "help", "Lists all of the drop party commands.", "/dp help [page]", new Permission("dropparty.help", PermissionDefault.TRUE), 0, 1, false);
@@ -43,22 +37,15 @@ public class Help extends DPCommand {
 
     @Override
     public void execute(String command, CommandSender sender, String[] args) {
-        List<Command> commands = dropParty.getCommandController().getMainCommand().getChildren(true);
-        int commandAmount = commands.size();
         int pageNumber = 1;
         if (args.length == 1) {
             try {
-                pageNumber = DPUtils.clamp(Integer.parseInt(args[0]), 1, (commandAmount + 3) / 4);
+                pageNumber = Integer.parseInt(args[0]);
             } catch (NumberFormatException e) {
                 dropParty.getMessenger().sendMessage(sender, "error.numberformat");
                 return;
             }
         }
-        int startIndex = COMMANDS_PER_PAGE * (pageNumber - 1);
-        sender.sendMessage(ChatColor.GOLD + "<-------<| " + ChatColor.DARK_PURPLE + "Commands: Page " + pageNumber + " " + ChatColor.GOLD + "|>------->");
-        for (Command helpCommand : commands.subList(startIndex, Math.min(startIndex + COMMANDS_PER_PAGE, commandAmount))) {
-            sender.sendMessage(ChatColor.DARK_PURPLE + ((DPCommand) helpCommand).getCommandUsage());
-            sender.sendMessage(ChatColor.GRAY + "-" + ((DPCommand) helpCommand).getDescription());
-        }
+        dropParty.getCommandController().getPageList().sendPage(pageNumber, sender);
     }
 }

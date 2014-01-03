@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.dropparty.command.commands.list;
+package me.ampayne2.dropparty.command.commands;
 
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.command.DPCommand;
@@ -25,27 +25,20 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
 /**
- * A command that lists the drop parties in the party manager.
+ * A command that reloads drop party.
  */
-public class ListParties extends DPCommand {
+public class Reload extends DPCommand {
     private final DropParty dropParty;
 
-    public ListParties(DropParty dropParty) {
-        super(dropParty, "parties", "Lists all of the drop parties.", "/dp list parties [page]", new Permission("dropparty.list.parties", PermissionDefault.TRUE), 0, 1, false);
+    public Reload(DropParty dropParty) {
+        super(dropParty, "reload", "Reloads the drop party plugin.", "/dp reload", new Permission("dropparty.reload", PermissionDefault.OP), 0, false);
         this.dropParty = dropParty;
     }
 
     @Override
     public void execute(String command, CommandSender sender, String[] args) {
-        int pageNumber = 1;
-        if (args.length == 1) {
-            try {
-                pageNumber = Integer.parseInt(args[0]);
-            } catch (NumberFormatException e) {
-                dropParty.getMessenger().sendMessage(sender, "error.numberformat");
-                return;
-            }
-        }
-        dropParty.getPartyManager().getPageList().sendPage(pageNumber, sender);
+        dropParty.onDisable();
+        dropParty.onEnable();
+        dropParty.getMessenger().sendMessage(sender, "reload");
     }
 }

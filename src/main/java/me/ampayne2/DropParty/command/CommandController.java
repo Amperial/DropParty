@@ -25,6 +25,7 @@ import me.ampayne2.dropparty.command.commands.remove.RemoveChest;
 import me.ampayne2.dropparty.command.commands.remove.RemoveFireworkPoint;
 import me.ampayne2.dropparty.command.commands.remove.RemoveItemPoint;
 import me.ampayne2.dropparty.command.commands.set.*;
+import me.ampayne2.dropparty.message.PageList;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.permissions.Permission;
@@ -39,6 +40,7 @@ import java.util.List;
 public class CommandController implements TabExecutor {
     private final DropParty dropParty;
     private final Command mainCommand;
+    private final PageList pageList;
 
     /**
      * Creates a new command controller.
@@ -58,24 +60,27 @@ public class CommandController implements TabExecutor {
                 .addChildCommand(new Teleport(dropParty))
                 .addChildCommand(new Vote(dropParty))
                 .addChildCommand(new ResetVotes(dropParty))
+                .addChildCommand(new Reload(dropParty))
                 .addChildCommand(new Command(dropParty, "set", new Permission("dropparty.set.all", PermissionDefault.OP), false)
-                        .addChildCommand(new SetChest(dropParty))
-                        .addChildCommand(new SetFireworkPoint(dropParty))
                         .addChildCommand(new SetItemPoint(dropParty))
+                        .addChildCommand(new SetFireworkPoint(dropParty))
+                        .addChildCommand(new SetChest(dropParty))
                         .addChildCommand(new SetPartySetting(dropParty))
                         .addChildCommand(new SetTeleport(dropParty)))
                 .addChildCommand(new Command(dropParty, "remove", new Permission("dropparty.remove.all", PermissionDefault.OP), false)
-                        .addChildCommand(new RemoveChest(dropParty))
-                        .addChildCommand(new RemoveFireworkPoint(dropParty))
                         .addChildCommand(new RemoveItemPoint(dropParty)))
+                        .addChildCommand(new RemoveFireworkPoint(dropParty))
+                .addChildCommand(new RemoveChest(dropParty))
                 .addChildCommand(new Command(dropParty, "list", new Permission("dropparty.list.all", PermissionDefault.TRUE), false)
-                        .addChildCommand(new ListChests(dropParty))
-                        .addChildCommand(new ListFireworkPoints(dropParty))
-                        .addChildCommand(new ListItemPoints(dropParty))
                         .addChildCommand(new ListParties(dropParty))
-                        .addChildCommand(new ListSettings(dropParty)));
+                        .addChildCommand(new ListItemPoints(dropParty))
+                        .addChildCommand(new ListFireworkPoints(dropParty))
+                        .addChildCommand(new ListChests(dropParty))
+                        .addChildCommand(new ListPartySettings(dropParty)));
 
         dropParty.getCommand(mainCommand.getName()).setExecutor(this);
+
+        pageList = new CommandPageList(dropParty);
     }
 
     @Override
@@ -137,5 +142,14 @@ public class CommandController implements TabExecutor {
      */
     public Command getMainCommand() {
         return mainCommand;
+    }
+
+    /**
+     * Gets the PageList of the drop party commands.
+     *
+     * @return The PageList.
+     */
+    public PageList getPageList() {
+        return pageList;
     }
 }

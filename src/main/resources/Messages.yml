@@ -1,6 +1,8 @@
 Messages:
   prefix: "&6[&5Drop Party&6] &7"
 
+  reload: "Reloaded Drop Party."
+
   permissions:
     nopermission: "&4You do not have permission to use this command."
 

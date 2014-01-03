@@ -19,10 +19,12 @@
 package me.ampayne2.dropparty;
 
 import me.ampayne2.dropparty.config.ConfigType;
+import me.ampayne2.dropparty.message.PageList;
 import me.ampayne2.dropparty.parties.ChestParty;
 import me.ampayne2.dropparty.parties.CustomParty;
 import me.ampayne2.dropparty.parties.Party;
 import me.ampayne2.dropparty.parties.PartyType;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
@@ -35,6 +37,7 @@ import java.util.Map;
  */
 public class PartyManager {
     private final DropParty dropParty;
+    private final PageList pageList;
     private Map<String, Party> parties = new HashMap<>();
 
     /**
@@ -63,6 +66,9 @@ public class PartyManager {
                 }
             }
         }
+
+        pageList = new PageList(dropParty, "Parties", 8);
+        updatePageList();
     }
 
     /**
@@ -87,6 +93,7 @@ public class PartyManager {
         partyConfig.createSection(path);
         party.save(partyConfig.getConfigurationSection(path));
         dropParty.getConfigManager().getConfigAccessor(ConfigType.PARTY).saveConfig();
+        updatePageList();
     }
 
     /**
@@ -102,6 +109,7 @@ public class PartyManager {
             parties.remove(partyName);
             dropParty.getConfigManager().getConfig(ConfigType.PARTY).set("Parties." + partyName, null);
             dropParty.getConfigManager().getConfigAccessor(ConfigType.PARTY).saveConfig();
+            updatePageList();
         }
     }
 
@@ -163,6 +171,26 @@ public class PartyManager {
             }
         }
         return partiesOfType;
+    }
+
+    /**
+     * Gets the PageList of drop parties.
+     *
+     * @return The PageList.
+     */
+    public PageList getPageList() {
+        return pageList;
+    }
+
+    /**
+     * Updates the PageList of drop parties.
+     */
+    public void updatePageList() {
+        List<String> strings = new ArrayList<>();
+        for (String partyName : parties.keySet()) {
+            strings.add(ChatColor.GRAY + "-" + partyName);
+        }
+        pageList.setStrings(strings);
     }
 
     /**
