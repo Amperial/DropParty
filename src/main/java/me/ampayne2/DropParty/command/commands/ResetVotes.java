@@ -34,7 +34,7 @@ public class ResetVotes extends DPCommand {
     private final DropParty dropParty;
 
     public ResetVotes(DropParty dropParty) {
-        super(dropParty, "resetvotes", "Resets the votes of a drop party.", "/dp resetvotes <party>", new Permission("dropparty.resetvotes", PermissionDefault.OP), 1, true);
+        super(dropParty, "resetvotes", "Resets the votes of a drop party.", "/dp resetvotes <party>", new Permission("dropparty.resetvotes", PermissionDefault.OP), 1, false);
         this.dropParty = dropParty;
     }
 

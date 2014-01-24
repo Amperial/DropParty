@@ -34,7 +34,7 @@ public class Start extends DPCommand {
     private final DropParty dropParty;
 
     public Start(DropParty dropParty) {
-        super(dropParty, "start", "Starts a drop party.", "/dp start <party>", new Permission("dropparty.start", PermissionDefault.OP), 1, true);
+        super(dropParty, "start", "Starts a drop party.", "/dp start <party>", new Permission("dropparty.start", PermissionDefault.OP), 1, false);
         this.dropParty = dropParty;
     }
 

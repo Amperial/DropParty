@@ -80,7 +80,7 @@ public class CommandController implements TabExecutor {
 
         dropParty.getCommand(mainCommand.getName()).setExecutor(this);
 
-        pageList = new CommandPageList(dropParty);
+        pageList = new CommandPageList(dropParty, mainCommand);
     }
 
     @Override

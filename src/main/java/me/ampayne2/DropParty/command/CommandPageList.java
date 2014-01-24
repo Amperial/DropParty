@@ -29,12 +29,12 @@ import java.util.List;
  * A PageList that lists all of the drop party commands and their description.
  */
 public class CommandPageList extends PageList {
-    public CommandPageList(DropParty dropParty) {
+    public CommandPageList(DropParty dropParty, Command command) {
         super(dropParty, "Commands", 8);
         List<String> strings = new ArrayList<>();
-        for (Command command : dropParty.getCommandController().getMainCommand().getChildren(true)) {
-            strings.add(ChatColor.DARK_PURPLE + ((DPCommand) command).getCommandUsage());
-            strings.add(ChatColor.GRAY + "-" + ((DPCommand) command).getDescription());
+        for (Command child : command.getChildren(true)) {
+            strings.add(ChatColor.DARK_PURPLE + ((DPCommand) child).getCommandUsage());
+            strings.add(ChatColor.GRAY + "-" + ((DPCommand) child).getDescription());
         }
         setStrings(strings);
     }

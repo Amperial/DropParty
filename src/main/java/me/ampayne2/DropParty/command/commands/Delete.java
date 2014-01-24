@@ -33,7 +33,7 @@ public class Delete extends DPCommand {
     private final DropParty dropParty;
 
     public Delete(DropParty dropParty) {
-        super(dropParty, "delete", "Deletes a drop party.", "/dp delete <party>", new Permission("dropparty.delete", PermissionDefault.OP), 1, true);
+        super(dropParty, "delete", "Deletes a drop party.", "/dp delete <party>", new Permission("dropparty.delete", PermissionDefault.OP), 1, false);
         this.dropParty = dropParty;
     }
 
