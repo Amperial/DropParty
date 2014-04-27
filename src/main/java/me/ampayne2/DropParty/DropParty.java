@@ -38,6 +38,7 @@ public class DropParty extends JavaPlugin {
     private PlayerModeController playerModeController;
     private CommandController commandController;
     private DPMetrics dpMetrics;
+    private UpdateManager updateManager;
 
     @Override
     public void onEnable() {
@@ -58,10 +59,12 @@ public class DropParty extends JavaPlugin {
         commandController = new CommandController(this);
         dpMetrics = new DPMetrics(this);
         new DPListener(this);
+        updateManager = new UpdateManager(this, this.getFile());
     }
 
     @Override
     public void onDisable() {
+        updateManager = null;
         HandlerList.unregisterAll(this);
         dpMetrics.destroyGraphs();
         dpMetrics = null;
@@ -127,5 +130,14 @@ public class DropParty extends JavaPlugin {
      */
     public DPMetrics getDpMetrics() {
         return dpMetrics;
+    }
+
+    /**
+     * Gets the update manager.
+     *
+     * @return The UpdateManager instance.
+     */
+    public UpdateManager getUpdateManager() {
+        return updateManager;
     }
 }

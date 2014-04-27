@@ -1,4 +1,5 @@
 debug: false
+update-notice: true
 colors:
   primary: DARK_PURPLE
   secondary: GRAY

@@ -32,6 +32,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 /**
  * The drop party listener.
@@ -142,6 +143,15 @@ public class DPListener implements Listener {
                     return;
                 }
             }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        if ((player.hasPermission("dropparty.update") || player.isOp()) && dropParty.getUpdateManager().updateAvailable()) {
+            dropParty.getMessenger().sendRawMessage(player, DPMessage.PREFIX + dropParty.getUpdateManager().getNotice());
+            dropParty.getMessenger().sendRawMessage(player, DPMessage.PREFIX + "Type /dp update to update.");
         }
     }
 }

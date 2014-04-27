@@ -62,6 +62,7 @@ public class CommandController implements TabExecutor {
                 .addChildCommand(new Vote(dropParty))
                 .addChildCommand(new ResetVotes(dropParty))
                 .addChildCommand(new Reload(dropParty))
+                .addChildCommand(new Update(dropParty))
                 .addChildCommand(new Command(dropParty, "set", new Permission("dropparty.set.all", PermissionDefault.OP), false)
                         .addChildCommand(new SetItemPoint(dropParty))
                         .addChildCommand(new SetFireworkPoint(dropParty))
