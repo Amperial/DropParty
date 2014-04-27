@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>me.ampayne2</groupId>
-    <artifactId>DropParty</artifactId>
+    <artifactId>dropparty</artifactId>
     <version>3.0</version>
     <inceptionYear>2013</inceptionYear>
     <name>DropParty</name>
