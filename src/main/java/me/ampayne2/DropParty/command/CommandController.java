@@ -25,6 +25,7 @@ import me.ampayne2.dropparty.command.commands.remove.RemoveChest;
 import me.ampayne2.dropparty.command.commands.remove.RemoveFireworkPoint;
 import me.ampayne2.dropparty.command.commands.remove.RemoveItemPoint;
 import me.ampayne2.dropparty.command.commands.set.*;
+import me.ampayne2.dropparty.message.DPMessage;
 import me.ampayne2.dropparty.message.PageList;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -68,11 +69,11 @@ public class CommandController implements TabExecutor {
                         .addChildCommand(new SetPartySetting(dropParty))
                         .addChildCommand(new SetTeleport(dropParty)))
                 .addChildCommand(new Command(dropParty, "remove", new Permission("dropparty.remove.all", PermissionDefault.OP), false)
-                        .addChildCommand(new RemoveItemPoint(dropParty)))
+                        .addChildCommand(new RemoveItemPoint(dropParty))
                         .addChildCommand(new RemoveFireworkPoint(dropParty))
-                .addChildCommand(new RemoveChest(dropParty))
+                        .addChildCommand(new RemoveChest(dropParty)))
                 .addChildCommand(new Command(dropParty, "list", new Permission("dropparty.list.all", PermissionDefault.TRUE), false)
-                        .addChildCommand(new ListParties(dropParty))
+                         .addChildCommand(new ListParties(dropParty))
                         .addChildCommand(new ListItemPoints(dropParty))
                         .addChildCommand(new ListFireworkPoints(dropParty))
                         .addChildCommand(new ListChests(dropParty))
@@ -101,7 +102,7 @@ public class CommandController implements TabExecutor {
                     mainCommand.execute(subCommand, sender, newArgs);
                 }
             } else {
-                dropParty.getMessenger().sendMessage(sender, "error.command.invalidsubcommand", "\"" + subCommand + "\"", "\"dropparty\"");
+                dropParty.getMessenger().sendMessage(sender, DPMessage.COMMAND_INVALID, "\"" + subCommand + "\"", "\"dropparty\"");
             }
             return true;
         } else {

@@ -20,7 +20,7 @@ package me.ampayne2.dropparty.command.commands;
 
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.command.DPCommand;
-import org.bukkit.ChatColor;
+import me.ampayne2.dropparty.message.Messenger;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -30,11 +30,11 @@ import org.bukkit.permissions.PermissionDefault;
  */
 public class About extends DPCommand {
     private final DropParty dropParty;
-    private final static String HEADER = ChatColor.GOLD + "<-------<| " + ChatColor.DARK_PURPLE + "About Drop Party " + ChatColor.GOLD + "|>------->";
-    private final static String URL = ChatColor.GRAY + "dev.bukkit.org/server-mods/dropparty/";
-    private final static String AUTHOR = ChatColor.GRAY + "Author: ampayne2";
-    private final static String VERSION = ChatColor.GRAY + "Version: ";
-    private final static String COMMANDS = ChatColor.GRAY + "Commands: /dp help [page]";
+    private final static String HEADER = Messenger.HIGHLIGHT_COLOR + "<-------<| " + Messenger.PRIMARY_COLOR + "About Drop Party " + Messenger.HIGHLIGHT_COLOR + "|>------->";
+    private final static String URL = Messenger.SECONDARY_COLOR + "dev.bukkit.org/server-mods/dropparty/";
+    private final static String AUTHOR = Messenger.SECONDARY_COLOR + "Author: ampayne2";
+    private final static String VERSION = Messenger.SECONDARY_COLOR + "Version: ";
+    private final static String COMMANDS = Messenger.SECONDARY_COLOR + "Commands: /dp help [page]";
 
     public About(DropParty dropParty) {
         super(dropParty, "", "Lists some information about drop party.", "/dp", new Permission("dropparty.about", PermissionDefault.TRUE), false);

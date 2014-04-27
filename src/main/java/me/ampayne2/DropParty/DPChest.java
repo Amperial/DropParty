@@ -19,6 +19,7 @@
 package me.ampayne2.dropparty;
 
 import me.ampayne2.dropparty.parties.Party;
+import me.ampayne2.dropparty.parties.PartySetting;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -36,6 +37,8 @@ public class DPChest {
     private final Chest chest;
     private final Inventory inventory;
     private final boolean isDoubleChest;
+    private int currentSlot = 0;
+    private int nextAmount = 0;
 
     /**
      * Creates a new DPChest.
@@ -86,12 +89,7 @@ public class DPChest {
      */
     public ItemStack getNextItemStack() {
         if (isDoubleChest) {
-            DoubleChest doubleChest = (DoubleChest) inventory.getHolder();
-            ItemStack itemStack = getNextItemStack(doubleChest.getLeftSide().getInventory());
-            if (itemStack == null) {
-                itemStack = getNextItemStack(doubleChest.getRightSide().getInventory());
-            }
-            return itemStack;
+            return getNextItemStack(inventory.getHolder().getInventory());
         } else {
             return getNextItemStack(inventory);
         }
@@ -104,21 +102,59 @@ public class DPChest {
      * @return The next item stack.
      */
     public ItemStack getNextItemStack(Inventory inventory) {
-        for (int i = 0; i < inventory.getSize(); i++) {
-            ItemStack itemStack = inventory.getItem(i);
-            if (itemStack != null) {
-                if (itemStack.getAmount() <= party.getMaxStackSize()) {
-                    inventory.setItem(i, null);
-                    return itemStack;
+        if (party.get(PartySetting.EMPTY_CHEST, Boolean.class)) {
+            for (int i = 0; i < inventory.getSize(); i++) {
+                ItemStack itemStack = inventory.getItem(i);
+                if (itemStack != null) {
+                    int maxStackSize = party.get(PartySetting.MAX_STACK_SIZE, Integer.class);
+                    if (itemStack.getAmount() <= maxStackSize) {
+                        inventory.setItem(i, null);
+                        return itemStack;
+                    } else {
+                        itemStack.setAmount(itemStack.getAmount() - maxStackSize);
+                        ItemStack newItemStack = itemStack.clone();
+                        newItemStack.setAmount(maxStackSize);
+                        return newItemStack;
+                    }
+                }
+            }
+        } else {
+            if (currentSlot == inventory.getSize()) {
+                return null;
+            }
+            for (int i = currentSlot; i < inventory.getSize(); i++) {
+                ItemStack itemStack = inventory.getItem(i);
+                if (itemStack == null) {
+                    currentSlot++;
                 } else {
-                    itemStack.setAmount(itemStack.getAmount() - party.getMaxStackSize());
-                    ItemStack newItemStack = itemStack.clone();
-                    newItemStack.setAmount(party.getMaxStackSize());
-                    return newItemStack;
+                    if (nextAmount == 0) {
+                        nextAmount = itemStack.getAmount();
+                    }
+                    int maxStackSize = party.get(PartySetting.MAX_STACK_SIZE, Integer.class);
+                    if (nextAmount <= maxStackSize) {
+                        ItemStack newItemStack = itemStack.clone();
+                        newItemStack.setAmount(nextAmount);
+                        currentSlot++;
+                        nextAmount = 0;
+                        return newItemStack;
+                    } else {
+                        nextAmount = nextAmount - maxStackSize;
+                        ItemStack newItemStack = itemStack.clone();
+                        newItemStack.setAmount(maxStackSize);
+                        return newItemStack;
+                    }
                 }
             }
         }
         return null;
+    }
+
+    /**
+     * Resets the current slot of the chest.
+     */
+    public void resetCurrentSlot() {
+        currentSlot = 0;
+        nextAmount = 0;
     }
 
     /**

@@ -18,10 +18,9 @@
  */
 package me.ampayne2.dropparty;
 
+import me.ampayne2.dropparty.message.DPMessage;
 import me.ampayne2.dropparty.modes.PlayerModeController;
-import me.ampayne2.dropparty.parties.ChestParty;
 import me.ampayne2.dropparty.parties.Party;
-import me.ampayne2.dropparty.parties.PartyType;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -63,12 +62,11 @@ public class DPListener implements Listener {
                     case SETTING_CHESTS:
                         if (block.getType() == Material.CHEST) {
                             Chest chest = (Chest) block.getState();
-                            ChestParty chestParty = (ChestParty) party;
-                            if (chestParty.hasChest(chest)) {
-                                dropParty.getMessenger().sendMessage(player, "error.chest.alreadyexists");
+                            if (party.hasChest(chest)) {
+                                dropParty.getMessenger().sendMessage(player, DPMessage.CHEST_ALREADYEXISTS);
                             } else {
-                                chestParty.addChest(new DPChest(dropParty, party, chest));
-                                dropParty.getMessenger().sendMessage(player, "set.chest", party.getName());
+                                party.addChest(new DPChest(dropParty, party, chest));
+                                dropParty.getMessenger().sendMessage(player, DPMessage.SET_CHEST, party.getName());
                             }
                         } else {
                             return;
@@ -77,31 +75,30 @@ public class DPListener implements Listener {
                     case SETTING_ITEM_POINTS:
                         block = block.getRelative(event.getBlockFace());
                         if (party.hasItemPoint(block.getLocation())) {
-                            dropParty.getMessenger().sendMessage(player, "error.itempoint.alreadyexists");
+                            dropParty.getMessenger().sendMessage(player, DPMessage.ITEMPOINT_ALREADYEXISTS);
                         } else {
                             party.addItemPoint(new DPItemPoint(dropParty, party, block.getLocation()));
-                            dropParty.getMessenger().sendMessage(player, "set.itempoint", party.getName());
+                            dropParty.getMessenger().sendMessage(player, DPMessage.SET_ITEMPOINT, party.getName());
                         }
                         break;
                     case SETTING_FIREWORK_POINTS:
                         block = block.getRelative(event.getBlockFace());
                         Location fireworkPointLocation = block.getLocation().clone().add(0.5, 0, 0.5);
                         if (party.hasFireworkPoint(fireworkPointLocation)) {
-                            dropParty.getMessenger().sendMessage(player, "error.fireworkpoint.alreadyexists");
+                            dropParty.getMessenger().sendMessage(player, DPMessage.FIREWORKPOINT_ALREADYEXISTS);
                         } else {
                             party.addFireworkPoint(new DPFireworkPoint(dropParty, party, fireworkPointLocation));
-                            dropParty.getMessenger().sendMessage(player, "set.fireworkpoint", party.getName());
+                            dropParty.getMessenger().sendMessage(player, DPMessage.SET_FIREWORKPOINT, party.getName());
                         }
                         break;
                     case REMOVING_CHESTS:
                         if (block.getType() == Material.CHEST) {
                             Chest chest = (Chest) block.getState();
-                            ChestParty chestParty = (ChestParty) party;
-                            if (chestParty.hasChest(chest)) {
-                                chestParty.removeChest(chest);
-                                dropParty.getMessenger().sendMessage(player, "remove.chest", party.getName());
+                            if (party.hasChest(chest)) {
+                                party.removeChest(chest);
+                                dropParty.getMessenger().sendMessage(player, DPMessage.REMOVE_CHEST, party.getName());
                             } else {
-                                dropParty.getMessenger().sendMessage(player, "error.chest.doesntexist");
+                                dropParty.getMessenger().sendMessage(player, DPMessage.CHEST_DOESNTEXIST);
                             }
                         } else {
                             return;
@@ -111,9 +108,9 @@ public class DPListener implements Listener {
                         block = block.getRelative(event.getBlockFace());
                         if (party.hasItemPoint(block.getLocation())) {
                             party.removeItemPoint(block.getLocation());
-                            dropParty.getMessenger().sendMessage(player, "remove.itempoint", party.getName());
+                            dropParty.getMessenger().sendMessage(player, DPMessage.REMOVE_ITEMPOINT, party.getName());
                         } else {
-                            dropParty.getMessenger().sendMessage(player, "error.itempoint.doesntexist", party.getName());
+                            dropParty.getMessenger().sendMessage(player, DPMessage.ITEMPOINT_DOESNTEXIST, party.getName());
                         }
                         break;
                     case REMOVING_FIREWORK_POINTS:
@@ -121,9 +118,9 @@ public class DPListener implements Listener {
                         fireworkPointLocation = block.getLocation().clone().add(0.5, 0, 0.5);
                         if (party.hasFireworkPoint(fireworkPointLocation)) {
                             party.removeFireworkPoint(fireworkPointLocation);
-                            dropParty.getMessenger().sendMessage(player, "remove.fireworkpoint", party.getName());
+                            dropParty.getMessenger().sendMessage(player, DPMessage.REMOVE_FIREWORKPOINT, party.getName());
                         } else {
-                            dropParty.getMessenger().sendMessage(player, "error.fireworkpoint.doesntexist");
+                            dropParty.getMessenger().sendMessage(player, DPMessage.FIREWORKPOINT_DOESNTEXIST);
                         }
                         break;
                 }
@@ -138,10 +135,10 @@ public class DPListener implements Listener {
         String playerName = player.getName();
         if (event.getBlock().getType() == Material.CHEST) {
             Chest chest = (Chest) event.getBlock().getState();
-            for (Party party : dropParty.getPartyManager().getParties(PartyType.CHEST_PARTY).values()) {
-                if (((ChestParty) party).hasChest(chest)) {
+            for (Party party : dropParty.getPartyManager().getParties().values()) {
+                if (party.hasChest(chest)) {
                     event.setCancelled(true);
-                    dropParty.getMessenger().sendMessage(player, "error.chest.cantbreak");
+                    dropParty.getMessenger().sendMessage(player, DPMessage.CHEST_CANTBREAK);
                     return;
                 }
             }

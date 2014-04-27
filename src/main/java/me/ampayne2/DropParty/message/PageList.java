@@ -20,7 +20,6 @@ package me.ampayne2.dropparty.message;
 
 import me.ampayne2.dropparty.DPUtils;
 import me.ampayne2.dropparty.DropParty;
-import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,9 +78,10 @@ public class PageList {
      * @param recipient  The recipient.
      */
     public void sendPage(int pageNumber, Object recipient) {
-        pageNumber = DPUtils.clamp(pageNumber, 1, getPageAmount());
+        int pageAmount = getPageAmount();
+        pageNumber = DPUtils.clamp(pageNumber, 1, pageAmount);
         Messenger messenger = dropParty.getMessenger();
-        messenger.sendRawMessage(recipient, ChatColor.GOLD + "<-------<| " + ChatColor.DARK_PURPLE + name + ": Page " + pageNumber + " " + ChatColor.GOLD + "|>------->");
+        messenger.sendRawMessage(recipient, Messenger.HIGHLIGHT_COLOR + "<-------<| " + Messenger.PRIMARY_COLOR + name + ": Page " + pageNumber + "/" + pageAmount + " " + Messenger.HIGHLIGHT_COLOR + "|>------->");
         int startIndex = messagesPerPage * (pageNumber - 1);
         for (String string : strings.subList(startIndex, Math.min(startIndex + messagesPerPage, strings.size()))) {
             messenger.sendRawMessage(recipient, string);

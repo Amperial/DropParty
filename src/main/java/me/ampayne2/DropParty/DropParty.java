@@ -25,6 +25,7 @@ import me.ampayne2.dropparty.message.RecipientHandler;
 import me.ampayne2.dropparty.modes.PlayerModeController;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -41,17 +42,17 @@ public class DropParty extends JavaPlugin {
     @Override
     public void onEnable() {
         configManager = new ConfigManager(this);
-        messenger = new Messenger(this)
-                .registerRecipient(CommandSender.class, new RecipientHandler() {
-                    @Override
-                    public void sendMessage(Object recipient, String message) {
-                        ((CommandSender) recipient).sendMessage(message);
-                    }})
-                .registerRecipient(Server.class, new RecipientHandler() {
-                    @Override
-                    public void sendMessage(Object recipient, String message) {
-                        ((Server) recipient).broadcastMessage(message);
-                    }});
+        messenger = new Messenger(this).registerRecipient(CommandSender.class, new RecipientHandler() {
+            @Override
+            public void sendMessage(Object recipient, String message) {
+                ((CommandSender) recipient).sendMessage(message);
+            }
+        }).registerRecipient(Server.class, new RecipientHandler() {
+            @Override
+            public void sendMessage(Object recipient, String message) {
+                ((Server) recipient).broadcastMessage(message);
+            }
+        });
         partyManager = new PartyManager(this);
         playerModeController = new PlayerModeController(this);
         commandController = new CommandController(this);
@@ -61,6 +62,7 @@ public class DropParty extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        HandlerList.unregisterAll(this);
         dpMetrics.destroyGraphs();
         dpMetrics = null;
         getCommand(commandController.getMainCommand().getName()).setExecutor(null);

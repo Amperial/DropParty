@@ -19,8 +19,8 @@
 package me.ampayne2.dropparty.command;
 
 import me.ampayne2.dropparty.DropParty;
+import me.ampayne2.dropparty.message.Messenger;
 import me.ampayne2.dropparty.message.PageList;
-import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +33,8 @@ public class CommandPageList extends PageList {
         super(dropParty, "Commands", 8);
         List<String> strings = new ArrayList<>();
         for (Command child : command.getChildren(true)) {
-            strings.add(ChatColor.DARK_PURPLE + ((DPCommand) child).getCommandUsage());
-            strings.add(ChatColor.GRAY + "-" + ((DPCommand) child).getDescription());
+            strings.add(Messenger.PRIMARY_COLOR + ((DPCommand) child).getCommandUsage());
+            strings.add(Messenger.SECONDARY_COLOR + "-" + ((DPCommand) child).getDescription());
         }
         setStrings(strings);
     }

@@ -20,6 +20,7 @@ package me.ampayne2.dropparty.command.commands.remove;
 
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.command.DPCommand;
+import me.ampayne2.dropparty.message.DPMessage;
 import me.ampayne2.dropparty.modes.PlayerMode;
 import me.ampayne2.dropparty.parties.Party;
 import org.bukkit.command.CommandSender;
@@ -52,16 +53,17 @@ public class RemoveItemPoint extends DPCommand {
                 try {
                     int id = Integer.parseInt(args[1]);
                     if (party.getItemPoints().size() > id) {
-                        // TODO: Remove itempoint of id
+                        party.removeItemPoint(party.getItemPoints().get(id));
+                        dropParty.getMessenger().sendMessage(sender, DPMessage.REMOVE_ITEMPOINT, partyName);
                     } else {
-                        dropParty.getMessenger().sendMessage(sender, "error.itempoint.iddoesntexist", args[1], partyName);
+                        dropParty.getMessenger().sendMessage(sender, DPMessage.ITEMPOINT_IDDOESNTEXIST, args[1], partyName);
                     }
                 } catch (NumberFormatException e) {
-                    dropParty.getMessenger().sendMessage(sender, "error.numberformat");
+                    dropParty.getMessenger().sendMessage(sender, DPMessage.ERROR_NUMBERFORMAT);
                 }
             }
         } else {
-            dropParty.getMessenger().sendMessage(sender, "error.party.doesntexist", partyName);
+            dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_DOESNTEXIST, partyName);
         }
     }
 

@@ -20,9 +20,8 @@ package me.ampayne2.dropparty.command.commands.set;
 
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.command.DPCommand;
+import me.ampayne2.dropparty.message.DPMessage;
 import me.ampayne2.dropparty.modes.PlayerMode;
-import me.ampayne2.dropparty.parties.Party;
-import me.ampayne2.dropparty.parties.PartyType;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
@@ -45,19 +44,14 @@ public class SetChest extends DPCommand {
     public void execute(String command, CommandSender sender, String[] args) {
         String partyName = args[0];
         if (dropParty.getPartyManager().hasParty(partyName)) {
-            Party party = dropParty.getPartyManager().getParty(partyName);
-            if (party.isType(PartyType.CHEST_PARTY)) {
-                dropParty.getPlayerModeController().setPlayerMode((Player) sender, PlayerMode.SETTING_CHESTS, party);
-            } else {
-                dropParty.getMessenger().sendMessage(sender, "error.chest.notachestparty", partyName);
-            }
+            dropParty.getPlayerModeController().setPlayerMode((Player) sender, PlayerMode.SETTING_CHESTS, dropParty.getPartyManager().getParty(partyName));
         } else {
-            dropParty.getMessenger().sendMessage(sender, "error.party.doesntexist", partyName);
+            dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_DOESNTEXIST, partyName);
         }
     }
 
     @Override
     public List<String> getTabCompleteList(String[] args) {
-        return dropParty.getPartyManager().getPartyList(PartyType.CHEST_PARTY);
+        return dropParty.getPartyManager().getPartyList();
     }
 }

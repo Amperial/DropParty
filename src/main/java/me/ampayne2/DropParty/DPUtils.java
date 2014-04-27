@@ -41,13 +41,7 @@ public final class DPUtils {
      * @return The string representation of the location.
      */
     public static String locationToString(Location location) {
-        return new StringBuilder()
-                .append(location.getWorld().getName()).append(",")
-                .append(location.getX()).append(",")
-                .append(location.getY()).append(",")
-                .append(location.getZ()).append(",")
-                .append(location.getYaw()).append(",")
-                .append(location.getPitch()).toString();
+        return new StringBuilder().append(location.getWorld().getName()).append(",").append(location.getX()).append(",").append(location.getY()).append(",").append(location.getZ()).append(",").append(location.getYaw()).append(",").append(location.getPitch()).toString();
     }
 
     /**

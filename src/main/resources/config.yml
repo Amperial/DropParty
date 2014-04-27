@@ -1,4 +1,8 @@
 debug: false
+colors:
+  primary: DARK_PURPLE
+  secondary: GRAY
+  highlights: GOLD
 defaultsettings:
   maxlength: 6000
   itemdelay: 5

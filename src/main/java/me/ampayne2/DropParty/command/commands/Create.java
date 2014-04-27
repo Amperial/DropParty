@@ -20,16 +20,12 @@ package me.ampayne2.dropparty.command.commands;
 
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.command.DPCommand;
-import me.ampayne2.dropparty.parties.ChestParty;
-import me.ampayne2.dropparty.parties.CustomParty;
-import me.ampayne2.dropparty.parties.PartyType;
+import me.ampayne2.dropparty.message.DPMessage;
+import me.ampayne2.dropparty.parties.Party;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A command that creates a drop party.
@@ -38,7 +34,7 @@ public class Create extends DPCommand {
     private final DropParty dropParty;
 
     public Create(DropParty dropParty) {
-        super(dropParty, "create", "Creates a drop party.", "/dp create <party> <type>", new Permission("dropparty.create", PermissionDefault.OP), 2, true);
+        super(dropParty, "create", "Creates a drop party.", "/dp create <party>", new Permission("dropparty.create", PermissionDefault.OP), true);
         this.dropParty = dropParty;
     }
 
@@ -46,27 +42,10 @@ public class Create extends DPCommand {
     public void execute(String command, CommandSender sender, String[] args) {
         String partyName = args[0];
         if (dropParty.getPartyManager().hasParty(partyName)) {
-            dropParty.getMessenger().sendMessage(sender, "error.party.alreadyexists", partyName);
+            dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_ALREADYEXISTS, partyName);
         } else {
-            PartyType partyType = PartyType.fromName(args[1]);
-            switch (partyType) {
-                case CHEST_PARTY:
-                    dropParty.getPartyManager().addParty(new ChestParty(dropParty, partyName, ((Player) sender).getLocation()));
-                    break;
-                case CUSTOM_PARTY:
-                    dropParty.getPartyManager().addParty(new CustomParty(dropParty, partyName, ((Player) sender).getLocation()));
-                    break;
-            }
-            dropParty.getMessenger().sendMessage(sender, "party.create", partyName);
-        }
-    }
-
-    @Override
-    public List<String> getTabCompleteList(String[] args) {
-        if (args.length == 1) {
-            return PartyType.getPartyTypeNames();
-        } else {
-            return new ArrayList<>();
+            dropParty.getPartyManager().addParty(new Party(dropParty, partyName, ((Player) sender).getLocation()));
+            dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_CREATE, partyName);
         }
     }
 }

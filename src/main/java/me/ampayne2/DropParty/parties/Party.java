@@ -18,13 +18,15 @@
  */
 package me.ampayne2.dropparty.parties;
 
-import me.ampayne2.dropparty.DPFireworkPoint;
-import me.ampayne2.dropparty.DPItemPoint;
-import me.ampayne2.dropparty.DPUtils;
-import me.ampayne2.dropparty.DropParty;
+import me.ampayne2.dropparty.*;
 import me.ampayne2.dropparty.config.ConfigType;
+import me.ampayne2.dropparty.message.DPMessage;
+import me.ampayne2.dropparty.message.Messenger;
+import me.ampayne2.dropparty.message.PageList;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Chest;
+import org.bukkit.block.DoubleChest;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -35,56 +37,61 @@ import java.util.*;
 /**
  * Controls and contains all the information of a drop party.
  */
-public abstract class Party {
-    protected final DropParty dropParty;
-    protected final String partyName;
-    protected final PartyType type;
-    protected long maxLength;
-    protected long currentLength;
-    protected long itemDelay;
-    protected int maxStackSize;
-    protected int fireworkAmount;
-    protected long fireworkDelay;
-    protected boolean isRunning = false;
-    protected int taskId;
-    protected boolean isShootingFireworks = false;
-    protected int fireworkTaskId;
-    protected int fireworksShot;
-    protected int periodicTaskId;
-    protected boolean startPeriodically;
-    protected long startPeriod;
-    protected boolean voteToStart;
-    protected int requiredVotes;
-    protected Set<String> voters = new HashSet<>();
-    protected Location teleport;
-    protected List<DPItemPoint> itemPoints = new ArrayList<>();
-    protected List<DPFireworkPoint> fireworkPoints = new ArrayList<>();
-    protected final static Random RANDOM = new Random();
+public class Party {
+    private final DropParty dropParty;
+    private final String partyName;
+    private Location teleport;
+    private final Map<PartySetting, Object> partySettings = new HashMap<>();
+    private final PageList settingsList;
+    private final List<DPChest> chests = new ArrayList<>();
+    private final PageList chestList;
+    private final List<DPItemPoint> itemPoints = new ArrayList<>();
+    private final PageList itemPointList;
+    private final List<DPFireworkPoint> fireworkPoints = new ArrayList<>();
+    private final PageList fireworkPointList;
+    private final Set<String> voters = new HashSet<>();
+
+    private boolean isRunning = false;
+    private int taskId;
+    private long currentLength;
+    private int currentChest = 0;
+    private boolean isShootingFireworks = false;
+    private int fireworkTaskId;
+    private int fireworksShot;
+    private int periodicTaskId;
+
+    private final static Random RANDOM = new Random();
 
     /**
      * Creates a Party from default settings.
      *
      * @param dropParty The DropParty instance.
      * @param partyName The name of the party.
-     * @param type      The type of the party.
      * @param teleport  The teleport location of the party.
      */
-    public Party(DropParty dropParty, String partyName, PartyType type, Location teleport) {
+    public Party(DropParty dropParty, String partyName, Location teleport) {
         this.dropParty = dropParty;
         this.partyName = partyName;
-        this.type = type;
         this.teleport = teleport;
 
         FileConfiguration config = dropParty.getConfig();
-        maxLength = config.getLong("defaultsettings." + PartySetting.MAX_LENGTH.getName(), 6000);
-        itemDelay = config.getLong("defaultsettings." + PartySetting.ITEM_DELAY.getName(), 5);
-        maxStackSize = config.getInt("defaultsettings." + PartySetting.MAX_STACK_SIZE.getName(), 8);
-        fireworkAmount = config.getInt("defaultsettings." + PartySetting.FIREWORK_AMOUNT.getName(), 8);
-        fireworkDelay = config.getLong("defaultsettings." + PartySetting.FIREWORK_DELAY.getName(), 2);
-        startPeriodically = config.getBoolean("defaultsettings." + PartySetting.START_PERIODICALLY.getName(), false);
-        startPeriod = config.getLong("defaultsettings." + PartySetting.START_PERIOD.getName(), 144000);
-        voteToStart = config.getBoolean("defaultsettings." + PartySetting.VOTE_TO_START.getName(), false);
-        requiredVotes = config.getInt("defaultsettings." + PartySetting.REQUIRED_VOTES.getName(), 50);
+        for (PartySetting partySetting : PartySetting.class.getEnumConstants()) {
+            Object value = null;
+            if (partySetting.getType() == Integer.class) {
+                value = config.getInt("defaultsettings." + partySetting.getName(), (int) partySetting.getDefault());
+            } else if (partySetting.getType() == Long.class) {
+                value = config.getLong("defaultsettings." + partySetting.getName(), (long) partySetting.getDefault());
+            } else if (partySetting.getType() == Boolean.class) {
+                value = config.getBoolean("defaultsettings." + partySetting.getName(), (boolean) partySetting.getDefault());
+            }
+            partySettings.put(partySetting, value);
+        }
+        settingsList = new PageList(dropParty, "Settings", 9);
+        updateSettingsList();
+
+        chestList = new PageList(dropParty, "Chests", 9);
+        itemPointList = new PageList(dropParty, "Item Points", 9);
+        fireworkPointList = new PageList(dropParty, "Firework Points", 9);
     }
 
     /**
@@ -96,25 +103,39 @@ public abstract class Party {
     public Party(DropParty dropParty, ConfigurationSection section) {
         this.dropParty = dropParty;
         this.partyName = section.getString("name");
-        this.type = PartyType.valueOf(section.getString("type"));
-        maxLength = section.getLong(PartySetting.MAX_LENGTH.getName());
-        itemDelay = section.getLong(PartySetting.ITEM_DELAY.getName());
-        maxStackSize = section.getInt(PartySetting.MAX_STACK_SIZE.getName());
-        fireworkAmount = section.getInt(PartySetting.FIREWORK_AMOUNT.getName());
-        fireworkDelay = section.getLong(PartySetting.FIREWORK_DELAY.getName());
-        startPeriodically = section.getBoolean(PartySetting.START_PERIODICALLY.getName());
-        startPeriod = section.getLong(PartySetting.START_PERIOD.getName());
-        voteToStart = section.getBoolean(PartySetting.VOTE_TO_START.getName());
-        requiredVotes = section.getInt(PartySetting.REQUIRED_VOTES.getName());
         teleport = DPUtils.stringToLocation(section.getString("teleport"));
+        for (PartySetting partySetting : PartySetting.class.getEnumConstants()) {
+            Object value = null;
+            if (partySetting.getType() == Integer.class) {
+                value = section.getInt(partySetting.getName(), (int) partySetting.getDefault());
+            } else if (partySetting.getType() == Long.class) {
+                value = section.getLong(partySetting.getName(), (long) partySetting.getDefault());
+            } else if (partySetting.getType() == Boolean.class) {
+                value = section.getBoolean(partySetting.getName(), (boolean) partySetting.getDefault());
+            }
+            partySettings.put(partySetting, value);
+        }
+        settingsList = new PageList(dropParty, "Settings", 9);
+        updateSettingsList();
+
+        List<String> dpChests = section.getStringList("chests");
+        for (String chest : dpChests) {
+            chests.add(DPChest.fromConfig(dropParty, this, chest));
+        }
+        chestList = new PageList(dropParty, "Chests", 9);
+        updateChestList();
 
         for (String itemPoint : section.getStringList("itempoints")) {
             itemPoints.add(DPItemPoint.fromConfig(dropParty, this, itemPoint));
         }
+        itemPointList = new PageList(dropParty, "Item Points", 9);
+        updateItemPointList();
 
         for (String fireworkPoint : section.getStringList("fireworkpoints")) {
             fireworkPoints.add(DPFireworkPoint.fromConfig(dropParty, this, fireworkPoint));
         }
+        fireworkPointList = new PageList(dropParty, "Firework Points", 9);
+        updateFireworkPointList();
     }
 
     /**
@@ -124,25 +145,6 @@ public abstract class Party {
      */
     public String getName() {
         return partyName;
-    }
-
-    /**
-     * Gets the type of the party.
-     *
-     * @return The type of the party.
-     */
-    public PartyType getType() {
-        return type;
-    }
-
-    /**
-     * Checks if the party is of a certain type.
-     *
-     * @param partyType The party type.
-     * @return True if the party is of the party type, else false.
-     */
-    public boolean isType(PartyType partyType) {
-        return type == partyType;
     }
 
     /**
@@ -162,6 +164,8 @@ public abstract class Party {
             isRunning = true;
             voters.clear();
             stopShootingFireworks();
+            final long maxLength = get(PartySetting.MAX_LENGTH, Long.class);
+            final long itemDelay = get(PartySetting.ITEM_DELAY, Long.class);
             taskId = dropParty.getServer().getScheduler().scheduleSyncRepeatingTask(dropParty, new Runnable() {
                 @Override
                 public void run() {
@@ -169,10 +173,11 @@ public abstract class Party {
                     if (currentLength > maxLength || !dropNext()) {
                         stop(true);
                         currentLength = 0;
+                        currentChest = 0;
                     }
                 }
             }, 0, itemDelay);
-            dropParty.getMessenger().sendMessage(dropParty.getServer(), "broadcast.start", partyName, partyName);
+            dropParty.getMessenger().sendMessage(dropParty.getServer(), DPMessage.BROADCAST_START, partyName, partyName);
         }
     }
 
@@ -185,7 +190,11 @@ public abstract class Party {
         if (isRunning) {
             isRunning = false;
             dropParty.getServer().getScheduler().cancelTask(taskId);
-            dropParty.getMessenger().sendMessage(dropParty.getServer(), "broadcast.stop", partyName);
+            dropParty.getMessenger().sendMessage(dropParty.getServer(), DPMessage.BROADCAST_STOP, partyName);
+
+            for (DPChest chest : chests) {
+                chest.resetCurrentSlot();
+            }
 
             if (shootFireworks) {
                 startShootingFireworks();
@@ -200,7 +209,7 @@ public abstract class Party {
      */
     public void teleport(Player player) {
         player.teleport(teleport);
-        dropParty.getMessenger().sendMessage(player, "party.teleport", partyName);
+        dropParty.getMessenger().sendMessage(player, DPMessage.PARTY_TELEPORT, partyName);
     }
 
     /**
@@ -216,8 +225,9 @@ public abstract class Party {
      * Starts shooting fireworks.
      */
     public void startShootingFireworks() {
-        if (!isShootingFireworks) {
+        if (!isShootingFireworks && fireworkPoints.size() > 0) {
             isShootingFireworks = true;
+            final int fireworkAmount = get(PartySetting.FIREWORK_AMOUNT, Integer.class);
             fireworkTaskId = dropParty.getServer().getScheduler().scheduleSyncRepeatingTask(dropParty, new Runnable() {
                 @Override
                 public void run() {
@@ -228,7 +238,7 @@ public abstract class Party {
                         stopShootingFireworks();
                     }
                 }
-            }, 0, fireworkDelay);
+            }, 0, get(PartySetting.FIREWORK_DELAY, Long.class));
         }
     }
 
@@ -248,7 +258,33 @@ public abstract class Party {
      *
      * @return True if the next item stack was dropped successfully.
      */
-    public abstract boolean dropNext();
+    public boolean dropNext() {
+        if (chests.size() > 0 && itemPoints.size() > 0) {
+            ItemStack itemStack = null;
+            if (get(PartySetting.EMPTY_CHEST, Boolean.class)) {
+                for (DPChest chest : chests) {
+                    itemStack = chest.getNextItemStack();
+                    if (itemStack != null) {
+                        break;
+                    }
+                }
+            } else {
+                if (currentChest == chests.size()) {
+                    return false;
+                }
+                for (int i = currentChest; i < chests.size(); i++) {
+                    itemStack = chests.get(i).getNextItemStack();
+                    if (itemStack != null) {
+                        break;
+                    }
+                    currentChest++;
+                }
+            }
+            return itemStack != null && dropItemStack(itemStack);
+        } else {
+            return false;
+        }
+    }
 
     /**
      * Drops an item stack at a random item point.
@@ -270,7 +306,8 @@ public abstract class Party {
      * Starts the periodic start timer.
      */
     public void startPeriodicTimer() {
-        if (startPeriodically) {
+        if (get(PartySetting.START_PERIODICALLY, Boolean.class)) {
+            long startPeriod = get(PartySetting.START_PERIOD, Long.class);
             periodicTaskId = dropParty.getServer().getScheduler().scheduleSyncRepeatingTask(dropParty, new Runnable() {
                 @Override
                 public void run() {
@@ -293,6 +330,106 @@ public abstract class Party {
     public void resetPeriodicTimer() {
         stopPeriodicTimer();
         startPeriodicTimer();
+    }
+
+    /**
+     * Checks if the party has a chest.
+     *
+     * @param chest The chest.
+     * @return True if the party has a chest, else false.
+     */
+    public boolean hasChest(Chest chest) {
+        if (chest.getInventory().getHolder() instanceof DoubleChest) {
+            DoubleChest doubleChest = (DoubleChest) chest.getInventory().getHolder();
+            for (DPChest dpChest : chests) {
+                if (dpChest.getChest().equals(doubleChest.getLeftSide()) || dpChest.getChest().equals(doubleChest.getRightSide())) {
+                    return true;
+                }
+            }
+        } else {
+            for (DPChest dpChest : chests) {
+                if (dpChest.getChest().equals(chest)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Adds a chest.
+     *
+     * @param chest The chest.
+     */
+    public void addChest(DPChest chest) {
+        chests.add(chest);
+        FileConfiguration partyConfig = dropParty.getConfigManager().getConfig(ConfigType.PARTY);
+        String path = "Parties." + partyName + ".chests";
+        List<String> dpChests = partyConfig.getStringList(path);
+        dpChests.add(chest.toConfig());
+        partyConfig.set(path, dpChests);
+        dropParty.getConfigManager().getConfigAccessor(ConfigType.PARTY).saveConfig();
+        updateChestList();
+    }
+
+    /**
+     * Removes a chest.
+     *
+     * @param chest The chest.
+     */
+    public void removeChest(Chest chest) {
+        for (DPChest dpChest : new HashSet<>(chests)) {
+            if (dpChest.getChest().equals(chest)) {
+                removeChest(dpChest);
+            }
+        }
+    }
+
+    /**
+     * Removes a chest.
+     *
+     * @param dpChest The chest.
+     */
+    public void removeChest(DPChest dpChest) {
+        chests.remove(dpChest);
+        chests.remove(dpChest);
+        FileConfiguration partyConfig = dropParty.getConfigManager().getConfig(ConfigType.PARTY);
+        String path = "Parties." + partyName + ".chests";
+        List<String> dpChests = partyConfig.getStringList(path);
+        dpChests.remove(dpChest.toConfig());
+        partyConfig.set(path, dpChests);
+        dropParty.getConfigManager().getConfigAccessor(ConfigType.PARTY).saveConfig();
+        updateChestList();
+    }
+
+    /**
+     * Gets the chests.
+     *
+     * @return The chests items are taken from during a party.
+     */
+    public List<DPChest> getChests() {
+        return chests;
+    }
+
+    /**
+     * Gets the PageList of the chests.
+     *
+     * @return The PageList of chests.
+     */
+    public PageList getChestList() {
+        return chestList;
+    }
+
+    /**
+     * Updates the PageList of chests.
+     */
+    public void updateChestList() {
+        List<String> strings = new ArrayList<>();
+        for (int i = 0; i < chests.size(); i++) {
+            Location location = chests.get(i).getChest().getLocation();
+            strings.add(Messenger.SECONDARY_COLOR + "-ID:" + i + " X:" + location.getX() + " Y:" + location.getY() + " Z:" + location.getZ());
+        }
+        chestList.setStrings(strings);
     }
 
     /**
@@ -323,25 +460,36 @@ public abstract class Party {
         dpItemPoints.add(itemPoint.toConfig());
         partyConfig.set(path, dpItemPoints);
         dropParty.getConfigManager().getConfigAccessor(ConfigType.PARTY).saveConfig();
+        updateItemPointList();
+    }
+
+    /**
+     * Removes an item point at a location.
+     *
+     * @param location The location of the item point.
+     */
+    public void removeItemPoint(Location location) {
+        for (DPItemPoint itemPoint : new HashSet<>(itemPoints)) {
+            if (itemPoint.getLocation().equals(location)) {
+                removeItemPoint(itemPoint);
+            }
+        }
     }
 
     /**
      * Removes an item point.
      *
-     * @param location The location of the item point.
+     * @param itemPoint The item point.
      */
-    public void removeItemPoint(Location location) {
-        for (DPItemPoint dpItemPoint : new HashSet<>(itemPoints)) {
-            if (dpItemPoint.getLocation().equals(location)) {
-                itemPoints.remove(dpItemPoint);
-                FileConfiguration partyConfig = dropParty.getConfigManager().getConfig(ConfigType.PARTY);
-                String path = "Parties." + partyName + ".itempoints";
-                List<String> dpItemPoints = partyConfig.getStringList(path);
-                dpItemPoints.remove(dpItemPoint.toConfig());
-                partyConfig.set(path, dpItemPoints);
-                dropParty.getConfigManager().getConfigAccessor(ConfigType.PARTY).saveConfig();
-            }
-        }
+    public void removeItemPoint(DPItemPoint itemPoint) {
+        itemPoints.remove(itemPoint);
+        FileConfiguration partyConfig = dropParty.getConfigManager().getConfig(ConfigType.PARTY);
+        String path = "Parties." + partyName + ".itempoints";
+        List<String> dpItemPoints = partyConfig.getStringList(path);
+        dpItemPoints.remove(itemPoint.toConfig());
+        partyConfig.set(path, dpItemPoints);
+        dropParty.getConfigManager().getConfigAccessor(ConfigType.PARTY).saveConfig();
+        updateItemPointList();
     }
 
     /**
@@ -351,6 +499,27 @@ public abstract class Party {
      */
     public List<DPItemPoint> getItemPoints() {
         return itemPoints;
+    }
+
+    /**
+     * Gets the PageList of item points.
+     *
+     * @return The PageList of item points.
+     */
+    public PageList getItemPointList() {
+        return itemPointList;
+    }
+
+    /**
+     * Updates the PageList of item points.
+     */
+    public void updateItemPointList() {
+        List<String> strings = new ArrayList<>();
+        for (int i = 0; i < itemPoints.size(); i++) {
+            Location location = itemPoints.get(i).getLocation();
+            strings.add(Messenger.SECONDARY_COLOR + "-ID:" + i + " X:" + location.getX() + " Y:" + location.getY() + " Z:" + location.getZ());
+        }
+        itemPointList.setStrings(strings);
     }
 
     /**
@@ -381,25 +550,36 @@ public abstract class Party {
         dpFireworkPoints.add(fireworkPoint.toConfig());
         partyConfig.set(path, dpFireworkPoints);
         dropParty.getConfigManager().getConfigAccessor(ConfigType.PARTY).saveConfig();
+        updateFireworkPointList();
+    }
+
+    /**
+     * Removes a firework point at a location.
+     *
+     * @param location The location of the firework point.
+     */
+    public void removeFireworkPoint(Location location) {
+        for (DPFireworkPoint fireworkPoint : new HashSet<>(fireworkPoints)) {
+            if (fireworkPoint.getLocation().equals(location)) {
+                removeFireworkPoint(fireworkPoint);
+            }
+        }
     }
 
     /**
      * Removes a firework point.
      *
-     * @param location The location of the firework point.
+     * @param fireworkPoint The firework point.
      */
-    public void removeFireworkPoint(Location location) {
-        for (DPFireworkPoint dpFireworkPoint : new HashSet<>(fireworkPoints)) {
-            if (dpFireworkPoint.getLocation().equals(location)) {
-                fireworkPoints.remove(dpFireworkPoint);
-                FileConfiguration partyConfig = dropParty.getConfigManager().getConfig(ConfigType.PARTY);
-                String path = "Parties." + partyName + ".fireworkpoints";
-                List<String> dpFireworkPoints = partyConfig.getStringList(path);
-                dpFireworkPoints.remove(dpFireworkPoint.toConfig());
-                partyConfig.set(path, dpFireworkPoints);
-                dropParty.getConfigManager().getConfigAccessor(ConfigType.PARTY).saveConfig();
-            }
-        }
+    public void removeFireworkPoint(DPFireworkPoint fireworkPoint) {
+        fireworkPoints.remove(fireworkPoint);
+        FileConfiguration partyConfig = dropParty.getConfigManager().getConfig(ConfigType.PARTY);
+        String path = "Parties." + partyName + ".fireworkpoints";
+        List<String> dpFireworkPoints = partyConfig.getStringList(path);
+        dpFireworkPoints.remove(fireworkPoint.toConfig());
+        partyConfig.set(path, dpFireworkPoints);
+        dropParty.getConfigManager().getConfigAccessor(ConfigType.PARTY).saveConfig();
+        updateFireworkPointList();
     }
 
     /**
@@ -409,6 +589,27 @@ public abstract class Party {
      */
     public List<DPFireworkPoint> getFireworkPoints() {
         return fireworkPoints;
+    }
+
+    /**
+     * Gets the PageList of firework points.
+     *
+     * @return The PageList of firework points.
+     */
+    public PageList getFireworkPointList() {
+        return chestList;
+    }
+
+    /**
+     * Updates the PageList of firework points.
+     */
+    public void updateFireworkPointList() {
+        List<String> strings = new ArrayList<>();
+        for (int i = 0; i < fireworkPoints.size(); i++) {
+            Location location = fireworkPoints.get(i).getLocation();
+            strings.add(Messenger.SECONDARY_COLOR + "-ID:" + i + " X:" + location.getX() + " Y:" + location.getY() + " Z:" + location.getZ());
+        }
+        fireworkPointList.setStrings(strings);
     }
 
     /**
@@ -434,209 +635,78 @@ public abstract class Party {
     }
 
     /**
-     * Gets the max length.
+     * Gets the value of a {@link me.ampayne2.dropparty.parties.PartySetting} of the party.
      *
-     * @return The max amount of ticks the party can last.
+     * @param partySetting The {@link me.ampayne2.dropparty.parties.PartySetting}.
+     * @return The value.
      */
-    public long getMaxLength() {
-        return maxLength;
+    public Object get(PartySetting partySetting) {
+        return partySettings.get(partySetting);
     }
 
     /**
-     * Sets the max length.
+     * Gets the value of a {@link me.ampayne2.dropparty.parties.PartySetting} of the party.
      *
-     * @param maxLength The max amount of ticks the party can last.
+     * @param partySetting The {@link me.ampayne2.dropparty.parties.PartySetting}.
+     * @param type         The type of the value.
+     * @return The value.
      */
-    public void setMaxLength(long maxLength) {
-        if (maxLength != this.maxLength) {
-            this.maxLength = maxLength;
-            dropParty.getConfigManager().getConfig(ConfigType.PARTY).set("Parties." + partyName + "." + PartySetting.MAX_LENGTH.getName(), maxLength);
-            dropParty.getConfigManager().getConfigAccessor(ConfigType.PARTY).saveConfig();
+    public <T> T get(PartySetting partySetting, Class<T> type) {
+        return type.cast(partySettings.get(partySetting));
+    }
+
+    /**
+     * Sets the value of a {@link me.ampayne2.dropparty.parties.PartySetting} of the party.
+     *
+     * @param partySetting The {@link me.ampayne2.dropparty.parties.PartySetting}.
+     * @param value        The value.
+     * @throws IllegalArgumentException If the value is not valid.
+     */
+    public void set(PartySetting partySetting, Object value) throws IllegalArgumentException {
+        if (!partySetting.getType().isAssignableFrom(value.getClass())) {
+            throw new IllegalArgumentException();
         }
-    }
 
-    /**
-     * Gets the item delay.
-     *
-     * @return The ticks between each item dropped.
-     */
-    public long getItemDelay() {
-        return itemDelay;
-    }
-
-    /**
-     * Sets the item delay.
-     *
-     * @param itemDelay The ticks between each item dropped.
-     */
-    public void setItemDelay(long itemDelay) {
-        if (itemDelay != this.itemDelay) {
-            this.itemDelay = itemDelay;
-            dropParty.getConfigManager().getConfig(ConfigType.PARTY).set("Parties." + partyName + "." + PartySetting.ITEM_DELAY.getName(), itemDelay);
+        value = partySetting.makeValid(value);
+        if (!partySettings.get(partySetting).equals(value)) {
+            partySettings.put(partySetting, value);
+            dropParty.getConfigManager().getConfig(ConfigType.PARTY).set("Parties." + partyName + "." + partySetting.getName(), value);
             dropParty.getConfigManager().getConfigAccessor(ConfigType.PARTY).saveConfig();
-        }
-    }
-
-    /**
-     * Gets the max stack size.
-     *
-     * @return The max stack size of dropped items.
-     */
-    public int getMaxStackSize() {
-        return maxStackSize;
-    }
-
-    /**
-     * Sets the max stack size.
-     *
-     * @param maxStackSize The max stack size of dropped items.
-     */
-    public void setMaxStackSize(int maxStackSize) {
-        if (maxStackSize != this.maxStackSize) {
-            this.maxStackSize = maxStackSize;
-            dropParty.getConfigManager().getConfig(ConfigType.PARTY).set("Parties." + partyName + "." + PartySetting.MAX_STACK_SIZE.getName(), maxStackSize);
-            dropParty.getConfigManager().getConfigAccessor(ConfigType.PARTY).saveConfig();
-        }
-    }
-
-    /**
-     * Gets the firework amount.
-     *
-     * @return The amount of fireworks launched after the party.
-     */
-    public int getFireworkAmount() {
-        return fireworkAmount;
-    }
-
-    /**
-     * Sets the firework amount.
-     *
-     * @param fireworkAmount The amount of fireworks launched after the party.
-     */
-    public void setFireworkAmount(int fireworkAmount) {
-        if (fireworkAmount != this.fireworkAmount) {
-            this.fireworkAmount = fireworkAmount;
-            dropParty.getConfigManager().getConfig(ConfigType.PARTY).set("Parties." + partyName + "." + PartySetting.FIREWORK_AMOUNT.getName(), fireworkAmount);
-            dropParty.getConfigManager().getConfigAccessor(ConfigType.PARTY).saveConfig();
-        }
-    }
-
-    /**
-     * Gets the firework delay.
-     *
-     * @return The ticks between each firework launch.
-     */
-    public long getFireworkDelay() {
-        return fireworkDelay;
-    }
-
-    /**
-     * Sets the firework delay.
-     *
-     * @param fireworkDelay The ticks between each firework launch.
-     */
-    public void setFireworkDelay(long fireworkDelay) {
-        if (fireworkDelay != this.fireworkDelay) {
-            this.fireworkDelay = fireworkDelay;
-            dropParty.getConfigManager().getConfig(ConfigType.PARTY).set("Parties." + partyName + "." + PartySetting.FIREWORK_DELAY.getName(), fireworkDelay);
-            dropParty.getConfigManager().getConfigAccessor(ConfigType.PARTY).saveConfig();
-        }
-    }
-
-    /**
-     * Checks if the party starts periodically.
-     *
-     * @return True if the party starts periodically, else false.
-     */
-    public boolean startsPeriodically() {
-        return startPeriodically;
-    }
-
-    /**
-     * Sets if the party starts periodically.
-     *
-     * @param startPeriodically If the party should start periodically.
-     */
-    public void setStartPeriodically(boolean startPeriodically) {
-        if (startPeriodically != this.startPeriodically) {
-            this.startPeriodically = startPeriodically;
-            dropParty.getConfigManager().getConfig(ConfigType.PARTY).set("Parties." + partyName + "." + PartySetting.START_PERIODICALLY.getName(), startPeriodically);
-            dropParty.getConfigManager().getConfigAccessor(ConfigType.PARTY).saveConfig();
-            if (startPeriodically) {
-                startPeriodicTimer();
-            } else {
-                stopPeriodicTimer();
+            if (partySetting == PartySetting.START_PERIODICALLY) {
+                if ((boolean) value) {
+                    startPeriodicTimer();
+                } else {
+                    stopPeriodicTimer();
+                }
+            } else if (partySetting == PartySetting.START_PERIOD) {
+                resetPeriodicTimer();
+            } else if (partySetting == PartySetting.VOTE_TO_START) {
+                clearVotes();
+            } else if (partySetting == PartySetting.REQUIRED_VOTES) {
+                voters.clear();
             }
+            updateSettingsList();
         }
     }
 
     /**
-     * Gets the start period.
+     * Gets the PageList of party settings.
      *
-     * @return The ticks between periodic starts.
+     * @return The PageList of party settings.
      */
-    public long getStartPeriod() {
-        return startPeriod;
+    public PageList getSettingsList() {
+        return settingsList;
     }
 
     /**
-     * Sets the start period.
-     *
-     * @param startPeriod The ticks between periodic starts.
+     * Updates the PageList of party settings.
      */
-    public void setStartPeriod(long startPeriod) {
-        if (startPeriod != this.startPeriod) {
-            this.startPeriod = startPeriod;
-            dropParty.getConfigManager().getConfig(ConfigType.PARTY).set("Parties." + partyName + "." + PartySetting.START_PERIOD.getName(), startPeriod);
-            dropParty.getConfigManager().getConfigAccessor(ConfigType.PARTY).saveConfig();
-            resetPeriodicTimer();
+    public void updateSettingsList() {
+        List<String> strings = new ArrayList<>();
+        for (PartySetting partySetting : PartySetting.class.getEnumConstants()) {
+            strings.add(Messenger.PRIMARY_COLOR + partySetting.getDisplayName() + ": " + Messenger.SECONDARY_COLOR + partySettings.get(partySetting).toString());
         }
-    }
-
-    /**
-     * Checks if the party can be started by votes.
-     *
-     * @return True if the party can be started by votes, else false.
-     */
-    public boolean canVoteToStart() {
-        return voteToStart;
-    }
-
-    /**
-     * Sets if the party can be started by votes.
-     *
-     * @param voteToStart If the party can be started by votes.
-     */
-    public void setVoteToStart(boolean voteToStart) {
-        if (voteToStart != this.voteToStart) {
-            this.voteToStart = voteToStart;
-            dropParty.getConfigManager().getConfig(ConfigType.PARTY).set("Parties." + partyName + "." + PartySetting.VOTE_TO_START.getName(), voteToStart);
-            dropParty.getConfigManager().getConfigAccessor(ConfigType.PARTY).saveConfig();
-            voters.clear();
-        }
-    }
-
-    /**
-     * Gets the required votes.
-     *
-     * @return Amount of votes required to start the party.
-     */
-    public int getRequiredVotes() {
-        return requiredVotes;
-    }
-
-    /**
-     * Sets the required votes.
-     *
-     * @param requiredVotes Amount of votes required to start the party.
-     */
-    public void setRequiredVotes(int requiredVotes) {
-        if (requiredVotes != this.requiredVotes) {
-            this.requiredVotes = requiredVotes;
-            dropParty.getConfigManager().getConfig(ConfigType.PARTY).set("Parties." + partyName + "." + PartySetting.REQUIRED_VOTES.getName(), requiredVotes);
-            dropParty.getConfigManager().getConfigAccessor(ConfigType.PARTY).saveConfig();
-            voters.clear();
-        }
+        settingsList.setStrings(strings);
     }
 
     /**
@@ -655,9 +725,9 @@ public abstract class Party {
      * @param playerName The name of the player who voted.
      */
     public void addVote(String playerName) {
-        if (voteToStart && !isRunning) {
+        if (get(PartySetting.VOTE_TO_START, Boolean.class) && !isRunning) {
             voters.add(playerName);
-            if (voters.size() >= requiredVotes) {
+            if (voters.size() >= get(PartySetting.REQUIRED_VOTES, Integer.class)) {
                 start();
             }
         }
@@ -686,17 +756,15 @@ public abstract class Party {
      */
     public void save(ConfigurationSection section) {
         section.set("name", partyName);
-        section.set("type", type.name());
-        section.set(PartySetting.MAX_LENGTH.getName(), maxLength);
-        section.set(PartySetting.ITEM_DELAY.getName(), itemDelay);
-        section.set(PartySetting.MAX_STACK_SIZE.getName(), maxStackSize);
-        section.set(PartySetting.FIREWORK_AMOUNT.getName(), fireworkAmount);
-        section.set(PartySetting.FIREWORK_DELAY.getName(), fireworkDelay);
-        section.set(PartySetting.START_PERIODICALLY.getName(), startPeriodically);
-        section.set(PartySetting.START_PERIOD.getName(), startPeriod);
-        section.set(PartySetting.VOTE_TO_START.getName(), voteToStart);
-        section.set(PartySetting.REQUIRED_VOTES.getName(), requiredVotes);
+        for (PartySetting partySetting : PartySetting.class.getEnumConstants()) {
+            section.set(partySetting.getName(), partySettings.get(partySetting));
+        }
         section.set("teleport", DPUtils.locationToString(teleport));
+        List<String> dpChests = new ArrayList<>();
+        for (DPChest chest : chests) {
+            dpChests.add(chest.toConfig());
+        }
+        section.set("chests", dpChests);
         List<String> dpItemPoints = new ArrayList<>();
         for (DPItemPoint itemPoint : itemPoints) {
             dpItemPoints.add(itemPoint.toConfig());

@@ -20,7 +20,9 @@ package me.ampayne2.dropparty.command.commands;
 
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.command.DPCommand;
+import me.ampayne2.dropparty.message.DPMessage;
 import me.ampayne2.dropparty.parties.Party;
+import me.ampayne2.dropparty.parties.PartySetting;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -43,21 +45,21 @@ public class Vote extends DPCommand {
         String partyName = args[0];
         if (dropParty.getPartyManager().hasParty(partyName)) {
             Party party = dropParty.getPartyManager().getParty(partyName);
-            if (party.canVoteToStart()) {
+            if (party.get(PartySetting.VOTE_TO_START, Boolean.class)) {
                 String playerName = sender.getName();
                 if (party.isRunning()) {
-                    dropParty.getMessenger().sendMessage(sender, "error.party.alreadyrunning", partyName);
+                    dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_ALREADYRUNNING, partyName);
                 } else if (party.hasVoted(playerName)) {
-                    dropParty.getMessenger().sendMessage(sender, "error.party.alreadyvoted", partyName);
+                    dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_ALREADYVOTED, partyName);
                 } else {
                     party.addVote(playerName);
-                    dropParty.getMessenger().sendMessage(sender, "party.vote", partyName);
+                    dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_VOTE, partyName);
                 }
             } else {
-                dropParty.getMessenger().sendMessage(sender, "error.party.cannotvote", partyName);
+                dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_CANNOTVOTE, partyName);
             }
         } else {
-            dropParty.getMessenger().sendMessage(sender, "error.party.doesntexist", partyName);
+            dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_DOESNTEXIST, partyName);
         }
     }
 

@@ -20,6 +20,7 @@ package me.ampayne2.dropparty.command.commands.set;
 
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.command.DPCommand;
+import me.ampayne2.dropparty.message.DPMessage;
 import me.ampayne2.dropparty.modes.PlayerMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -45,7 +46,7 @@ public class SetFireworkPoint extends DPCommand {
         if (dropParty.getPartyManager().hasParty(partyName)) {
             dropParty.getPlayerModeController().setPlayerMode((Player) sender, PlayerMode.SETTING_FIREWORK_POINTS, dropParty.getPartyManager().getParty(partyName));
         } else {
-            dropParty.getMessenger().sendMessage(sender, "error.party.doesntexist", partyName);
+            dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_DOESNTEXIST, partyName);
         }
     }
 

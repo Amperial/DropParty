@@ -20,6 +20,7 @@ package me.ampayne2.dropparty.command.commands;
 
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.command.DPCommand;
+import me.ampayne2.dropparty.message.DPMessage;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -42,9 +43,9 @@ public class Delete extends DPCommand {
         String partyName = args[0];
         if (dropParty.getPartyManager().hasParty(partyName)) {
             dropParty.getPartyManager().removeParty(partyName);
-            dropParty.getMessenger().sendMessage(sender, "party.delete", partyName);
+            dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_DELETE, partyName);
         } else {
-            dropParty.getMessenger().sendMessage(sender, "error.party.doesntexist", partyName);
+            dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_DOESNTEXIST, partyName);
         }
     }
 

@@ -20,10 +20,13 @@ package me.ampayne2.dropparty.command.commands.list;
 
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.command.DPCommand;
+import me.ampayne2.dropparty.message.DPMessage;
+import me.ampayne2.dropparty.parties.Party;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,16 +36,32 @@ public class ListFireworkPoints extends DPCommand {
     private final DropParty dropParty;
 
     public ListFireworkPoints(DropParty dropParty) {
-        super(dropParty, "fireworkpoints", "Lists the firework points of a drop party.", "/dp list fireworkpoints <party>", new Permission("dropparty.list.fireworkpoints", PermissionDefault.TRUE), 1, false);
+        super(dropParty, "fireworkpoints", "Lists the firework points of a drop party.", "/dp list fireworkpoints <party> [page]", new Permission("dropparty.list.fireworkpoints", PermissionDefault.TRUE), 1, 2, false);
         this.dropParty = dropParty;
     }
 
     @Override
     public void execute(String command, CommandSender sender, String[] args) {
+        String partyName = args[0];
+        if (dropParty.getPartyManager().hasParty(partyName)) {
+            Party party = dropParty.getPartyManager().getParty(partyName);
+            int pageNumber = 1;
+            if (args.length == 2) {
+                try {
+                    pageNumber = Integer.parseInt(args[1]);
+                } catch (NumberFormatException e) {
+                    dropParty.getMessenger().sendMessage(sender, DPMessage.ERROR_NUMBERFORMAT);
+                    return;
+                }
+            }
+            party.getFireworkPointList().sendPage(pageNumber, sender);
+        } else {
+            dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_DOESNTEXIST, partyName);
+        }
     }
 
     @Override
     public List<String> getTabCompleteList(String[] args) {
-        return dropParty.getPartyManager().getPartyList();
+        return args.length == 0 ? dropParty.getPartyManager().getPartyList() : new ArrayList<String>();
     }
 }

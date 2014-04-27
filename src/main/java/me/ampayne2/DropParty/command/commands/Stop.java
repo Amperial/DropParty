@@ -20,6 +20,7 @@ package me.ampayne2.dropparty.command.commands;
 
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.command.DPCommand;
+import me.ampayne2.dropparty.message.DPMessage;
 import me.ampayne2.dropparty.parties.Party;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
@@ -45,15 +46,15 @@ public class Stop extends DPCommand {
             Party party = dropParty.getPartyManager().getParty(partyName);
             if (party.isRunning()) {
                 party.stop(false);
-                dropParty.getMessenger().sendMessage(sender, "party.stop", partyName);
+                dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_STOP, partyName);
             } else if (party.isShootingFireworks()) {
                 party.stopShootingFireworks();
-                dropParty.getMessenger().sendMessage(sender, "party.stopfireworks", partyName);
+                dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_STOPFIREWORKS, partyName);
             } else {
-                dropParty.getMessenger().sendMessage(sender, "error.party.notrunning", partyName);
+                dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_NOTRUNNING, partyName);
             }
         } else {
-            dropParty.getMessenger().sendMessage(sender, "error.party.doesntexist", partyName);
+            dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_DOESNTEXIST, partyName);
         }
     }
 

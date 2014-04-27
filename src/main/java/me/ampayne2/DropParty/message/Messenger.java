@@ -37,9 +37,13 @@ import java.util.logging.Logger;
 public class Messenger {
     private final boolean debug;
     private final Logger log;
-    private final String messagePrefix;
     private final Map<String, String> messages = new HashMap<>();
     private final Map<Class<?>, RecipientHandler> recipientHandlers = new HashMap<>();
+
+    public static ChatColor PRIMARY_COLOR;
+    public static ChatColor SECONDARY_COLOR;
+    public static ChatColor HIGHLIGHT_COLOR;
+
 
     /**
      * Creates a new message manager.
@@ -50,10 +54,30 @@ public class Messenger {
         debug = dropParty.getConfig().getBoolean("debug", false);
         log = dropParty.getLogger();
         FileConfiguration messageConfig = dropParty.getConfigManager().getConfig(ConfigType.MESSAGE);
-        for (String key : messageConfig.getConfigurationSection("Messages").getKeys(true)) {
-            messages.put(key, ChatColor.translateAlternateColorCodes('&', messageConfig.getString("Messages." + key)));
+        for (DPMessage message : DPMessage.class.getEnumConstants()) {
+            messageConfig.addDefault(message.getPath(), message.getDefault());
         }
-        messagePrefix = messages.containsKey("prefix") ? messages.get("prefix") : ChatColor.GOLD + "[" + ChatColor.DARK_PURPLE + "Drop Party" + ChatColor.GOLD + "] " + ChatColor.GRAY;
+        messageConfig.options().copyDefaults(true);
+        dropParty.getConfigManager().getConfigAccessor(ConfigType.MESSAGE).saveConfig();
+        for (DPMessage message : DPMessage.class.getEnumConstants()) {
+            message.setMessage(ChatColor.translateAlternateColorCodes('&', messageConfig.getString(message.getPath())));
+        }
+        FileConfiguration mainConfig = dropParty.getConfig();
+        try {
+            PRIMARY_COLOR = ChatColor.valueOf(mainConfig.getString("colors.primary", "DARK_PURPLE"));
+        } catch (IllegalArgumentException e) {
+            PRIMARY_COLOR = ChatColor.DARK_PURPLE;
+        }
+        try {
+            SECONDARY_COLOR = ChatColor.valueOf(mainConfig.getString("colors.secondary", "GRAY"));
+        } catch (IllegalArgumentException e) {
+            SECONDARY_COLOR = ChatColor.GRAY;
+        }
+        try {
+            HIGHLIGHT_COLOR = ChatColor.valueOf(mainConfig.getString("colors.highlights", "GOLD"));
+        } catch (IllegalArgumentException e) {
+            HIGHLIGHT_COLOR = ChatColor.GOLD;
+        }
     }
 
     /**
@@ -69,34 +93,15 @@ public class Messenger {
     }
 
     /**
-     * Gets the message prefix.
-     *
-     * @return The message prefix.
-     */
-    public String getPrefix() {
-        return messagePrefix;
-    }
-
-    /**
-     * Gets a message with translated color codes.
-     *
-     * @param path Path to the message in the message config, without "Messages."
-     * @return The message.
-     */
-    public String getMessage(String path) {
-        return messages.containsKey(path) ? messages.get(path) : ChatColor.DARK_RED + "No configured message for " + path;
-    }
-
-    /**
-     * Sends a message to a recipient.
+     * Sends a {@link me.ampayne2.dropparty.message.DPMessage} to a recipient.
      *
      * @param recipient The recipient of the message.
-     * @param path      The path to the message.
+     * @param message   The {@link me.ampayne2.dropparty.message.DPMessage}.
      * @param replace   Strings to replace any occurences of %s in the message with.
      * @return True if the message was sent, else false.
      */
-    public boolean sendMessage(Object recipient, String path, String... replace) {
-        return sendRawMessage(recipient, messagePrefix + (replace == null ? getMessage(path) : String.format(getMessage(path), (Object[]) replace)));
+    public boolean sendMessage(Object recipient, DPMessage message, String... replace) {
+        return sendRawMessage(recipient, DPMessage.PREFIX + (replace == null ? message.getMessage() : String.format(message.getMessage(), (Object[]) replace)));
     }
 
     /**

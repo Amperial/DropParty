@@ -20,6 +20,7 @@ package me.ampayne2.dropparty.command.commands;
 
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.command.DPCommand;
+import me.ampayne2.dropparty.message.DPMessage;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -42,7 +43,7 @@ public class Help extends DPCommand {
             try {
                 pageNumber = Integer.parseInt(args[0]);
             } catch (NumberFormatException e) {
-                dropParty.getMessenger().sendMessage(sender, "error.numberformat");
+                dropParty.getMessenger().sendMessage(sender, DPMessage.ERROR_NUMBERFORMAT);
                 return;
             }
         }

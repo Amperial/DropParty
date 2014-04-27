@@ -20,6 +20,7 @@ package me.ampayne2.dropparty.command.commands;
 
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.command.DPCommand;
+import me.ampayne2.dropparty.message.DPMessage;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -39,6 +40,6 @@ public class Reload extends DPCommand {
     public void execute(String command, CommandSender sender, String[] args) {
         dropParty.onDisable();
         dropParty.onEnable();
-        dropParty.getMessenger().sendMessage(sender, "reload");
+        dropParty.getMessenger().sendMessage(sender, DPMessage.RELOAD);
     }
 }

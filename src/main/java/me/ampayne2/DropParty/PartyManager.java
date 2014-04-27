@@ -19,12 +19,9 @@
 package me.ampayne2.dropparty;
 
 import me.ampayne2.dropparty.config.ConfigType;
+import me.ampayne2.dropparty.message.Messenger;
 import me.ampayne2.dropparty.message.PageList;
-import me.ampayne2.dropparty.parties.ChestParty;
-import me.ampayne2.dropparty.parties.CustomParty;
 import me.ampayne2.dropparty.parties.Party;
-import me.ampayne2.dropparty.parties.PartyType;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
@@ -54,16 +51,7 @@ public class PartyManager {
                 if (hasParty(partyName)) {
                     continue;
                 }
-                String path = "Parties." + partyName;
-                PartyType partyType = PartyType.valueOf(partyConfig.getString(path + ".type"));
-                switch (partyType) {
-                    case CHEST_PARTY:
-                        parties.put(partyName, new ChestParty(dropParty, partyConfig.getConfigurationSection(path)));
-                        break;
-                    case CUSTOM_PARTY:
-                        parties.put(partyName, new CustomParty(dropParty, partyConfig.getConfigurationSection(path)));
-                        break;
-                }
+                parties.put(partyName, new Party(dropParty, partyConfig.getConfigurationSection("Parties." + partyName)));
             }
         }
 
@@ -133,44 +121,12 @@ public class PartyManager {
     }
 
     /**
-     * Gets the parties in the manager of a certain type.
-     *
-     * @param partyType The type of party.
-     * @return All of the manager's parties of the type.
-     */
-    public Map<String, Party> getParties(PartyType partyType) {
-        Map<String, Party> partiesOfType = new HashMap<>();
-        for (Party party : parties.values()) {
-            if (party.getType() == partyType) {
-                partiesOfType.put(party.getName(), party);
-            }
-        }
-        return partiesOfType;
-    }
-
-    /**
      * Gets a string list of the parties in the manager.
      *
      * @return A string list of all of the manager's parties.
      */
     public List<String> getPartyList() {
         return new ArrayList<>(parties.keySet());
-    }
-
-    /**
-     * Gets a string list of the parties in the manager of a certain type.
-     *
-     * @param partyType The type of party.
-     * @return A string list of all of the manager's parties of the type.
-     */
-    public List<String> getPartyList(PartyType partyType) {
-        List<String> partiesOfType = new ArrayList<>();
-        for (Party party : parties.values()) {
-            if (party.getType() == partyType) {
-                partiesOfType.add(party.getName());
-            }
-        }
-        return partiesOfType;
     }
 
     /**
@@ -188,7 +144,7 @@ public class PartyManager {
     public void updatePageList() {
         List<String> strings = new ArrayList<>();
         for (String partyName : parties.keySet()) {
-            strings.add(ChatColor.GRAY + "-" + partyName);
+            strings.add(Messenger.SECONDARY_COLOR + "-" + partyName);
         }
         pageList.setStrings(strings);
     }

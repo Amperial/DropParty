@@ -19,6 +19,7 @@
 package me.ampayne2.dropparty.modes;
 
 import me.ampayne2.dropparty.DropParty;
+import me.ampayne2.dropparty.message.DPMessage;
 import me.ampayne2.dropparty.parties.Party;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -90,7 +91,7 @@ public class PlayerModeController implements Listener {
         if (playerModes.containsKey(playerName)) {
             PlayerMode currentMode = playerModes.get(playerName);
             Party currentParty = playerModeParties.get(playerName);
-            dropParty.getMessenger().sendMessage(player, "mode.modeoff", currentMode.getName(), currentParty.getName());
+            dropParty.getMessenger().sendMessage(player, DPMessage.MODE_DISABLE, currentMode.getName(), currentParty.getName());
             if (currentMode.equals(playerMode) && currentParty.equals(party)) {
                 playerModes.remove(playerName);
                 playerModeParties.remove(playerName);
@@ -99,7 +100,7 @@ public class PlayerModeController implements Listener {
         }
         playerModes.put(playerName, playerMode);
         playerModeParties.put(playerName, party);
-        dropParty.getMessenger().sendMessage(player, "mode.modeon", playerMode.getName(), party.getName());
+        dropParty.getMessenger().sendMessage(player, DPMessage.MODE_ENABLE, playerMode.getName(), party.getName());
     }
 
     /**

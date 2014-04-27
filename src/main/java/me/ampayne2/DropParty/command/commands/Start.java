@@ -20,6 +20,7 @@ package me.ampayne2.dropparty.command.commands;
 
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.command.DPCommand;
+import me.ampayne2.dropparty.message.DPMessage;
 import me.ampayne2.dropparty.parties.Party;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
@@ -44,13 +45,13 @@ public class Start extends DPCommand {
         if (dropParty.getPartyManager().hasParty(partyName)) {
             Party party = dropParty.getPartyManager().getParty(partyName);
             if (party.isRunning()) {
-                dropParty.getMessenger().sendMessage(sender, "error.party.alreadyrunning", partyName);
+                dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_ALREADYRUNNING, partyName);
             } else {
                 party.start();
-                dropParty.getMessenger().sendMessage(sender, "party.start", partyName);
+                dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_START, partyName);
             }
         } else {
-            dropParty.getMessenger().sendMessage(sender, "error.party.doesntexist", partyName);
+            dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_DOESNTEXIST, partyName);
         }
     }
 

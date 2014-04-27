@@ -19,6 +19,7 @@
 package me.ampayne2.dropparty.command;
 
 import me.ampayne2.dropparty.DropParty;
+import me.ampayne2.dropparty.message.DPMessage;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
@@ -213,13 +214,13 @@ public class Command {
                     if (sender instanceof Player || !entry.isPlayerOnly()) {
                         entry.execute(command, sender, args);
                     } else {
-                        dropParty.getMessenger().sendMessage(sender, "error.command.notaplayer");
+                        dropParty.getMessenger().sendMessage(sender, DPMessage.COMMAND_NOTAPLAYER);
                     }
                 } else {
-                    dropParty.getMessenger().sendMessage(sender, "permissions.nopermission", command);
+                    dropParty.getMessenger().sendMessage(sender, DPMessage.COMMAND_NOPERMISSION, command);
                 }
             } else {
-                dropParty.getMessenger().sendMessage(sender, "error.command.usage", ((DPCommand) entry).getCommandUsage());
+                dropParty.getMessenger().sendMessage(sender, DPMessage.COMMAND_USAGE, ((DPCommand) entry).getCommandUsage());
             }
         } else {
             String subCommand = args.length == 0 ? "" : args[0];
@@ -233,7 +234,7 @@ public class Command {
                 }
                 entry.execute(subCommand, sender, newArgs);
             } else {
-                dropParty.getMessenger().sendMessage(sender, "error.command.invalidsubcommand", "\"" + subCommand + "\"", "\"" + command + "\"");
+                dropParty.getMessenger().sendMessage(sender, DPMessage.COMMAND_INVALID, "\"" + subCommand + "\"", "\"" + command + "\"");
             }
         }
     }
