@@ -6,4 +6,4 @@ main: me.ampayne2.dropparty.DropParty
 load: POSTWORLD
 commands:
   dropparty:
-    aliases: dp
+    aliases: [dp, dparty]

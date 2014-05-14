@@ -46,6 +46,8 @@ public enum DPMessage {
     PARTY_ALREADYEXISTS("Party.AlreadyExists", "&4Drop party &5%s&4 already exists."),
     PARTY_DOESNTEXIST("Party.DoesntExist", "&4Drop party &5%s&4 doesn't exist."),
     PARTY_NOTAPARTYSETTING("Party.NotAPartySetting", "&4Not a valid party setting."),
+    PARTY_NONEEXIST("Party.NoneExist", "&4No drop parties found. Create one with /dp create"),
+    PARTY_NOTSPECIFIED("Party.NotSpecified", "&4Please specify a drop party."),
 
     BROADCAST_START("Broadcast.Start", "Drop party &5%s&7 started! Teleport with /dp teleport &5%s&7"),
     BROADCAST_STOP("Broadcast.Stop", "Drop party &5%s&7 has ended!"),

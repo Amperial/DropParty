@@ -136,7 +136,7 @@ public class DPListener implements Listener {
         String playerName = player.getName();
         if (event.getBlock().getType() == Material.CHEST) {
             Chest chest = (Chest) event.getBlock().getState();
-            for (Party party : dropParty.getPartyManager().getParties().values()) {
+            for (Party party : dropParty.getPartyManager().getParties()) {
                 if (party.hasChest(chest)) {
                     event.setCancelled(true);
                     dropParty.getMessenger().sendMessage(player, DPMessage.CHEST_CANTBREAK);

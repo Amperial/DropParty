@@ -19,8 +19,10 @@
 package me.ampayne2.dropparty.command.commands;
 
 import me.ampayne2.dropparty.DropParty;
+import me.ampayne2.dropparty.PartyManager;
 import me.ampayne2.dropparty.command.DPCommand;
 import me.ampayne2.dropparty.message.DPMessage;
+import me.ampayne2.dropparty.parties.Party;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
@@ -35,17 +37,41 @@ public class Teleport extends DPCommand {
     private final DropParty dropParty;
 
     public Teleport(DropParty dropParty) {
-        super(dropParty, "teleport", "Teleports you to a drop party.", "/dp teleport <party>", new Permission("dropparty.teleport", PermissionDefault.TRUE), 1, true);
+        super(dropParty, "teleport", "Teleports you to a drop party.", "/dp teleport [party]", new Permission("dropparty.teleport", PermissionDefault.TRUE), 0, 1, true);
         this.dropParty = dropParty;
     }
 
     @Override
     public void execute(String command, CommandSender sender, String[] args) {
-        String partyName = args[0];
-        if (dropParty.getPartyManager().hasParty(partyName)) {
-            dropParty.getPartyManager().getParty(partyName).teleport((Player) sender);
+        PartyManager partyManager = dropParty.getPartyManager();
+        // Attempt to find a party when no party is specified
+        if (args.length == 0) {
+            // Attempt to find a single running party
+            List<Party> runningParties = (List<Party>) partyManager.getRunningParties();
+            if (runningParties.size() == 0) {
+                // Attempt to find a single party if none are running
+                List<Party> parties = (List<Party>) partyManager.getParties();
+                if (parties.size() == 0) {
+                    dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_NONEEXIST);
+                } else if (parties.size() == 1) {
+                    parties.get(0).teleport((Player) sender);
+                } else {
+                    dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_NOTSPECIFIED);
+                    dropParty.getMessenger().sendMessage(sender, DPMessage.COMMAND_USAGE, getCommandUsage());
+                }
+            } else if (runningParties.size() == 1) {
+                runningParties.get(0).teleport((Player) sender);
+            } else {
+                dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_NOTSPECIFIED);
+                dropParty.getMessenger().sendMessage(sender, DPMessage.COMMAND_USAGE, getCommandUsage());
+            }
         } else {
-            dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_DOESNTEXIST, partyName);
+            String partyName = args[0];
+            if (partyManager.hasParty(partyName)) {
+                partyManager.getParty(partyName).teleport((Player) sender);
+            } else {
+                dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_DOESNTEXIST, partyName);
+            }
         }
     }
 

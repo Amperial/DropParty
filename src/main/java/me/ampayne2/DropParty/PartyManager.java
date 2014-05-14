@@ -24,10 +24,7 @@ import me.ampayne2.dropparty.message.PageList;
 import me.ampayne2.dropparty.parties.Party;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Manages all of the drop parties.
@@ -116,8 +113,23 @@ public class PartyManager {
      *
      * @return All of the manager's parties.
      */
-    public Map<String, Party> getParties() {
-        return parties;
+    public Collection<Party> getParties() {
+        return parties.values();
+    }
+
+    /**
+     * Gets the parties in the manager that are currently running.
+     *
+     * @return The manager's parties that are running.
+     */
+    public Collection<Party> getRunningParties() {
+        List<Party> runningParties = new ArrayList<>();
+        for (Party party : parties.values()) {
+            if (party.isRunning()) {
+                runningParties.add(party);
+            }
+        }
+        return runningParties;
     }
 
     /**
