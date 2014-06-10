@@ -4,6 +4,7 @@ description: The Drop Party plugin for Bukkit.
 author: ampayne2
 main: me.ampayne2.dropparty.DropParty
 load: POSTWORLD
+softdepend: [Votifier]
 commands:
   dropparty:
     aliases: [dp, dparty]

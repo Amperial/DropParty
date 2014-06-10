@@ -99,6 +99,7 @@ public enum PartySetting {
             }
         }
     },
+    VOTIFIER("votifier", "votifier", Boolean.class, false),
     EMPTY_CHEST("emptychest", "empty chest", Boolean.class, true);
 
     private final String name;

@@ -23,6 +23,7 @@ import me.ampayne2.dropparty.config.ConfigManager;
 import me.ampayne2.dropparty.message.Messenger;
 import me.ampayne2.dropparty.message.RecipientHandler;
 import me.ampayne2.dropparty.modes.PlayerModeController;
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.HandlerList;
@@ -59,6 +60,9 @@ public class DropParty extends JavaPlugin {
         commandController = new CommandController(this);
         dpMetrics = new DPMetrics(this);
         new DPListener(this);
+        if (Bukkit.getPluginManager().isPluginEnabled("Votifier")) {
+            new VoteListener(this);
+        }
         updateManager = new UpdateManager(this, this.getFile());
     }
 

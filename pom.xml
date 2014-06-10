@@ -27,6 +27,10 @@
             <id>gravity-repo</id>
             <url>http://repo.gravitydevelopment.net</url>
         </repository>
+        <repository>
+            <id>votifier-repo</id>
+            <url>http://repo.sacredlabyrinth.net:8081/artifactory/remote-repos/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -47,6 +51,11 @@
             <groupId>net.gravitydevelopment.updater</groupId>
             <artifactId>updater</artifactId>
             <version>2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vexsoftware</groupId>
+            <artifactId>votifier</artifactId>
+            <version>1.9</version>
         </dependency>
     </dependencies>
 
