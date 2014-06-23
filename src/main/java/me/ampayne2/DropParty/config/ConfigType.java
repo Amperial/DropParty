@@ -1,7 +1,7 @@
 /*
  * This file is part of DropParty.
  *
- * Copyright (c) 2013-2013 <http://dev.bukkit.org/server-mods/dropparty//>
+ * Copyright (c) 2013-2014 <http://dev.bukkit.org/server-mods/dropparty//>
  *
  * DropParty is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,8 +21,7 @@ package me.ampayne2.dropparty.config;
 /**
  * An enumeration of the drop party custom config types.
  */
-public enum ConfigType {
-    MESSAGE("Messages.yml"),
+public enum ConfigType implements me.ampayne2.amplib.config.ConfigType {
     PARTY("Parties.yml");
 
     private final String fileName;

@@ -1,7 +1,7 @@
 /*
  * This file is part of DropParty.
  *
- * Copyright (c) 2013-2013 <http://dev.bukkit.org/server-mods/dropparty//>
+ * Copyright (c) 2013-2014 <http://dev.bukkit.org/server-mods/dropparty//>
  *
  * DropParty is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -18,6 +18,7 @@
  */
 package me.ampayne2.dropparty;
 
+import me.ampayne2.amplib.messenger.DefaultMessage;
 import me.ampayne2.dropparty.message.DPMessage;
 import me.ampayne2.dropparty.modes.PlayerModeController;
 import me.ampayne2.dropparty.parties.Party;
@@ -150,8 +151,8 @@ public class DPListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         if ((player.hasPermission("dropparty.update") || player.isOp()) && dropParty.getUpdateManager().updateAvailable()) {
-            dropParty.getMessenger().sendRawMessage(player, DPMessage.PREFIX + dropParty.getUpdateManager().getNotice());
-            dropParty.getMessenger().sendRawMessage(player, DPMessage.PREFIX + "Type /dp update to update.");
+            dropParty.getMessenger().sendRawMessage(player, DefaultMessage.PREFIX + dropParty.getUpdateManager().getNotice());
+            dropParty.getMessenger().sendRawMessage(player, DefaultMessage.PREFIX + "Type /dp update to update.");
         }
     }
 }

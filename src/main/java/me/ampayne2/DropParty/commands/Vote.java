@@ -1,7 +1,7 @@
 /*
  * This file is part of DropParty.
  *
- * Copyright (c) 2013-2013 <http://dev.bukkit.org/server-mods/dropparty//>
+ * Copyright (c) 2013-2014 <http://dev.bukkit.org/server-mods/dropparty//>
  *
  * DropParty is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,29 +16,31 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.dropparty.command.commands.remove;
+package me.ampayne2.dropparty.commands;
 
+import me.ampayne2.amplib.command.Command;
 import me.ampayne2.dropparty.DropParty;
-import me.ampayne2.dropparty.command.DPCommand;
 import me.ampayne2.dropparty.message.DPMessage;
-import me.ampayne2.dropparty.modes.PlayerMode;
 import me.ampayne2.dropparty.parties.Party;
+import me.ampayne2.dropparty.parties.PartySetting;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A command that removes a chest of a certain id or sets the sender to chest removal mode.
+ * A command that votes for a drop party to start.
  */
-public class RemoveChest extends DPCommand {
+public class Vote extends Command {
     private final DropParty dropParty;
 
-    public RemoveChest(DropParty dropParty) {
-        super(dropParty, "chest", "Removes a chest or sets you to chest removal mode.", "/dp remove chest <party> [id]", new Permission("dropparty.remove.chest", PermissionDefault.OP), 1, 2, true);
+    public Vote(DropParty dropParty) {
+        super(dropParty, "vote");
+        setDescription("Votes for a drop party to start.");
+        setCommandUsage("/dp vote <party>");
+        setPermission(new Permission("dropparty.vote", PermissionDefault.TRUE));
+        setArgumentRange(1, 1);
         this.dropParty = dropParty;
     }
 
@@ -47,20 +49,18 @@ public class RemoveChest extends DPCommand {
         String partyName = args[0];
         if (dropParty.getPartyManager().hasParty(partyName)) {
             Party party = dropParty.getPartyManager().getParty(partyName);
-            if (args.length == 1) {
-                dropParty.getPlayerModeController().setPlayerMode((Player) sender, PlayerMode.REMOVING_CHESTS, party);
-            } else {
-                try {
-                    int id = Integer.parseInt(args[1]);
-                    if (party.getChests().size() > id) {
-                        party.removeChest(party.getChests().get(id));
-                        dropParty.getMessenger().sendMessage(sender, DPMessage.REMOVE_CHEST, partyName);
-                    } else {
-                        dropParty.getMessenger().sendMessage(sender, DPMessage.CHEST_IDDOESNTEXIST, args[1], partyName);
-                    }
-                } catch (NumberFormatException e) {
-                    dropParty.getMessenger().sendMessage(sender, DPMessage.ERROR_NUMBERFORMAT);
+            if (party.get(PartySetting.VOTE_TO_START, Boolean.class)) {
+                String playerName = sender.getName();
+                if (party.isRunning()) {
+                    dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_ALREADYRUNNING, partyName);
+                } else if (party.hasVoted(playerName)) {
+                    dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_ALREADYVOTED, partyName);
+                } else {
+                    party.addVote(playerName);
+                    dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_VOTE, partyName);
                 }
+            } else {
+                dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_CANNOTVOTE, partyName);
             }
         } else {
             dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_DOESNTEXIST, partyName);
@@ -69,6 +69,6 @@ public class RemoveChest extends DPCommand {
 
     @Override
     public List<String> getTabCompleteList(String[] args) {
-        return args.length == 0 ? dropParty.getPartyManager().getPartyList() : new ArrayList<String>();
+        return dropParty.getPartyManager().getPartyList();
     }
 }

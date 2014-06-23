@@ -1,7 +1,7 @@
 /*
  * This file is part of DropParty.
  *
- * Copyright (c) 2013-2013 <http://dev.bukkit.org/server-mods/dropparty//>
+ * Copyright (c) 2013-2014 <http://dev.bukkit.org/server-mods/dropparty//>
  *
  * DropParty is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,27 +16,33 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.dropparty.command.commands.set;
+package me.ampayne2.dropparty.commands.list;
 
+import me.ampayne2.amplib.command.Command;
+import me.ampayne2.amplib.messenger.PageList;
 import me.ampayne2.dropparty.DropParty;
-import me.ampayne2.dropparty.command.DPCommand;
 import me.ampayne2.dropparty.message.DPMessage;
-import me.ampayne2.dropparty.modes.PlayerMode;
+import me.ampayne2.dropparty.parties.Party;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A command that sets the sender to firework point selection mode.
+ * A command that lists the firework points of a drop party.
  */
-public class SetFireworkPoint extends DPCommand {
+public class ListFireworkPoints extends Command {
     private final DropParty dropParty;
 
-    public SetFireworkPoint(DropParty dropParty) {
-        super(dropParty, "fireworkpoint", "Sets you to firework point selection mode.", "/dp set fireworkpoint <party>", new Permission("dropparty.set.fireworkpoint", PermissionDefault.OP), 1, true);
+    public ListFireworkPoints(DropParty dropParty) {
+        super(dropParty, "fireworkpoints");
+        setDescription("Lists the firework points of a drop party.");
+        setCommandUsage("/dp list fireworkpoints <party> [page]");
+        setPermission(new Permission("dropparty.list.fireworkpoints", PermissionDefault.TRUE));
+        setArgumentRange(1, 2);
+        setPlayerOnly(false);
         this.dropParty = dropParty;
     }
 
@@ -44,7 +50,12 @@ public class SetFireworkPoint extends DPCommand {
     public void execute(String command, CommandSender sender, String[] args) {
         String partyName = args[0];
         if (dropParty.getPartyManager().hasParty(partyName)) {
-            dropParty.getPlayerModeController().setPlayerMode((Player) sender, PlayerMode.SETTING_FIREWORK_POINTS, dropParty.getPartyManager().getParty(partyName));
+            Party party = dropParty.getPartyManager().getParty(partyName);
+            int pageNumber = 1;
+            if (args.length == 2) {
+                pageNumber = PageList.getPageNumber(args[1]);
+            }
+            party.getFireworkPointList().sendPage(pageNumber, sender);
         } else {
             dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_DOESNTEXIST, partyName);
         }
@@ -52,6 +63,6 @@ public class SetFireworkPoint extends DPCommand {
 
     @Override
     public List<String> getTabCompleteList(String[] args) {
-        return dropParty.getPartyManager().getPartyList();
+        return args.length == 0 ? dropParty.getPartyManager().getPartyList() : new ArrayList<String>();
     }
 }

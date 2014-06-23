@@ -1,7 +1,7 @@
 /*
  * This file is part of DropParty.
  *
- * Copyright (c) 2013-2013 <http://dev.bukkit.org/server-mods/dropparty//>
+ * Copyright (c) 2013-2014 <http://dev.bukkit.org/server-mods/dropparty//>
  *
  * DropParty is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,10 +16,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.dropparty.command.commands.list;
+package me.ampayne2.dropparty.commands.list;
 
+import me.ampayne2.amplib.command.Command;
+import me.ampayne2.amplib.messenger.PageList;
 import me.ampayne2.dropparty.DropParty;
-import me.ampayne2.dropparty.command.DPCommand;
 import me.ampayne2.dropparty.message.DPMessage;
 import me.ampayne2.dropparty.parties.Party;
 import org.bukkit.command.CommandSender;
@@ -30,13 +31,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A command that lists the firework points of a drop party.
+ * A command that lists the item points of a drop party.
  */
-public class ListFireworkPoints extends DPCommand {
+public class ListItemPoints extends Command {
     private final DropParty dropParty;
 
-    public ListFireworkPoints(DropParty dropParty) {
-        super(dropParty, "fireworkpoints", "Lists the firework points of a drop party.", "/dp list fireworkpoints <party> [page]", new Permission("dropparty.list.fireworkpoints", PermissionDefault.TRUE), 1, 2, false);
+    public ListItemPoints(DropParty dropParty) {
+        super(dropParty, "itempoints");
+        setDescription("Lists the item points of a drop party.");
+        setCommandUsage("/dp list itempoints <party> [page]");
+        setPermission(new Permission("dropparty.list.itempoints", PermissionDefault.TRUE));
+        setArgumentRange(1, 2);
+        setPlayerOnly(false);
         this.dropParty = dropParty;
     }
 
@@ -47,14 +53,9 @@ public class ListFireworkPoints extends DPCommand {
             Party party = dropParty.getPartyManager().getParty(partyName);
             int pageNumber = 1;
             if (args.length == 2) {
-                try {
-                    pageNumber = Integer.parseInt(args[1]);
-                } catch (NumberFormatException e) {
-                    dropParty.getMessenger().sendMessage(sender, DPMessage.ERROR_NUMBERFORMAT);
-                    return;
-                }
+                pageNumber = PageList.getPageNumber(args[1]);
             }
-            party.getFireworkPointList().sendPage(pageNumber, sender);
+            party.getItemPointList().sendPage(pageNumber, sender);
         } else {
             dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_DOESNTEXIST, partyName);
         }

@@ -1,7 +1,7 @@
 /*
  * This file is part of DropParty.
  *
- * Copyright (c) 2013-2013 <http://dev.bukkit.org/server-mods/dropparty//>
+ * Copyright (c) 2013-2014 <http://dev.bukkit.org/server-mods/dropparty//>
  *
  * DropParty is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,27 +16,28 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.dropparty.command.commands;
+package me.ampayne2.dropparty.commands;
 
+import me.ampayne2.amplib.command.Command;
 import me.ampayne2.dropparty.DropParty;
-import me.ampayne2.dropparty.command.DPCommand;
 import me.ampayne2.dropparty.message.DPMessage;
 import me.ampayne2.dropparty.parties.Party;
-import me.ampayne2.dropparty.parties.PartySetting;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
-import java.util.List;
-
 /**
- * A command that resets the votes of a drop party.
+ * A command that creates a drop party.
  */
-public class ResetVotes extends DPCommand {
+public class Create extends Command {
     private final DropParty dropParty;
 
-    public ResetVotes(DropParty dropParty) {
-        super(dropParty, "resetvotes", "Resets the votes of a drop party.", "/dp resetvotes <party>", new Permission("dropparty.resetvotes", PermissionDefault.OP), 1, false);
+    public Create(DropParty dropParty) {
+        super(dropParty, "create");
+        setDescription("Creates a drop party.");
+        setCommandUsage("/dp create <party>");
+        setPermission(new Permission("dropparty.create", PermissionDefault.OP));
         this.dropParty = dropParty;
     }
 
@@ -44,20 +45,10 @@ public class ResetVotes extends DPCommand {
     public void execute(String command, CommandSender sender, String[] args) {
         String partyName = args[0];
         if (dropParty.getPartyManager().hasParty(partyName)) {
-            Party party = dropParty.getPartyManager().getParty(partyName);
-            if (party.get(PartySetting.VOTE_TO_START, Boolean.class)) {
-                party.clearVotes();
-                dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_RESETVOTES, partyName);
-            } else {
-                dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_CANNOTVOTE, partyName);
-            }
+            dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_ALREADYEXISTS, partyName);
         } else {
-            dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_DOESNTEXIST, partyName);
+            dropParty.getPartyManager().addParty(new Party(dropParty, partyName, ((Player) sender).getLocation()));
+            dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_CREATE, partyName);
         }
-    }
-
-    @Override
-    public List<String> getTabCompleteList(String[] args) {
-        return dropParty.getPartyManager().getPartyList();
     }
 }

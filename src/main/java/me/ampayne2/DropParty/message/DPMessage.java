@@ -1,7 +1,7 @@
 /*
  * This file is part of DropParty.
  *
- * Copyright (c) 2013-2013 <http://dev.bukkit.org/server-mods/dropparty//>
+ * Copyright (c) 2013-2014 <http://dev.bukkit.org/server-mods/dropparty//>
  *
  * DropParty is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -18,19 +18,12 @@
  */
 package me.ampayne2.dropparty.message;
 
+import me.ampayne2.amplib.messenger.Message;
+
 /**
  * Messages in Drop Party.
  */
-public enum DPMessage {
-    PREFIX("Prefix", "&6[&5Drop Party&6] &7"),
-
-    RELOAD("Reload", "Reloaded Drop Party."),
-
-    COMMAND_NOTAPLAYER("Command.NotAPlayer", "&4You must be a player to use this command."),
-    COMMAND_NOPERMISSION("Command.NoPermission", "&4You do not have permission to use this command."),
-    COMMAND_INVALID("Command.Invalid", "&4%s is not a sub command of %s."),
-    COMMAND_USAGE("Command.Usage", "&4Usage: %s"),
-
+public enum DPMessage implements Message {
     PARTY_CREATE("Party.Create", "Created drop party &5%s&7."),
     PARTY_DELETE("Party.Delete", "Deleted drop party &5%s&7."),
     PARTY_START("Party.Start", "Started drop party &5%s&7."),
@@ -77,16 +70,14 @@ public enum DPMessage {
 
     FIREWORKPOINT_ALREADYEXISTS("FireworkPoint.AlreadyExists", "&4A firework point already exists at this location."),
     FIREWORKPOINT_DOESNTEXIST("FireworkPoint.DoesntExist", "&4No drop party firework points exist at this location."),
-    FIREWORKPOINT_IDDOESNTEXIST("FireworkPoint.IdDoesntExist", "&4No firework point of the id &5%s&4 of the drop party &5%s&4 found."),
-
-    ERROR_NUMBERFORMAT("Error.NumberFormat", "&4Value must be a positive integer."),
-    ERROR_BOOLEANFORMAT("Error.BooleanFormat", "&4Value must be true or false.");
+    FIREWORKPOINT_IDDOESNTEXIST("FireworkPoint.IdDoesntExist", "&4No firework point of the id &5%s&4 of the drop party &5%s&4 found.");
 
     private String message;
     private final String path;
     private final String defaultMessage;
 
     private DPMessage(String path, String defaultMessage) {
+        this.message = defaultMessage;
         this.path = path;
         this.defaultMessage = defaultMessage;
     }
@@ -127,6 +118,7 @@ public enum DPMessage {
         return defaultMessage;
     }
 
+    @Override
     public String toString() {
         return message;
     }

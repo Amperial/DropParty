@@ -1,7 +1,7 @@
 /*
  * This file is part of DropParty.
  *
- * Copyright (c) 2013-2013 <http://dev.bukkit.org/server-mods/dropparty//>
+ * Copyright (c) 2013-2014 <http://dev.bukkit.org/server-mods/dropparty//>
  *
  * DropParty is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,41 +16,37 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.dropparty.command.commands.set;
+package me.ampayne2.dropparty.commands.list;
 
+import me.ampayne2.amplib.command.Command;
+import me.ampayne2.amplib.messenger.PageList;
 import me.ampayne2.dropparty.DropParty;
-import me.ampayne2.dropparty.command.DPCommand;
-import me.ampayne2.dropparty.message.DPMessage;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
-import java.util.List;
-
 /**
- * A command that sets the teleport of a drop party.
+ * A command that lists the drop parties in the party manager.
  */
-public class SetTeleport extends DPCommand {
+public class ListParties extends Command {
     private final DropParty dropParty;
 
-    public SetTeleport(DropParty dropParty) {
-        super(dropParty, "teleport", "Sets the teleport of a drop party.", "/dp set teleport <party>", new Permission("dropparty.set.teleport", PermissionDefault.OP), 1, true);
+    public ListParties(DropParty dropParty) {
+        super(dropParty, "parties");
+        setDescription("Lists all of the drop parties.");
+        setCommandUsage("/dp list parties [page]");
+        setPermission(new Permission("dropparty.list.parties", PermissionDefault.TRUE));
+        setArgumentRange(0, 1);
+        setPlayerOnly(false);
         this.dropParty = dropParty;
     }
 
     @Override
     public void execute(String command, CommandSender sender, String[] args) {
-        String partyName = args[0];
-        if (dropParty.getPartyManager().hasParty(partyName)) {
-            dropParty.getPartyManager().getParty(partyName).setTeleport(((Player) sender).getLocation());
-        } else {
-            dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_DOESNTEXIST, partyName);
+        int pageNumber = 1;
+        if (args.length == 1) {
+            pageNumber = PageList.getPageNumber(args[0]);
         }
-    }
-
-    @Override
-    public List<String> getTabCompleteList(String[] args) {
-        return dropParty.getPartyManager().getPartyList();
+        dropParty.getPartyManager().getPageList().sendPage(pageNumber, sender);
     }
 }

@@ -4,7 +4,7 @@
 
     <groupId>me.ampayne2</groupId>
     <artifactId>dropparty</artifactId>
-    <version>3.0</version>
+    <version>3.1</version>
     <inceptionYear>2013</inceptionYear>
     <name>DropParty</name>
     <description>Drop Party Plugin for Bukkit.</description>
@@ -31,6 +31,10 @@
             <id>votifier-repo</id>
             <url>http://repo.sacredlabyrinth.net:8081/artifactory/remote-repos/</url>
         </repository>
+        <repository>
+            <id>greatman-repo</id>
+            <url>http://repo.greatmancode.com/content/groups/public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -56,6 +60,11 @@
             <groupId>com.vexsoftware</groupId>
             <artifactId>votifier</artifactId>
             <version>1.9</version>
+        </dependency>
+        <dependency>
+            <groupId>me.ampayne2</groupId>
+            <artifactId>amplib</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
 
@@ -119,7 +128,7 @@
                     <properties>
                         <name>${project.name}</name>
                         <url>http://dev.bukkit.org/server-mods/dropparty/</url>
-                        <copyright>Copyright (c) ${project.inceptionYear}-2013</copyright>
+                        <copyright>Copyright (c) ${project.inceptionYear}-2014</copyright>
                     </properties>
                     <includes>
                         <include>src/main/java/**</include>
@@ -152,10 +161,13 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <minimizeJar>true</minimizeJar>
                             <artifactSet>
-                                <excludes>
-                                    <exclude>org.bukkit:bukkit</exclude>
-                                </excludes>
+                                <includes>
+                                    <include>me.ampayne2:amplib</include>
+                                    <include>org.mcstats.bukkit:metrics</include>
+                                    <include>net.gravitydevelopment.updater:updater</include>
+                                </includes>
                             </artifactSet>
                         </configuration>
                     </execution>

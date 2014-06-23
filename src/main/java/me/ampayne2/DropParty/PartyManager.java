@@ -1,7 +1,7 @@
 /*
  * This file is part of DropParty.
  *
- * Copyright (c) 2013-2013 <http://dev.bukkit.org/server-mods/dropparty//>
+ * Copyright (c) 2013-2014 <http://dev.bukkit.org/server-mods/dropparty//>
  *
  * DropParty is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -18,13 +18,17 @@
  */
 package me.ampayne2.dropparty;
 
+import me.ampayne2.amplib.messenger.Messenger;
+import me.ampayne2.amplib.messenger.PageList;
 import me.ampayne2.dropparty.config.ConfigType;
-import me.ampayne2.dropparty.message.Messenger;
-import me.ampayne2.dropparty.message.PageList;
 import me.ampayne2.dropparty.parties.Party;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Manages all of the drop parties.

@@ -1,7 +1,7 @@
 /*
  * This file is part of DropParty.
  *
- * Copyright (c) 2013-2013 <http://dev.bukkit.org/server-mods/dropparty//>
+ * Copyright (c) 2013-2014 <http://dev.bukkit.org/server-mods/dropparty//>
  *
  * DropParty is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,11 +16,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.dropparty.command.commands;
+package me.ampayne2.dropparty.commands;
 
+import me.ampayne2.amplib.command.Command;
+import me.ampayne2.amplib.messenger.DefaultMessage;
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.PartyManager;
-import me.ampayne2.dropparty.command.DPCommand;
 import me.ampayne2.dropparty.message.DPMessage;
 import me.ampayne2.dropparty.parties.Party;
 import org.bukkit.command.CommandSender;
@@ -33,11 +34,15 @@ import java.util.List;
 /**
  * A command that teleports the sender to a drop party.
  */
-public class Teleport extends DPCommand {
+public class Teleport extends Command {
     private final DropParty dropParty;
 
     public Teleport(DropParty dropParty) {
-        super(dropParty, "teleport", "Teleports you to a drop party.", "/dp teleport [party]", new Permission("dropparty.teleport", PermissionDefault.TRUE), 0, 1, true);
+        super(dropParty, "teleport");
+        setDescription("Teleports you to a drop party.");
+        setCommandUsage("/dp teleport [party]");
+        setPermission(new Permission("dropparty.teleport", PermissionDefault.TRUE));
+        setArgumentRange(0, 1);
         this.dropParty = dropParty;
     }
 
@@ -57,13 +62,13 @@ public class Teleport extends DPCommand {
                     parties.get(0).teleport((Player) sender);
                 } else {
                     dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_NOTSPECIFIED);
-                    dropParty.getMessenger().sendMessage(sender, DPMessage.COMMAND_USAGE, getCommandUsage());
+                    dropParty.getMessenger().sendMessage(sender, DefaultMessage.COMMAND_USAGE, getCommandUsage());
                 }
             } else if (runningParties.size() == 1) {
                 runningParties.get(0).teleport((Player) sender);
             } else {
                 dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_NOTSPECIFIED);
-                dropParty.getMessenger().sendMessage(sender, DPMessage.COMMAND_USAGE, getCommandUsage());
+                dropParty.getMessenger().sendMessage(sender, DefaultMessage.COMMAND_USAGE, getCommandUsage());
             }
         } else {
             String partyName = args[0];

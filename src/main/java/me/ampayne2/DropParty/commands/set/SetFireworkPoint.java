@@ -1,7 +1,7 @@
 /*
  * This file is part of DropParty.
  *
- * Copyright (c) 2013-2013 <http://dev.bukkit.org/server-mods/dropparty//>
+ * Copyright (c) 2013-2014 <http://dev.bukkit.org/server-mods/dropparty//>
  *
  * DropParty is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,25 +16,31 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.dropparty.command.commands;
+package me.ampayne2.dropparty.commands.set;
 
+import me.ampayne2.amplib.command.Command;
 import me.ampayne2.dropparty.DropParty;
-import me.ampayne2.dropparty.command.DPCommand;
 import me.ampayne2.dropparty.message.DPMessage;
-import me.ampayne2.dropparty.parties.Party;
+import me.ampayne2.dropparty.modes.PlayerMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import java.util.List;
+
 /**
- * A command that creates a drop party.
+ * A command that sets the sender to firework point selection mode.
  */
-public class Create extends DPCommand {
+public class SetFireworkPoint extends Command {
     private final DropParty dropParty;
 
-    public Create(DropParty dropParty) {
-        super(dropParty, "create", "Creates a drop party.", "/dp create <party>", new Permission("dropparty.create", PermissionDefault.OP), true);
+    public SetFireworkPoint(DropParty dropParty) {
+        super(dropParty, "fireworkpoint");
+        setDescription("Sets you to firework point selection mode.");
+        setCommandUsage("/dp set fireworkpoint <party>");
+        setPermission(new Permission("dropparty.set.fireworkpoint", PermissionDefault.OP));
+        setArgumentRange(1, 1);
         this.dropParty = dropParty;
     }
 
@@ -42,10 +48,14 @@ public class Create extends DPCommand {
     public void execute(String command, CommandSender sender, String[] args) {
         String partyName = args[0];
         if (dropParty.getPartyManager().hasParty(partyName)) {
-            dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_ALREADYEXISTS, partyName);
+            dropParty.getPlayerModeController().setPlayerMode((Player) sender, PlayerMode.SETTING_FIREWORK_POINTS, dropParty.getPartyManager().getParty(partyName));
         } else {
-            dropParty.getPartyManager().addParty(new Party(dropParty, partyName, ((Player) sender).getLocation()));
-            dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_CREATE, partyName);
+            dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_DOESNTEXIST, partyName);
         }
+    }
+
+    @Override
+    public List<String> getTabCompleteList(String[] args) {
+        return dropParty.getPartyManager().getPartyList();
     }
 }

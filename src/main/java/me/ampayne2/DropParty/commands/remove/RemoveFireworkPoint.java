@@ -1,7 +1,7 @@
 /*
  * This file is part of DropParty.
  *
- * Copyright (c) 2013-2013 <http://dev.bukkit.org/server-mods/dropparty//>
+ * Copyright (c) 2013-2014 <http://dev.bukkit.org/server-mods/dropparty//>
  *
  * DropParty is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,13 +16,16 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.dropparty.command.commands.list;
+package me.ampayne2.dropparty.commands.remove;
 
+import me.ampayne2.amplib.command.Command;
+import me.ampayne2.amplib.messenger.DefaultMessage;
 import me.ampayne2.dropparty.DropParty;
-import me.ampayne2.dropparty.command.DPCommand;
 import me.ampayne2.dropparty.message.DPMessage;
+import me.ampayne2.dropparty.modes.PlayerMode;
 import me.ampayne2.dropparty.parties.Party;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
@@ -30,13 +33,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A command that lists the item points of a drop party.
+ * A command that removes a firework point of a certain id or sets the sender to firework point removal mode.
  */
-public class ListItemPoints extends DPCommand {
+public class RemoveFireworkPoint extends Command {
     private final DropParty dropParty;
 
-    public ListItemPoints(DropParty dropParty) {
-        super(dropParty, "itempoints", "Lists the item points of a drop party.", "/dp list itempoints <party> [page]", new Permission("dropparty.list.itempoints", PermissionDefault.TRUE), 1, 2, false);
+    public RemoveFireworkPoint(DropParty dropParty) {
+        super(dropParty, "fireworkpoint");
+        setDescription("Removes a firework point or sets you to firework point removal mode.");
+        setCommandUsage("/dp remove fireworkpoint <party> [id]");
+        setPermission(new Permission("dropparty.remove.fireworkpoint", PermissionDefault.OP));
+        setArgumentRange(1, 2);
         this.dropParty = dropParty;
     }
 
@@ -45,16 +52,21 @@ public class ListItemPoints extends DPCommand {
         String partyName = args[0];
         if (dropParty.getPartyManager().hasParty(partyName)) {
             Party party = dropParty.getPartyManager().getParty(partyName);
-            int pageNumber = 1;
-            if (args.length == 2) {
+            if (args.length == 1) {
+                dropParty.getPlayerModeController().setPlayerMode((Player) sender, PlayerMode.REMOVING_FIREWORK_POINTS, party);
+            } else {
                 try {
-                    pageNumber = Integer.parseInt(args[1]);
+                    int id = Integer.parseInt(args[1]);
+                    if (party.getFireworkPoints().size() > id) {
+                        party.removeFireworkPoint(party.getFireworkPoints().get(id));
+                        dropParty.getMessenger().sendMessage(sender, DPMessage.REMOVE_FIREWORKPOINT, partyName);
+                    } else {
+                        dropParty.getMessenger().sendMessage(sender, DPMessage.FIREWORKPOINT_IDDOESNTEXIST, args[1], partyName);
+                    }
                 } catch (NumberFormatException e) {
-                    dropParty.getMessenger().sendMessage(sender, DPMessage.ERROR_NUMBERFORMAT);
-                    return;
+                    dropParty.getMessenger().sendMessage(sender, DefaultMessage.ERROR_NUMBERFORMAT);
                 }
             }
-            party.getItemPointList().sendPage(pageNumber, sender);
         } else {
             dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_DOESNTEXIST, partyName);
         }

@@ -1,7 +1,7 @@
 /*
  * This file is part of DropParty.
  *
- * Copyright (c) 2013-2013 <http://dev.bukkit.org/server-mods/dropparty//>
+ * Copyright (c) 2013-2014 <http://dev.bukkit.org/server-mods/dropparty//>
  *
  * DropParty is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -87,7 +87,7 @@ public class DPFireworkPoint {
      * @return The string representation of the firework point.
      */
     public String toConfig() {
-        return new StringBuilder().append(party.getName()).append(";").append(DPUtils.locationToString(location)).toString();
+        return party.getName() + ";" + DPUtils.locationToString(location);
     }
 
     /**

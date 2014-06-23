@@ -1,7 +1,7 @@
 /*
  * This file is part of DropParty.
  *
- * Copyright (c) 2013-2013 <http://dev.bukkit.org/server-mods/dropparty//>
+ * Copyright (c) 2013-2014 <http://dev.bukkit.org/server-mods/dropparty//>
  *
  * DropParty is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,27 +16,31 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.dropparty.command.commands.set;
+package me.ampayne2.dropparty.commands;
 
+import me.ampayne2.amplib.command.Command;
 import me.ampayne2.dropparty.DropParty;
-import me.ampayne2.dropparty.command.DPCommand;
 import me.ampayne2.dropparty.message.DPMessage;
-import me.ampayne2.dropparty.modes.PlayerMode;
+import me.ampayne2.dropparty.parties.Party;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
 import java.util.List;
 
 /**
- * A command that sets the player to item point selection mode.
+ * A command that stops a drop party.
  */
-public class SetItemPoint extends DPCommand {
+public class Stop extends Command {
     private final DropParty dropParty;
 
-    public SetItemPoint(DropParty dropParty) {
-        super(dropParty, "itempoint", "Sets you to item point selection mode.", "/dp set itempoint <party>", new Permission("dropparty.set.itempoint", PermissionDefault.OP), 1, true);
+    public Stop(DropParty dropParty) {
+        super(dropParty, "stop");
+        setDescription("Stops a drop party.");
+        setCommandUsage("/dp stop <party>");
+        setPermission(new Permission("dropparty.stop", PermissionDefault.OP));
+        setArgumentRange(1, 1);
+        setPlayerOnly(false);
         this.dropParty = dropParty;
     }
 
@@ -44,7 +48,16 @@ public class SetItemPoint extends DPCommand {
     public void execute(String command, CommandSender sender, String[] args) {
         String partyName = args[0];
         if (dropParty.getPartyManager().hasParty(partyName)) {
-            dropParty.getPlayerModeController().setPlayerMode((Player) sender, PlayerMode.SETTING_ITEM_POINTS, dropParty.getPartyManager().getParty(partyName));
+            Party party = dropParty.getPartyManager().getParty(partyName);
+            if (party.isRunning()) {
+                party.stop(false);
+                dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_STOP, partyName);
+            } else if (party.isShootingFireworks()) {
+                party.stopShootingFireworks();
+                dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_STOPFIREWORKS, partyName);
+            } else {
+                dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_NOTRUNNING, partyName);
+            }
         } else {
             dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_DOESNTEXIST, partyName);
         }

@@ -1,7 +1,7 @@
 /*
  * This file is part of DropParty.
  *
- * Copyright (c) 2013-2013 <http://dev.bukkit.org/server-mods/dropparty//>
+ * Copyright (c) 2013-2014 <http://dev.bukkit.org/server-mods/dropparty//>
  *
  * DropParty is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,26 +16,31 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with DropParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ampayne2.dropparty.command.commands;
+package me.ampayne2.dropparty.commands.set;
 
+import me.ampayne2.amplib.command.Command;
 import me.ampayne2.dropparty.DropParty;
-import me.ampayne2.dropparty.command.DPCommand;
 import me.ampayne2.dropparty.message.DPMessage;
-import me.ampayne2.dropparty.parties.Party;
+import me.ampayne2.dropparty.modes.PlayerMode;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
 import java.util.List;
 
 /**
- * A command that starts a drop party.
+ * A command that sets the player to item point selection mode.
  */
-public class Start extends DPCommand {
+public class SetItemPoint extends Command {
     private final DropParty dropParty;
 
-    public Start(DropParty dropParty) {
-        super(dropParty, "start", "Starts a drop party.", "/dp start <party>", new Permission("dropparty.start", PermissionDefault.OP), 1, false);
+    public SetItemPoint(DropParty dropParty) {
+        super(dropParty, "itempoint");
+        setDescription("Sets you to item point selection mode.");
+        setCommandUsage("/dp set itempoint <party>");
+        setPermission(new Permission("dropparty.set.itempoint", PermissionDefault.OP));
+        setArgumentRange(1, 1);
         this.dropParty = dropParty;
     }
 
@@ -43,13 +48,7 @@ public class Start extends DPCommand {
     public void execute(String command, CommandSender sender, String[] args) {
         String partyName = args[0];
         if (dropParty.getPartyManager().hasParty(partyName)) {
-            Party party = dropParty.getPartyManager().getParty(partyName);
-            if (party.isRunning()) {
-                dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_ALREADYRUNNING, partyName);
-            } else {
-                party.start();
-                dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_START, partyName);
-            }
+            dropParty.getPlayerModeController().setPlayerMode((Player) sender, PlayerMode.SETTING_ITEM_POINTS, dropParty.getPartyManager().getParty(partyName));
         } else {
             dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_DOESNTEXIST, partyName);
         }

@@ -1,7 +1,7 @@
 /*
  * This file is part of DropParty.
  *
- * Copyright (c) 2013-2013 <http://dev.bukkit.org/server-mods/dropparty//>
+ * Copyright (c) 2013-2014 <http://dev.bukkit.org/server-mods/dropparty//>
  *
  * DropParty is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -18,11 +18,15 @@
  */
 package me.ampayne2.dropparty.parties;
 
-import me.ampayne2.dropparty.*;
+import me.ampayne2.amplib.messenger.Messenger;
+import me.ampayne2.amplib.messenger.PageList;
+import me.ampayne2.dropparty.DPChest;
+import me.ampayne2.dropparty.DPFireworkPoint;
+import me.ampayne2.dropparty.DPItemPoint;
+import me.ampayne2.dropparty.DPUtils;
+import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.config.ConfigType;
 import me.ampayne2.dropparty.message.DPMessage;
-import me.ampayne2.dropparty.message.Messenger;
-import me.ampayne2.dropparty.message.PageList;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
@@ -32,7 +36,13 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
 /**
  * Controls and contains all the information of a drop party.
@@ -648,7 +658,8 @@ public class Party {
      * Gets the value of a {@link me.ampayne2.dropparty.parties.PartySetting} of the party.
      *
      * @param partySetting The {@link me.ampayne2.dropparty.parties.PartySetting}.
-     * @param type         The type of the value.
+     * @param type         The value's class.
+     * @param <T>          The value's type.
      * @return The value.
      */
     public <T> T get(PartySetting partySetting, Class<T> type) {

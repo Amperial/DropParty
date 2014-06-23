@@ -1,7 +1,7 @@
 /*
  * This file is part of DropParty.
  *
- * Copyright (c) 2013-2013 <http://dev.bukkit.org/server-mods/dropparty//>
+ * Copyright (c) 2013-2014 <http://dev.bukkit.org/server-mods/dropparty//>
  *
  * DropParty is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -41,7 +41,7 @@ public final class DPUtils {
      * @return The string representation of the location.
      */
     public static String locationToString(Location location) {
-        return new StringBuilder().append(location.getWorld().getName()).append(",").append(location.getX()).append(",").append(location.getY()).append(",").append(location.getZ()).append(",").append(location.getYaw()).append(",").append(location.getPitch()).toString();
+        return location.getWorld().getName() + "," + location.getX() + "," + location.getY() + "," + location.getZ() + "," + location.getYaw() + "," + location.getPitch();
     }
 
     /**
@@ -95,6 +95,13 @@ public final class DPUtils {
      * Gets a random enum value from an enum.
      *
      * @param clazz The enum's class.
+     * @return The random enum value.
+     */
+    /**
+     * Gets a random enum value from an enum.
+     *
+     * @param clazz The enum's class.
+     * @param <T>   The enum's type.
      * @return The random enum value.
      */
     public static <T extends Enum> T randomEnum(Class<T> clazz) {
