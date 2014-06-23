@@ -1,4 +1,5 @@
 debug: false
+configversion: ${project.version}
 update-notice: true
 colors:
   primary: DARK_PURPLE
@@ -14,3 +15,5 @@ defaultsettings:
   startperiod: 144000
   votetostart: false
   requiredvotes: 50
+  votifier: false
+  emptychest: true

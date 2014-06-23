@@ -74,10 +74,13 @@ public class DropParty extends AmpJavaPlugin {
         DefaultMessage.RELOAD.setMessage("Reloaded Drop Party.");
         enableAmpLib();
         getConfigManager().registerConfigTypes(EnumSet.allOf(ConfigType.class));
+        saveDefaultConfig();
         FileConfiguration config = getConfig();
         Messenger.PRIMARY_COLOR = ChatColor.valueOf(config.getString("colors.primary", "DARK_PURPLE"));
         Messenger.SECONDARY_COLOR = ChatColor.valueOf(config.getString("colors.secondary", "GRAY"));
         Messenger.HIGHLIGHT_COLOR = ChatColor.valueOf(config.getString("colors.highlights", "GOLD"));
+        config.set("configversion", getDescription().getVersion());
+        saveConfig();
         getMessenger().registerMessages(EnumSet.allOf(DPMessage.class));
         partyManager = new PartyManager(this);
         playerModeController = new PlayerModeController(this);

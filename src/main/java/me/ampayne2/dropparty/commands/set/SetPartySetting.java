@@ -72,7 +72,7 @@ public class SetPartySetting extends Command {
                 }
             } else if (partySetting.getType() == Boolean.class) {
                 if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
-                    party.set(PartySetting.START_PERIODICALLY, Boolean.parseBoolean(value));
+                    party.set(partySetting, Boolean.parseBoolean(value));
                 } else {
                     dropParty.getMessenger().sendMessage(sender, DefaultMessage.ERROR_BOOLEANFORMAT);
                     return;
