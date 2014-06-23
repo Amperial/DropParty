@@ -1,5 +1,5 @@
 name: DropParty
-version: 3
+version: ${project.version}
 description: The Drop Party plugin for Bukkit.
 author: ampayne2
 main: me.ampayne2.dropparty.DropParty
