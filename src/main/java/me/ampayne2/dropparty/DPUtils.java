@@ -71,15 +71,6 @@ public final class DPUtils {
     }
 
     /**
-     * Gets the amount of players online.
-     *
-     * @return The amount of players online.
-     */
-    public static int getPlayersOnline() {
-        return Bukkit.getOnlinePlayers().length;
-    }
-
-    /**
      * Clamps a value between a minimum and maximum value.
      *
      * @param value The value.
