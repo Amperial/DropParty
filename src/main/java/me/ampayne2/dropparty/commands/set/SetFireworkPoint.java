@@ -18,10 +18,10 @@
  */
 package me.ampayne2.dropparty.commands.set;
 
-import me.ampayne2.amplib.command.Command;
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.message.DPMessage;
 import me.ampayne2.dropparty.modes.PlayerMode;
+import ninja.amp.amplib.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;

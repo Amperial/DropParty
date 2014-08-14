@@ -18,14 +18,6 @@
  */
 package me.ampayne2.dropparty;
 
-import me.ampayne2.amplib.AmpJavaPlugin;
-import me.ampayne2.amplib.command.Command;
-import me.ampayne2.amplib.command.CommandGroup;
-import me.ampayne2.amplib.command.commands.AboutCommand;
-import me.ampayne2.amplib.command.commands.HelpCommand;
-import me.ampayne2.amplib.command.commands.ReloadCommand;
-import me.ampayne2.amplib.messenger.DefaultMessage;
-import me.ampayne2.amplib.messenger.Messenger;
 import me.ampayne2.dropparty.commands.Create;
 import me.ampayne2.dropparty.commands.Delete;
 import me.ampayne2.dropparty.commands.ResetVotes;
@@ -50,6 +42,14 @@ import me.ampayne2.dropparty.commands.set.SetTeleport;
 import me.ampayne2.dropparty.config.ConfigType;
 import me.ampayne2.dropparty.message.DPMessage;
 import me.ampayne2.dropparty.modes.PlayerModeController;
+import ninja.amp.amplib.AmpJavaPlugin;
+import ninja.amp.amplib.command.Command;
+import ninja.amp.amplib.command.CommandGroup;
+import ninja.amp.amplib.command.commands.AboutCommand;
+import ninja.amp.amplib.command.commands.HelpCommand;
+import ninja.amp.amplib.command.commands.ReloadCommand;
+import ninja.amp.amplib.messenger.DefaultMessage;
+import ninja.amp.amplib.messenger.Messenger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;

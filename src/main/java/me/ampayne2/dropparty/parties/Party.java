@@ -18,8 +18,6 @@
  */
 package me.ampayne2.dropparty.parties;
 
-import me.ampayne2.amplib.messenger.Messenger;
-import me.ampayne2.amplib.messenger.PageList;
 import me.ampayne2.dropparty.DPChest;
 import me.ampayne2.dropparty.DPFireworkPoint;
 import me.ampayne2.dropparty.DPItemPoint;
@@ -27,6 +25,8 @@ import me.ampayne2.dropparty.DPUtils;
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.config.ConfigType;
 import me.ampayne2.dropparty.message.DPMessage;
+import ninja.amp.amplib.messenger.Messenger;
+import ninja.amp.amplib.messenger.PageList;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;

@@ -18,10 +18,10 @@
  */
 package me.ampayne2.dropparty;
 
-import me.ampayne2.amplib.messenger.DefaultMessage;
 import me.ampayne2.dropparty.message.DPMessage;
 import me.ampayne2.dropparty.modes.PlayerModeController;
 import me.ampayne2.dropparty.parties.Party;
+import ninja.amp.amplib.messenger.DefaultMessage;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

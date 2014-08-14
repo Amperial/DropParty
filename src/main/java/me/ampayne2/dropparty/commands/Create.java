@@ -18,10 +18,10 @@
  */
 package me.ampayne2.dropparty.commands;
 
-import me.ampayne2.amplib.command.Command;
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.message.DPMessage;
 import me.ampayne2.dropparty.parties.Party;
+import ninja.amp.amplib.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
@@ -38,6 +38,7 @@ public class Create extends Command {
         setDescription("Creates a drop party.");
         setCommandUsage("/dp create <party>");
         setPermission(new Permission("dropparty.create", PermissionDefault.OP));
+        setArgumentRange(1, 1);
         this.dropParty = dropParty;
     }
 

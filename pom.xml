@@ -62,9 +62,9 @@
             <version>1.9</version>
         </dependency>
         <dependency>
-            <groupId>me.ampayne2</groupId>
+            <groupId>ninja.amp</groupId>
             <artifactId>amplib</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
         </dependency>
     </dependencies>
 
@@ -164,7 +164,7 @@
                             <minimizeJar>true</minimizeJar>
                             <artifactSet>
                                 <includes>
-                                    <include>me.ampayne2:amplib</include>
+                                    <include>ninja.amp:amplib</include>
                                     <include>org.mcstats.bukkit:metrics</include>
                                     <include>net.gravitydevelopment.updater:updater</include>
                                 </includes>

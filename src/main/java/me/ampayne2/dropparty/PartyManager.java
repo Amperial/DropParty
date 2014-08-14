@@ -18,10 +18,10 @@
  */
 package me.ampayne2.dropparty;
 
-import me.ampayne2.amplib.messenger.Messenger;
-import me.ampayne2.amplib.messenger.PageList;
 import me.ampayne2.dropparty.config.ConfigType;
 import me.ampayne2.dropparty.parties.Party;
+import ninja.amp.amplib.messenger.Messenger;
+import ninja.amp.amplib.messenger.PageList;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;

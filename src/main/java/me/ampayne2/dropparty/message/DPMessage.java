@@ -18,7 +18,7 @@
  */
 package me.ampayne2.dropparty.message;
 
-import me.ampayne2.amplib.messenger.Message;
+import ninja.amp.amplib.messenger.Message;
 
 /**
  * Messages in Drop Party.

@@ -21,7 +21,7 @@ package me.ampayne2.dropparty.config;
 /**
  * An enumeration of the drop party custom config types.
  */
-public enum ConfigType implements me.ampayne2.amplib.config.ConfigType {
+public enum ConfigType implements ninja.amp.amplib.config.ConfigType {
     PARTY("Parties.yml");
 
     private final String fileName;

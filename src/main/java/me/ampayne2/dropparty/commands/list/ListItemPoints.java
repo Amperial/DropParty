@@ -18,11 +18,11 @@
  */
 package me.ampayne2.dropparty.commands.list;
 
-import me.ampayne2.amplib.command.Command;
-import me.ampayne2.amplib.messenger.PageList;
 import me.ampayne2.dropparty.DropParty;
 import me.ampayne2.dropparty.message.DPMessage;
 import me.ampayne2.dropparty.parties.Party;
+import ninja.amp.amplib.command.Command;
+import ninja.amp.amplib.messenger.PageList;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
