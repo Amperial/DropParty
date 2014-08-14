@@ -2,7 +2,7 @@ name: DropParty
 version: ${project.version}
 description: The Drop Party plugin for Bukkit.
 author: ampayne2
-main: me.ampayne2.dropparty.DropParty
+main: ninja.amp.dropparty.DropParty
 load: POSTWORLD
 softdepend: [Votifier]
 commands:
