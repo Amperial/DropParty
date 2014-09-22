@@ -51,6 +51,8 @@ public class Start extends Command {
             Party party = dropParty.getPartyManager().getParty(partyName);
             if (party.isRunning()) {
                 dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_ALREADYRUNNING, partyName);
+            } else if (!party.canStart()) {
+                dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_NOITEMS, partyName);
             } else {
                 party.start();
                 dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_START, partyName);

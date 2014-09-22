@@ -28,6 +28,7 @@ public enum DPMessage implements Message {
     PARTY_DELETE("Party.Delete", "Deleted drop party &5%s&7."),
     PARTY_START("Party.Start", "Started drop party &5%s&7."),
     PARTY_ALREADYRUNNING("Party.AlreadyRunning", "&4Drop party &5%s&4 is already running."),
+    PARTY_NOITEMS("Party.NoItems", "&4Drop party &5%s&4 has no items to drop."),
     PARTY_STOP("Party.Stop", "Stopped drop party &5%s&7."),
     PARTY_NOTRUNNING("Party.NotRunning", "&4Drop party &5%s&4 is not running."),
     PARTY_STOPFIREWORKS("Party.StopFireworks", "Stopped the fireworks of drop party &5%s&7."),

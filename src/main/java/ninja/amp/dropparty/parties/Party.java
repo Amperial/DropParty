@@ -167,28 +167,48 @@ public class Party {
     }
 
     /**
+     * Checks if the party can start.
+     *
+     * @return True if the party isn't running and has items to drop, else false.
+     */
+    public boolean canStart() {
+        if (isRunning) {
+            return false;
+        }
+
+        boolean hasItems = false;
+        for (DPChest chest : chests) {
+            for (ItemStack stack : chest.getChest().getInventory().getContents()) {
+                if (stack != null) {
+                    hasItems = true;
+                    break;
+                }
+            }
+        }
+        return hasItems;
+    }
+
+    /**
      * Starts the party.
      */
     public void start() {
-        if (!isRunning) {
-            isRunning = true;
-            voters.clear();
-            stopShootingFireworks();
-            final long maxLength = get(PartySetting.MAX_LENGTH, Long.class);
-            final long itemDelay = get(PartySetting.ITEM_DELAY, Long.class);
-            taskId = dropParty.getServer().getScheduler().scheduleSyncRepeatingTask(dropParty, new Runnable() {
-                @Override
-                public void run() {
-                    currentLength += itemDelay;
-                    if (currentLength > maxLength || !dropNext()) {
-                        stop(true);
-                        currentLength = 0;
-                        currentChest = 0;
-                    }
+        voters.clear();
+        stopShootingFireworks();
+        final long maxLength = get(PartySetting.MAX_LENGTH, Long.class);
+        final long itemDelay = get(PartySetting.ITEM_DELAY, Long.class);
+        taskId = dropParty.getServer().getScheduler().scheduleSyncRepeatingTask(dropParty, new Runnable() {
+            @Override
+            public void run() {
+                currentLength += itemDelay;
+                if (currentLength > maxLength || !dropNext()) {
+                    stop(true);
+                    currentLength = 0;
+                    currentChest = 0;
                 }
-            }, 0, itemDelay);
-            dropParty.getMessenger().sendMessage(dropParty.getServer(), DPMessage.BROADCAST_START, partyName, partyName);
-        }
+            }
+        }, 0, itemDelay);
+        dropParty.getMessenger().sendMessage(dropParty.getServer(), DPMessage.BROADCAST_START, partyName, partyName);
+        isRunning = true;
     }
 
     /**
@@ -321,7 +341,9 @@ public class Party {
             periodicTaskId = dropParty.getServer().getScheduler().scheduleSyncRepeatingTask(dropParty, new Runnable() {
                 @Override
                 public void run() {
-                    start();
+                    if (canStart()) {
+                        start();
+                    }
                 }
             }, startPeriod, startPeriod);
         }
@@ -738,7 +760,7 @@ public class Party {
     public void addVote(String playerName) {
         if (get(PartySetting.VOTE_TO_START, Boolean.class) && !isRunning) {
             voters.add(playerName);
-            if (voters.size() >= get(PartySetting.REQUIRED_VOTES, Integer.class)) {
+            if (voters.size() >= get(PartySetting.REQUIRED_VOTES, Integer.class) && canStart()) {
                 start();
             }
         }
