@@ -18,8 +18,6 @@
  */
 package ninja.amp.dropparty;
 
-import net.gravitydevelopment.updater.Updater;
-
 import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 
