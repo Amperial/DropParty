@@ -18,7 +18,7 @@
  */
 package ninja.amp.dropparty;
 
-import com.vexsoftware.votifier.model.VotifierEvent;
+//import com.vexsoftware.votifier.model.VotifierEvent;
 import ninja.amp.dropparty.parties.Party;
 import ninja.amp.dropparty.parties.PartySetting;
 import org.bukkit.event.EventHandler;
@@ -38,9 +38,10 @@ public class VoteListener implements Listener {
      */
     public VoteListener(DropParty dropParty) {
         this.dropParty = dropParty;
-        dropParty.getServer().getPluginManager().registerEvents(this, dropParty);
+        //dropParty.getServer().getPluginManager().registerEvents(this, dropParty);
     }
 
+    /*
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onVote(VotifierEvent event) {
         String playerName = event.getVote().getUsername();
@@ -50,4 +51,5 @@ public class VoteListener implements Listener {
             }
         }
     }
+    */
 }

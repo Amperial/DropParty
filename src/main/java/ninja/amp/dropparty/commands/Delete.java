@@ -31,6 +31,7 @@ import java.util.List;
  * A command that deletes a drop party.
  */
 public class Delete extends Command {
+
     private final DropParty dropParty;
 
     public Delete(DropParty dropParty) {
@@ -58,4 +59,5 @@ public class Delete extends Command {
     public List<String> getTabCompleteList(String[] args) {
         return dropParty.getPartyManager().getPartyList();
     }
+
 }

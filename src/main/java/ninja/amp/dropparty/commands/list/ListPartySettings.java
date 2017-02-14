@@ -34,6 +34,7 @@ import java.util.List;
  * A command that lists the party settings of a drop party.
  */
 public class ListPartySettings extends Command {
+
     private final DropParty dropParty;
 
     public ListPartySettings(DropParty dropParty) {
@@ -63,6 +64,7 @@ public class ListPartySettings extends Command {
 
     @Override
     public List<String> getTabCompleteList(String[] args) {
-        return args.length == 0 ? dropParty.getPartyManager().getPartyList() : new ArrayList<String>();
+        return args.length == 0 ? dropParty.getPartyManager().getPartyList() : new ArrayList<>();
     }
+
 }

@@ -36,6 +36,7 @@ import java.util.List;
  * A command that removes an item point of a certain id or sets the sender to item point removal mode.
  */
 public class RemoveItemPoint extends Command {
+
     private final DropParty dropParty;
 
     public RemoveItemPoint(DropParty dropParty) {
@@ -74,6 +75,7 @@ public class RemoveItemPoint extends Command {
 
     @Override
     public List<String> getTabCompleteList(String[] args) {
-        return args.length == 0 ? dropParty.getPartyManager().getPartyList() : new ArrayList<String>();
+        return args.length == 0 ? dropParty.getPartyManager().getPartyList() : new ArrayList<>();
     }
+
 }

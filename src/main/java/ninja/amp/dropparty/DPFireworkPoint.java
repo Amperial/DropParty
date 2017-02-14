@@ -32,6 +32,7 @@ import java.util.Random;
  * A drop party firework point.
  */
 public class DPFireworkPoint {
+
     private final DropParty dropParty;
     private final Party party;
     private final Location location;
@@ -125,4 +126,5 @@ public class DPFireworkPoint {
 
         return FireworkEffect.builder().flicker(RANDOM.nextBoolean()).withColor(c1).withFade(c2).with(type).trail(RANDOM.nextBoolean()).build();
     }
+
 }

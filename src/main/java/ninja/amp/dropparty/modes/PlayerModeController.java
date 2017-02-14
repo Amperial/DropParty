@@ -35,6 +35,7 @@ import java.util.Map;
  * Controls player's drop party selection and removal modes.
  */
 public class PlayerModeController implements Listener {
+
     private final DropParty dropParty;
     private final Map<String, PlayerMode> playerModes = new HashMap<>();
     private final Map<String, Party> playerModeParties = new HashMap<>();
@@ -136,4 +137,5 @@ public class PlayerModeController implements Listener {
         playerModes.remove(playerName);
         playerModeParties.remove(playerName);
     }
+
 }

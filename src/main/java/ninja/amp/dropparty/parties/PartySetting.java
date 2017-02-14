@@ -99,7 +99,7 @@ public enum PartySetting {
             }
         }
     },
-    VOTIFIER("votifier", "votifier", Boolean.class, false),
+    //VOTIFIER("votifier", "votifier", Boolean.class, false),
     EMPTY_CHEST("emptychest", "empty chest", Boolean.class, true);
 
     private final String name;
@@ -108,7 +108,7 @@ public enum PartySetting {
     private final Object defaultValue;
     private final static List<String> partySettingNames;
 
-    private PartySetting(String name, String displayName, Class<?> type, Object defaultValue) {
+    PartySetting(String name, String displayName, Class<?> type, Object defaultValue) {
         this.name = name;
         this.displayName = displayName;
         this.type = type;
@@ -186,4 +186,5 @@ public enum PartySetting {
             partySettingNames.add(partySetting.getName());
         }
     }
+
 }

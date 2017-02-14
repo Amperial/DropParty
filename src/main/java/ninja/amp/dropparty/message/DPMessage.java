@@ -34,8 +34,8 @@ public enum DPMessage implements Message {
     PARTY_STOPFIREWORKS("Party.StopFireworks", "Stopped the fireworks of drop party &5%s&7."),
     PARTY_TELEPORT("Party.Teleport", "Teleported to drop party &5%s&7."),
     PARTY_VOTE("Party.Vote", "Voted for drop party &5%s&7."),
-    PARTY_CANNOTVOTE("Party.CannotVote", "&4Drop party &5%s&7 can not be started by voting."),
-    PARTY_ALREADYVOTED("Party.AlreadyVoted", "&4Already voted for drop party &5%s&7."),
+    PARTY_CANNOTVOTE("Party.CannotVote", "&4Drop party &5%s&4 can not be started by voting."),
+    PARTY_ALREADYVOTED("Party.AlreadyVoted", "&4Already voted for drop party &5%s&4."),
     PARTY_RESETVOTES("Party.ResetVotes", "Reset votes for drop party &5%s&7."),
     PARTY_ALREADYEXISTS("Party.AlreadyExists", "&4Drop party &5%s&4 already exists."),
     PARTY_DOESNTEXIST("Party.DoesntExist", "&4Drop party &5%s&4 doesn't exist."),
@@ -77,7 +77,7 @@ public enum DPMessage implements Message {
     private final String path;
     private final String defaultMessage;
 
-    private DPMessage(String path, String defaultMessage) {
+    DPMessage(String path, String defaultMessage) {
         this.message = defaultMessage;
         this.path = path;
         this.defaultMessage = defaultMessage;
@@ -123,4 +123,5 @@ public enum DPMessage implements Message {
     public String toString() {
         return message;
     }
+
 }

@@ -34,6 +34,7 @@ import java.util.List;
  * A command that lists the chests of a drop party.
  */
 public class ListChests extends Command {
+
     private final DropParty dropParty;
 
     public ListChests(DropParty dropParty) {
@@ -63,6 +64,7 @@ public class ListChests extends Command {
 
     @Override
     public List<String> getTabCompleteList(String[] args) {
-        return args.length == 0 ? dropParty.getPartyManager().getPartyList() : new ArrayList<String>();
+        return args.length == 0 ? dropParty.getPartyManager().getPartyList() : new ArrayList<>();
     }
+
 }

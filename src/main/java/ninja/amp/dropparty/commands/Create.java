@@ -31,6 +31,7 @@ import org.bukkit.permissions.PermissionDefault;
  * A command that creates a drop party.
  */
 public class Create extends Command {
+
     private final DropParty dropParty;
 
     public Create(DropParty dropParty) {
@@ -52,4 +53,5 @@ public class Create extends Command {
             dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_CREATE, partyName);
         }
     }
+
 }

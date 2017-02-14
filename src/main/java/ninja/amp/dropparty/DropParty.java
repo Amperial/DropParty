@@ -24,7 +24,6 @@ import ninja.amp.dropparty.commands.ResetVotes;
 import ninja.amp.dropparty.commands.Start;
 import ninja.amp.dropparty.commands.Stop;
 import ninja.amp.dropparty.commands.Teleport;
-import ninja.amp.dropparty.commands.Update;
 import ninja.amp.dropparty.commands.Vote;
 import ninja.amp.dropparty.commands.list.ListChests;
 import ninja.amp.dropparty.commands.list.ListFireworkPoints;
@@ -65,8 +64,6 @@ import java.util.EnumSet;
 public class DropParty extends AmpJavaPlugin {
     private PartyManager partyManager;
     private PlayerModeController playerModeController;
-    private DPMetrics dpMetrics;
-    private UpdateManager updateManager;
 
     @Override
     public void onEnable() {
@@ -84,12 +81,10 @@ public class DropParty extends AmpJavaPlugin {
         getMessenger().registerMessages(EnumSet.allOf(DPMessage.class));
         partyManager = new PartyManager(this);
         playerModeController = new PlayerModeController(this);
-        dpMetrics = new DPMetrics(this);
         new DPListener(this);
         if (Bukkit.getPluginManager().isPluginEnabled("Votifier")) {
             new VoteListener(this);
         }
-        updateManager = new UpdateManager(this, this.getFile());
 
         Command about = new AboutCommand(this);
         about.setCommandUsage("/dp");
@@ -101,7 +96,6 @@ public class DropParty extends AmpJavaPlugin {
                 .addChildCommand(about)
                 .addChildCommand(help)
                 .addChildCommand(reload)
-                .addChildCommand(new Update(this))
                 .addChildCommand(new Create(this))
                 .addChildCommand(new Delete(this))
                 .addChildCommand(new Start(this))
@@ -131,10 +125,7 @@ public class DropParty extends AmpJavaPlugin {
 
     @Override
     public void onDisable() {
-        updateManager = null;
         HandlerList.unregisterAll(this);
-        dpMetrics.destroyGraphs();
-        dpMetrics = null;
         playerModeController.clearModes();
         playerModeController = null;
         partyManager.stopParties();
@@ -160,21 +151,4 @@ public class DropParty extends AmpJavaPlugin {
         return playerModeController;
     }
 
-    /**
-     * Gets the drop party metrics wrapper.
-     *
-     * @return The DPMetrics instance.
-     */
-    public DPMetrics getDpMetrics() {
-        return dpMetrics;
-    }
-
-    /**
-     * Gets the update manager.
-     *
-     * @return The UpdateManager instance.
-     */
-    public UpdateManager getUpdateManager() {
-        return updateManager;
-    }
 }

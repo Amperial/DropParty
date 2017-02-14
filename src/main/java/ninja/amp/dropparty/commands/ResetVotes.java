@@ -33,6 +33,7 @@ import java.util.List;
  * A command that resets the votes of a drop party.
  */
 public class ResetVotes extends Command {
+
     private final DropParty dropParty;
 
     public ResetVotes(DropParty dropParty) {
@@ -65,4 +66,5 @@ public class ResetVotes extends Command {
     public List<String> getTabCompleteList(String[] args) {
         return dropParty.getPartyManager().getPartyList();
     }
+
 }

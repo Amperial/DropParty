@@ -33,6 +33,7 @@ import java.util.List;
  * A command that votes for a drop party to start.
  */
 public class Vote extends Command {
+
     private final DropParty dropParty;
 
     public Vote(DropParty dropParty) {
@@ -71,4 +72,5 @@ public class Vote extends Command {
     public List<String> getTabCompleteList(String[] args) {
         return dropParty.getPartyManager().getPartyList();
     }
+
 }

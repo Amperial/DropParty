@@ -33,6 +33,7 @@ import java.util.List;
  * A command that sets the sender to firework point selection mode.
  */
 public class SetFireworkPoint extends Command {
+
     private final DropParty dropParty;
 
     public SetFireworkPoint(DropParty dropParty) {
@@ -58,4 +59,5 @@ public class SetFireworkPoint extends Command {
     public List<String> getTabCompleteList(String[] args) {
         return dropParty.getPartyManager().getPartyList();
     }
+
 }

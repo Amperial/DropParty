@@ -32,6 +32,7 @@ import org.bukkit.inventory.ItemStack;
  * A drop party chest.
  */
 public class DPChest {
+
     private final DropParty dropParty;
     private final Party party;
     private final Chest chest;
@@ -192,4 +193,5 @@ public class DPChest {
             return null;
         }
     }
+
 }

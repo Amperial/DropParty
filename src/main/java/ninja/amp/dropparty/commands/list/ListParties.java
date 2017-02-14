@@ -29,6 +29,7 @@ import org.bukkit.permissions.PermissionDefault;
  * A command that lists the drop parties in the party manager.
  */
 public class ListParties extends Command {
+
     private final DropParty dropParty;
 
     public ListParties(DropParty dropParty) {
@@ -49,4 +50,5 @@ public class ListParties extends Command {
         }
         dropParty.getPartyManager().getPageList().sendPage(pageNumber, sender);
     }
+
 }

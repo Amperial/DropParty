@@ -33,6 +33,7 @@ import java.util.List;
  * A command that sets the sender to chest selection mode.
  */
 public class SetChest extends Command {
+
     private final DropParty dropParty;
 
     public SetChest(DropParty dropParty) {
@@ -58,4 +59,5 @@ public class SetChest extends Command {
     public List<String> getTabCompleteList(String[] args) {
         return dropParty.getPartyManager().getPartyList();
     }
+
 }

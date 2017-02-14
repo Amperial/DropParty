@@ -31,7 +31,7 @@ public enum PlayerMode {
 
     private final String name;
 
-    private PlayerMode(String name) {
+    PlayerMode(String name) {
         this.name = name;
     }
 
@@ -43,4 +43,5 @@ public enum PlayerMode {
     public String getName() {
         return name;
     }
+
 }

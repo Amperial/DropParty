@@ -36,6 +36,7 @@ import java.util.List;
  * A command that removes a firework point of a certain id or sets the sender to firework point removal mode.
  */
 public class RemoveFireworkPoint extends Command {
+
     private final DropParty dropParty;
 
     public RemoveFireworkPoint(DropParty dropParty) {
@@ -74,6 +75,7 @@ public class RemoveFireworkPoint extends Command {
 
     @Override
     public List<String> getTabCompleteList(String[] args) {
-        return args.length == 0 ? dropParty.getPartyManager().getPartyList() : new ArrayList<String>();
+        return args.length == 0 ? dropParty.getPartyManager().getPartyList() : new ArrayList<>();
     }
+
 }

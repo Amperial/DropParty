@@ -4,7 +4,7 @@
 
     <groupId>ninja.amp</groupId>
     <artifactId>dropparty</artifactId>
-    <version>3.1</version>
+    <version>3.2</version>
     <inceptionYear>2013</inceptionYear>
     <name>DropParty</name>
     <description>Drop Party Plugin for Bukkit.</description>
@@ -19,42 +19,19 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
-        <repository>
-            <id>Plugin Metrics</id>
-            <url>http://repo.mcstats.org/content/repositories/public</url>
-        </repository>
-        <repository>
-            <id>votifier-repo</id>
-            <url>http://repo.sacredlabyrinth.net:8081/artifactory/remote-repos/</url>
-        </repository>
-        <repository>
-            <id>greatman-repo</id>
-            <url>http://repo.greatmancode.com/content/groups/public/</url>
-        </repository>
     </repositories>
 
     <dependencies>
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.9.2-R0.1-SNAPSHOT</version>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.11.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mcstats.bukkit</groupId>
-            <artifactId>metrics</artifactId>
-            <version>R8-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.vexsoftware</groupId>
-            <artifactId>votifier</artifactId>
-            <version>1.9</version>
         </dependency>
         <dependency>
             <groupId>ninja.amp</groupId>
             <artifactId>amplib</artifactId>
-            <version>1.1</version>
+            <version>1.2</version>
         </dependency>
     </dependencies>
 
@@ -80,8 +57,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.0</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                     <compilerArguments>
                         <O>-Xlint:all</O>
                         <O>-Xlint:-path</O>
@@ -151,12 +128,10 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <minimizeJar>true</minimizeJar>
+                            <minimizeJar>false</minimizeJar>
                             <artifactSet>
                                 <includes>
                                     <include>ninja.amp:amplib</include>
-                                    <include>org.mcstats.bukkit:metrics</include>
-                                    <include>net.gravitydevelopment.updater:updater</include>
                                 </includes>
                             </artifactSet>
                         </configuration>

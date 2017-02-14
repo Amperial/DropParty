@@ -22,11 +22,11 @@ package ninja.amp.dropparty.config;
  * An enumeration of the drop party custom config types.
  */
 public enum ConfigType implements ninja.amp.amplib.config.ConfigType {
-    PARTY("Parties.yml");
+    PARTY("parties.yml");
 
     private final String fileName;
 
-    private ConfigType(String fileName) {
+    ConfigType(String fileName) {
         this.fileName = fileName;
     }
 
@@ -38,4 +38,5 @@ public enum ConfigType implements ninja.amp.amplib.config.ConfigType {
     public String getFileName() {
         return fileName;
     }
+
 }

@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Manages all of the drop parties.
@@ -127,13 +128,7 @@ public class PartyManager {
      * @return The manager's parties that are running.
      */
     public Collection<Party> getRunningParties() {
-        List<Party> runningParties = new ArrayList<>();
-        for (Party party : parties.values()) {
-            if (party.isRunning()) {
-                runningParties.add(party);
-            }
-        }
-        return runningParties;
+        return parties.values().stream().filter(Party::isRunning).collect(Collectors.toList());
     }
 
     /**
@@ -158,10 +153,7 @@ public class PartyManager {
      * Updates the PageList of drop parties.
      */
     public void updatePageList() {
-        List<String> strings = new ArrayList<>();
-        for (String partyName : parties.keySet()) {
-            strings.add(Messenger.SECONDARY_COLOR + "-" + partyName);
-        }
+        List<String> strings = parties.keySet().stream().map(partyName -> Messenger.SECONDARY_COLOR + "-" + partyName).collect(Collectors.toList());
         pageList.setStrings(strings);
     }
 

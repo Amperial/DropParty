@@ -29,6 +29,7 @@ import java.util.Random;
  * Drop party utilities.
  */
 public final class DPUtils {
+
     private static final Random RANDOM = new Random();
 
     private DPUtils() {
@@ -144,4 +145,5 @@ public final class DPUtils {
                 return Color.WHITE;
         }
     }
+
 }

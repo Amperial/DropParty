@@ -21,7 +21,6 @@ package ninja.amp.dropparty;
 import ninja.amp.dropparty.message.DPMessage;
 import ninja.amp.dropparty.modes.PlayerModeController;
 import ninja.amp.dropparty.parties.Party;
-import ninja.amp.amplib.messenger.DefaultMessage;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -33,12 +32,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 
 /**
  * The drop party listener.
  */
 public class DPListener implements Listener {
+
     private final DropParty dropParty;
 
     /**
@@ -147,12 +146,4 @@ public class DPListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        if ((player.hasPermission("dropparty.update") || player.isOp()) && dropParty.getUpdateManager().updateAvailable()) {
-            dropParty.getMessenger().sendRawMessage(player, DefaultMessage.PREFIX + dropParty.getUpdateManager().getNotice());
-            dropParty.getMessenger().sendRawMessage(player, DefaultMessage.PREFIX + "Type /dp update to update.");
-        }
-    }
 }

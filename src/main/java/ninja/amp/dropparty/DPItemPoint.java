@@ -25,6 +25,7 @@ import org.bukkit.Location;
  * A drop party item point.
  */
 public class DPItemPoint {
+
     private final DropParty dropParty;
     private final Party party;
     private final Location location;
@@ -91,4 +92,5 @@ public class DPItemPoint {
             return null;
         }
     }
+
 }

@@ -32,6 +32,7 @@ import java.util.List;
  * A command that starts a drop party.
  */
 public class Start extends Command {
+
     private final DropParty dropParty;
 
     public Start(DropParty dropParty) {
@@ -66,4 +67,5 @@ public class Start extends Command {
     public List<String> getTabCompleteList(String[] args) {
         return dropParty.getPartyManager().getPartyList();
     }
+
 }

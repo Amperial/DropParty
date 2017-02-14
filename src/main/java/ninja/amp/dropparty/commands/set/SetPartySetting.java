@@ -35,6 +35,7 @@ import java.util.List;
  * A command that sets a party setting of a drop party.
  */
 public class SetPartySetting extends Command {
+
     private final DropParty dropParty;
 
     public SetPartySetting(DropParty dropParty) {
@@ -94,4 +95,5 @@ public class SetPartySetting extends Command {
             return new ArrayList<>();
         }
     }
+
 }

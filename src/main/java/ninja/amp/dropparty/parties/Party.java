@@ -43,11 +43,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Controls and contains all the information of a drop party.
  */
 public class Party {
+
     private final DropParty dropParty;
     private final String partyName;
     private Location teleport;
@@ -196,15 +198,12 @@ public class Party {
         stopShootingFireworks();
         final long maxLength = get(PartySetting.MAX_LENGTH, Long.class);
         final long itemDelay = get(PartySetting.ITEM_DELAY, Long.class);
-        taskId = dropParty.getServer().getScheduler().scheduleSyncRepeatingTask(dropParty, new Runnable() {
-            @Override
-            public void run() {
-                currentLength += itemDelay;
-                if (currentLength > maxLength || !dropNext()) {
-                    stop(true);
-                    currentLength = 0;
-                    currentChest = 0;
-                }
+        taskId = dropParty.getServer().getScheduler().scheduleSyncRepeatingTask(dropParty, () -> {
+            currentLength += itemDelay;
+            if (currentLength > maxLength || !dropNext()) {
+                stop(true);
+                currentLength = 0;
+                currentChest = 0;
             }
         }, 0, itemDelay);
         dropParty.getMessenger().sendMessage(dropParty.getServer(), DPMessage.BROADCAST_START, partyName, partyName);
@@ -222,9 +221,7 @@ public class Party {
             dropParty.getServer().getScheduler().cancelTask(taskId);
             dropParty.getMessenger().sendMessage(dropParty.getServer(), DPMessage.BROADCAST_STOP, partyName);
 
-            for (DPChest chest : chests) {
-                chest.resetCurrentSlot();
-            }
+            chests.forEach(DPChest::resetCurrentSlot);
 
             if (shootFireworks) {
                 startShootingFireworks();
@@ -258,15 +255,12 @@ public class Party {
         if (!isShootingFireworks && fireworkPoints.size() > 0) {
             isShootingFireworks = true;
             final int fireworkAmount = get(PartySetting.FIREWORK_AMOUNT, Integer.class);
-            fireworkTaskId = dropParty.getServer().getScheduler().scheduleSyncRepeatingTask(dropParty, new Runnable() {
-                @Override
-                public void run() {
-                    fireworksShot++;
-                    if (fireworksShot <= fireworkAmount) {
-                        fireworkPoints.get(RANDOM.nextInt(fireworkPoints.size())).spawnFirework();
-                    } else {
-                        stopShootingFireworks();
-                    }
+            fireworkTaskId = dropParty.getServer().getScheduler().scheduleSyncRepeatingTask(dropParty, () -> {
+                fireworksShot++;
+                if (fireworksShot <= fireworkAmount) {
+                    fireworkPoints.get(RANDOM.nextInt(fireworkPoints.size())).spawnFirework();
+                } else {
+                    stopShootingFireworks();
                 }
             }, 0, get(PartySetting.FIREWORK_DELAY, Long.class));
         }
@@ -338,12 +332,9 @@ public class Party {
     public void startPeriodicTimer() {
         if (get(PartySetting.START_PERIODICALLY, Boolean.class)) {
             long startPeriod = get(PartySetting.START_PERIOD, Long.class);
-            periodicTaskId = dropParty.getServer().getScheduler().scheduleSyncRepeatingTask(dropParty, new Runnable() {
-                @Override
-                public void run() {
-                    if (canStart()) {
-                        start();
-                    }
+            periodicTaskId = dropParty.getServer().getScheduler().scheduleSyncRepeatingTask(dropParty, () -> {
+                if (canStart()) {
+                    start();
                 }
             }, startPeriod, startPeriod);
         }
@@ -410,11 +401,7 @@ public class Party {
      * @param chest The chest.
      */
     public void removeChest(Chest chest) {
-        for (DPChest dpChest : new HashSet<>(chests)) {
-            if (dpChest.getChest().equals(chest)) {
-                removeChest(dpChest);
-            }
-        }
+        new HashSet<>(chests).stream().filter(dpChest -> dpChest.getChest().equals(chest)).forEach(this::removeChest);
     }
 
     /**
@@ -501,11 +488,7 @@ public class Party {
      * @param location The location of the item point.
      */
     public void removeItemPoint(Location location) {
-        for (DPItemPoint itemPoint : new HashSet<>(itemPoints)) {
-            if (itemPoint.getLocation().equals(location)) {
-                removeItemPoint(itemPoint);
-            }
-        }
+        new HashSet<>(itemPoints).stream().filter(itemPoint -> itemPoint.getLocation().equals(location)).forEach(this::removeItemPoint);
     }
 
     /**
@@ -591,11 +574,7 @@ public class Party {
      * @param location The location of the firework point.
      */
     public void removeFireworkPoint(Location location) {
-        for (DPFireworkPoint fireworkPoint : new HashSet<>(fireworkPoints)) {
-            if (fireworkPoint.getLocation().equals(location)) {
-                removeFireworkPoint(fireworkPoint);
-            }
-        }
+        new HashSet<>(fireworkPoints).stream().filter(fireworkPoint -> fireworkPoint.getLocation().equals(location)).forEach(this::removeFireworkPoint);
     }
 
     /**
@@ -629,7 +608,7 @@ public class Party {
      * @return The PageList of firework points.
      */
     public PageList getFireworkPointList() {
-        return chestList;
+        return fireworkPointList;
     }
 
     /**
@@ -793,20 +772,12 @@ public class Party {
             section.set(partySetting.getName(), partySettings.get(partySetting));
         }
         section.set("teleport", DPUtils.locationToString(teleport));
-        List<String> dpChests = new ArrayList<>();
-        for (DPChest chest : chests) {
-            dpChests.add(chest.toConfig());
-        }
+        List<String> dpChests = chests.stream().map(DPChest::toConfig).collect(Collectors.toList());
         section.set("chests", dpChests);
-        List<String> dpItemPoints = new ArrayList<>();
-        for (DPItemPoint itemPoint : itemPoints) {
-            dpItemPoints.add(itemPoint.toConfig());
-        }
+        List<String> dpItemPoints = itemPoints.stream().map(DPItemPoint::toConfig).collect(Collectors.toList());
         section.set("itempoints", dpItemPoints);
-        List<String> dpFireworkPoints = new ArrayList<>();
-        for (DPFireworkPoint fireworkPoint : fireworkPoints) {
-            dpFireworkPoints.add(fireworkPoint.toConfig());
-        }
+        List<String> dpFireworkPoints = fireworkPoints.stream().map(DPFireworkPoint::toConfig).collect(Collectors.toList());
         section.set("fireworkpoints", dpFireworkPoints);
     }
+
 }

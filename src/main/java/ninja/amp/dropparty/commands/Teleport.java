@@ -35,6 +35,7 @@ import java.util.List;
  * A command that teleports the sender to a drop party.
  */
 public class Teleport extends Command {
+
     private final DropParty dropParty;
 
     public Teleport(DropParty dropParty) {
@@ -84,4 +85,5 @@ public class Teleport extends Command {
     public List<String> getTabCompleteList(String[] args) {
         return dropParty.getPartyManager().getPartyList();
     }
+
 }

@@ -33,6 +33,7 @@ import java.util.List;
  * A command that sets the player to item point selection mode.
  */
 public class SetItemPoint extends Command {
+
     private final DropParty dropParty;
 
     public SetItemPoint(DropParty dropParty) {
@@ -58,4 +59,5 @@ public class SetItemPoint extends Command {
     public List<String> getTabCompleteList(String[] args) {
         return dropParty.getPartyManager().getPartyList();
     }
+
 }

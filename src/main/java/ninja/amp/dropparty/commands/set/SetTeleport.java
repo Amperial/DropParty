@@ -33,6 +33,7 @@ import java.util.List;
  * A command that sets the teleport of a drop party.
  */
 public class SetTeleport extends Command {
+
     private final DropParty dropParty;
 
     public SetTeleport(DropParty dropParty) {
@@ -60,4 +61,5 @@ public class SetTeleport extends Command {
     public List<String> getTabCompleteList(String[] args) {
         return dropParty.getPartyManager().getPartyList();
     }
+
 }
