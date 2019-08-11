@@ -34,17 +34,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A command that removes a chest of a certain id or sets the sender to chest removal mode.
+ * A command that removes a firework point of a certain id or sets the sender to firework point removal mode.
  */
-public class RemoveChest extends Command {
+public class RemoveFireworkPoint extends Command {
 
     private final DropParty dropParty;
 
-    public RemoveChest(DropParty dropParty) {
-        super(dropParty, "chest");
-        setDescription("Removes a chest or sets you to chest removal mode.");
-        setCommandUsage("/dp remove chest <party> [id]");
-        setPermission(new Permission("dropparty.remove.chest", PermissionDefault.OP));
+    public RemoveFireworkPoint(DropParty dropParty) {
+        super(dropParty, "fireworkpoint");
+        setDescription("Removes a firework point or sets you to firework point removal mode.");
+        setCommandUsage("/dp remove fireworkpoint <party> [id]");
+        setPermission(new Permission("dropparty.remove.fireworkpoint", PermissionDefault.OP));
         setArgumentRange(1, 2);
         this.dropParty = dropParty;
     }
@@ -55,15 +55,15 @@ public class RemoveChest extends Command {
         if (dropParty.getPartyManager().hasParty(partyName)) {
             Party party = dropParty.getPartyManager().getParty(partyName);
             if (args.length == 1) {
-                dropParty.getPlayerModeController().setPlayerMode((Player) sender, PlayerMode.REMOVING_CHESTS, party);
+                dropParty.getPlayerModeController().setPlayerMode((Player) sender, PlayerMode.REMOVING_FIREWORK_POINTS, party);
             } else {
                 try {
                     int id = Integer.parseInt(args[1]);
-                    if (party.getChests().size() > id) {
-                        party.removeChest(party.getChests().get(id));
-                        dropParty.getMessenger().sendMessage(sender, DPMessage.REMOVE_CHEST, partyName);
+                    if (party.getFireworkPoints().size() > id) {
+                        party.removeFireworkPoint(party.getFireworkPoints().get(id));
+                        dropParty.getMessenger().sendMessage(sender, DPMessage.REMOVE_FIREWORKPOINT, partyName);
                     } else {
-                        dropParty.getMessenger().sendMessage(sender, DPMessage.CHEST_IDDOESNTEXIST, args[1], partyName);
+                        dropParty.getMessenger().sendMessage(sender, DPMessage.FIREWORKPOINT_IDDOESNTEXIST, args[1], partyName);
                     }
                 } catch (NumberFormatException e) {
                     dropParty.getMessenger().sendMessage(sender, DefaultMessage.ERROR_NUMBERFORMAT);
