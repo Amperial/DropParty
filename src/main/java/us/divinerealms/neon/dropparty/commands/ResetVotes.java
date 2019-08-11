@@ -21,39 +21,50 @@ package us.divinerealms.neon.dropparty.commands;
 import us.divinerealms.neon.dropparty.DropParty;
 import us.divinerealms.neon.dropparty.message.DPMessage;
 import us.divinerealms.neon.dropparty.parties.Party;
+import us.divinerealms.neon.dropparty.parties.PartySetting;
 import us.divinerealms.neon.amplib.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
-import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 /**
- * A command that creates a drop party.
+ * A command that resets the votes of a drop party.
  */
-public class Create extends Command {
+public class ResetVotes extends Command {
 
     private final DropParty dropParty;
 
-    public Create(DropParty dropParty) {
-        super(dropParty, "create");
-        setDescription("Creates a drop party.");
-        setCommandUsage("/dp create <party>");
-        setPermission(new Permission("dropparty.create", PermissionDefault.OP));
+    public ResetVotes(DropParty dropParty) {
+        super(dropParty, "resetvotes");
+        setDescription("Resets the votes of a drop party.");
+        setCommandUsage("/dp resetvotes <party>");
+        setPermission(new Permission("dropparty.resetvotes", PermissionDefault.OP));
         setArgumentRange(1, 1);
+        setPlayerOnly(false);
         this.dropParty = dropParty;
     }
 
     @Override
-    public void execute(String command, CommandSender sender, String[] args) throws UnsupportedEncodingException {
+    public void execute(String command, CommandSender sender, String[] args) {
         String partyName = args[0];
         if (dropParty.getPartyManager().hasParty(partyName)) {
-            dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_ALREADYEXISTS, partyName);
+            Party party = dropParty.getPartyManager().getParty(partyName);
+            if (party.get(PartySetting.VOTE_TO_START, Boolean.class)) {
+                party.clearVotes();
+                dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_RESETVOTES, partyName);
+            } else {
+                dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_CANNOTVOTE, partyName);
+            }
         } else {
-            dropParty.getPartyManager().addParty(new Party(dropParty, partyName, ((Player) sender).getLocation()));
-            dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_CREATE, partyName);
+            dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_DOESNTEXIST, partyName);
         }
+    }
+
+    @Override
+    public List<String> getTabCompleteList(String[] args) {
+        return dropParty.getPartyManager().getPartyList();
     }
 
 }

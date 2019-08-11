@@ -23,37 +23,50 @@ import us.divinerealms.neon.dropparty.message.DPMessage;
 import us.divinerealms.neon.dropparty.parties.Party;
 import us.divinerealms.neon.amplib.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
-import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 /**
- * A command that creates a drop party.
+ * A command that stops a drop party.
  */
-public class Create extends Command {
+public class Stop extends Command {
 
     private final DropParty dropParty;
 
-    public Create(DropParty dropParty) {
-        super(dropParty, "create");
-        setDescription("Creates a drop party.");
-        setCommandUsage("/dp create <party>");
-        setPermission(new Permission("dropparty.create", PermissionDefault.OP));
+    public Stop(DropParty dropParty) {
+        super(dropParty, "stop");
+        setDescription("Stops a drop party.");
+        setCommandUsage("/dp stop <party>");
+        setPermission(new Permission("dropparty.stop", PermissionDefault.OP));
         setArgumentRange(1, 1);
+        setPlayerOnly(false);
         this.dropParty = dropParty;
     }
 
     @Override
-    public void execute(String command, CommandSender sender, String[] args) throws UnsupportedEncodingException {
+    public void execute(String command, CommandSender sender, String[] args) {
         String partyName = args[0];
         if (dropParty.getPartyManager().hasParty(partyName)) {
-            dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_ALREADYEXISTS, partyName);
+            Party party = dropParty.getPartyManager().getParty(partyName);
+            if (party.isRunning()) {
+                party.stop(false);
+                dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_STOP, partyName);
+            } else if (party.isShootingFireworks()) {
+                party.stopShootingFireworks();
+                dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_STOPFIREWORKS, partyName);
+            } else {
+                dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_NOTRUNNING, partyName);
+            }
         } else {
-            dropParty.getPartyManager().addParty(new Party(dropParty, partyName, ((Player) sender).getLocation()));
-            dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_CREATE, partyName);
+            dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_DOESNTEXIST, partyName);
         }
+    }
+
+    @Override
+    public List<String> getTabCompleteList(String[] args) {
+        return dropParty.getPartyManager().getPartyList();
     }
 
 }
