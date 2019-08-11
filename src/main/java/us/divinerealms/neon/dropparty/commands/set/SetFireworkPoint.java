@@ -30,17 +30,17 @@ import org.bukkit.permissions.PermissionDefault;
 import java.util.List;
 
 /**
- * A command that sets the sender to chest selection mode.
+ * A command that sets the sender to firework point selection mode.
  */
-public class SetChest extends Command {
+public class SetFireworkPoint extends Command {
 
     private final DropParty dropParty;
 
-    public SetChest(DropParty dropParty) {
-        super(dropParty, "chest");
-        setDescription("Sets you to chest selection mode.");
-        setCommandUsage("/dp set chest <party>");
-        setPermission(new Permission("dropparty.set.chest", PermissionDefault.OP));
+    public SetFireworkPoint(DropParty dropParty) {
+        super(dropParty, "fireworkpoint");
+        setDescription("Sets you to firework point selection mode.");
+        setCommandUsage("/dp set fireworkpoint <party>");
+        setPermission(new Permission("dropparty.set.fireworkpoint", PermissionDefault.OP));
         setArgumentRange(1, 1);
         this.dropParty = dropParty;
     }
@@ -49,7 +49,7 @@ public class SetChest extends Command {
     public void execute(String command, CommandSender sender, String[] args) {
         String partyName = args[0];
         if (dropParty.getPartyManager().hasParty(partyName)) {
-            dropParty.getPlayerModeController().setPlayerMode((Player) sender, PlayerMode.SETTING_CHESTS, dropParty.getPartyManager().getParty(partyName));
+            dropParty.getPlayerModeController().setPlayerMode((Player) sender, PlayerMode.SETTING_FIREWORK_POINTS, dropParty.getPartyManager().getParty(partyName));
         } else {
             dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_DOESNTEXIST, partyName);
         }

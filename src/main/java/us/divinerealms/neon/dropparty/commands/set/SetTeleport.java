@@ -20,36 +20,39 @@ package us.divinerealms.neon.dropparty.commands.set;
 
 import us.divinerealms.neon.dropparty.DropParty;
 import us.divinerealms.neon.dropparty.message.DPMessage;
-import us.divinerealms.neon.dropparty.modes.PlayerMode;
+import us.divinerealms.neon.dropparty.parties.Party;
 import us.divinerealms.neon.amplib.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
- * A command that sets the sender to chest selection mode.
+ * A command that sets the teleport of a drop party.
  */
-public class SetChest extends Command {
+public class SetTeleport extends Command {
 
     private final DropParty dropParty;
 
-    public SetChest(DropParty dropParty) {
-        super(dropParty, "chest");
-        setDescription("Sets you to chest selection mode.");
-        setCommandUsage("/dp set chest <party>");
-        setPermission(new Permission("dropparty.set.chest", PermissionDefault.OP));
+    public SetTeleport(DropParty dropParty) {
+        super(dropParty, "teleport");
+        setDescription("Sets the teleport of a drop party.");
+        setCommandUsage("/dp set teleport <party>");
+        setPermission(new Permission("dropparty.set.teleport", PermissionDefault.OP));
         setArgumentRange(1, 1);
         this.dropParty = dropParty;
     }
 
     @Override
-    public void execute(String command, CommandSender sender, String[] args) {
+    public void execute(String command, CommandSender sender, String[] args) throws UnsupportedEncodingException {
         String partyName = args[0];
         if (dropParty.getPartyManager().hasParty(partyName)) {
-            dropParty.getPlayerModeController().setPlayerMode((Player) sender, PlayerMode.SETTING_CHESTS, dropParty.getPartyManager().getParty(partyName));
+            Party party = dropParty.getPartyManager().getParty(partyName);
+            party.setTeleport(((Player) sender).getLocation());
+            dropParty.getMessenger().sendMessage(sender, DPMessage.SET_TELEPORT, party.getName());
         } else {
             dropParty.getMessenger().sendMessage(sender, DPMessage.PARTY_DOESNTEXIST, partyName);
         }
