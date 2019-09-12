@@ -3,7 +3,7 @@ Drop Party
 
 A Drop Party Plugin for the Bukkit Minecraft server API.
 
-Website: [http://dev.bukkit.org/bukkit-plugins/dropparty/](http://dev.bukkit.org/bukkit-plugins/dropparty/)
+Website: [https://www.spigotmc.org/resources/drop-party.66864/](https://www.spigotmc.org/resources/drop-party.66864/)
 
 Features
 --------
